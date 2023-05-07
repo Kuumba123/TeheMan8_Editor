@@ -14,7 +14,7 @@ namespace TeheMan8_Editor.Forms
     {
         #region Fields
         private static bool added = false;
-        private static byte[] pixels = new byte[0x30000];
+        private static byte[] pixels = new byte[0x8000];
         public static int page = 0;
         public static int clut = 0;
         private static int bgF = 1;
@@ -25,7 +25,7 @@ namespace TeheMan8_Editor.Forms
         public ClutWindow()
         {
             InitializeComponent();
-            if (ISO.levels.Count == 0)
+            if (PSX.levels.Count == 0)
                 return;
             AddClut();
         }
@@ -64,7 +64,7 @@ namespace TeheMan8_Editor.Forms
                 {
                     //Create Color
                     Rectangle r = new Rectangle();
-                    r.Fill = Brushes.Blue;  //TODO: Replace this with Clut for current Level
+                    r.Fill = Brushes.Blue;
                     r.Focusable = false;
                     r.Width = 16;
                     r.Height = 16;
@@ -125,55 +125,59 @@ namespace TeheMan8_Editor.Forms
         #region Events
         private void Color_Down(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == System.Windows.Input.MouseButton.Right)
+            if (e.ChangedButton == System.Windows.Input.MouseButton.Right) //Change Color
             {
-                using (var colorDialog = new System.Windows.Forms.ColorDialog())
+                //Get Current Color
+                var c = Grid.GetColumn(sender as UIElement);
+                var r = Grid.GetRow(sender as UIElement);
+                ushort oldC = BitConverter.ToUInt16(PSX.levels[Level.Id].pal, (c + (r + (bgF * 0x40)) * 16) * 2);
+
+                var d = new ColorDialog(oldC,c,r);
+                d.ShowDialog();
+                if (d.confirm)
                 {
-                    if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    ushort newC = (ushort)Level.To15Rgb(d.canvas.SelectedColor.Value.B, d.canvas.SelectedColor.Value.G, d.canvas.SelectedColor.Value.R);
+
+                    if (newC != oldC)
                     {
-                        var c = Grid.GetColumn(sender as UIElement);
-                        var r = Grid.GetRow(sender as UIElement);
+                        //Edit Clut in PAC
+                        PSX.levels[Level.Id].edit = true;
+                        byte b1 = (byte)(newC & 0xFF);
+                        byte b2 = (byte)((newC >> 8) & 0xFF);
+                        PSX.levels[Level.Id].pal[(c + (r + (bgF * 0x40)) * 16) * 2] = b1;
+                        PSX.levels[Level.Id].pal[((c + (r + (bgF * 0x40)) * 16) * 2) + 1] = b2;
+                        Level.AssignPallete(r + (bgF * 0x40));
 
-                        ushort oldC = BitConverter.ToUInt16(ISO.levels[Level.Id].pal, (c + (r + 0x40) * 16) * 2);
-                        int newC = colorDialog.Color.B / 8 * 1024 + colorDialog.Color.G / 8 * 32 + colorDialog.Color.R / 8;
-                        if (newC != oldC)
-                        {
-                            ISO.levels[Level.Id].edit = true;
-                            byte b1 = (byte)(newC & 0xFF);
-                            byte b2 = (byte)((newC >> 8) & 0xFF);
-                            ISO.levels[Level.Id].pal[(c + (r + (bgF * 0x40)) * 16) * 2] = b1;
-                            ISO.levels[Level.Id].pal[((c + (r + (bgF * 0x40)) * 16) * 2) + 1] = b2;
-                            Level.AssignPallete(r + (bgF * 0x40));
-                            int rgb32 = Level.To32Rgb(newC);
-                            ((Rectangle)sender).Fill = new SolidColorBrush(Color.FromRgb((byte)(rgb32 >> 16), (byte)((rgb32 >> 8) & 0xFF), (byte)(rgb32 & 0xFF)));
+                        //Convert & Change Clut in GUI
+                        int rgb32 = Level.To32Rgb(newC);
+                        ((Rectangle)sender).Fill = new SolidColorBrush(Color.FromRgb((byte)(rgb32 >> 16), (byte)((rgb32 >> 8) & 0xFF), (byte)(rgb32 & 0xFF)));
 
-                            if (clut == r)
-                                DrawTextures();
-                            if (bgF == 0)
-                                return;
-                            //Enemy Tab
-                            MainWindow.window.enemyE.Draw();
-                            //16x16 Tab
-                            if(Level.palId == r)
-                                MainWindow.window.x16E.DrawTextures();
-                            if( Level.GetClut(MainWindow.window.x16E.selectedTile) == r)
-                                MainWindow.window.x16E.DrawTile();
-                            MainWindow.window.x16E.DrawTiles();
-                            //Screen Tab
-                            if (Level.GetClut(MainWindow.window.screenE.selectedTile) == r)
-                                MainWindow.window.screenE.DrawTile();
-                            MainWindow.window.screenE.DrawScreen();
-                            MainWindow.window.screenE.DrawTiles();
-                            //Layout Tab
-                            MainWindow.window.layoutE.DrawLayout();
-                            MainWindow.window.layoutE.DrawScreen();
-                        }
+                        //Updating the rest of GUI
+                        if (clut == r)
+                            DrawTextures();
+                        if (bgF == 0)
+                            return;
+                        //Enemy Tab
+                        MainWindow.window.enemyE.Draw();
+                        //16x16 Tab
+                        MainWindow.window.x16E.DrawTextures();
+                        if (Level.GetClut(MainWindow.window.x16E.selectedTile) == r)
+                            MainWindow.window.x16E.DrawTile();
+                        MainWindow.window.x16E.DrawTiles();
+                        //Screen Tab
+                        if (Level.GetClut(MainWindow.window.screenE.selectedTile) == r)
+                            MainWindow.window.screenE.DrawTile();
+                        MainWindow.window.screenE.DrawScreen();
+                        MainWindow.window.screenE.DrawTiles();
+                        //Layout Tab
+                        MainWindow.window.layoutE.DrawLayout();
+                        MainWindow.window.layoutE.DrawScreen();
                     }
                 }
             }
-            else
+            else //Change selected Clut
             {
-                clut = (int)Grid.GetRow(sender as UIElement);
+                clut = Grid.GetRow(sender as UIElement);
                 UpdateClutTxt();
                 DrawTextures();
             }
@@ -219,6 +223,6 @@ namespace TeheMan8_Editor.Forms
             DrawTextures();
             MainWindow.window.clutE.cursor.Fill = Brushes.Transparent;
         }
-        #endregion Events
+#endregion Events
     }
 }

@@ -7,11 +7,10 @@
         Background="Black"
         mc:Ignorable="d"
         Title="ListWindow" Height="300" Width="400" Closing="Window_Closing">
-    <Grid>
+    <Grid x:Name="outGrid">
         <ScrollViewer x:Name="scroll">
             <StackPanel x:Name="pannel">
                 <Grid x:Name="grid">
-                    
                 </Grid>
             </StackPanel>
         </ScrollViewer>

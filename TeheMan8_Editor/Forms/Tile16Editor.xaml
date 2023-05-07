@@ -104,7 +104,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Image x:Name="textureImage" Grid.RowSpan="16" Grid.ColumnSpan="16" MaxWidth="768" HorizontalAlignment="Left" MouseDown="textureImage_MouseDown" MouseWheel="textureImage_MouseWheel"></Image>
+                    <Image x:Name="textureImage" Grid.RowSpan="16" Grid.ColumnSpan="16" HorizontalAlignment="Left" MouseDown="textureImage_MouseDown" MouseWheel="textureImage_MouseWheel"></Image>
                 </Grid>
             </Border>
             <Grid>
@@ -147,23 +147,23 @@
             <WrapPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">TILE:</Label>
-                    <xctk:IntegerUpDown x:Name="tileInt" Width="70" FontSize="18" Value="0" Maximum="#FFF" Minimum="0" ValueChanged="tileInt_ValueChanged" MaxLength="3"/>
+                    <local:NumInt x:Name="tileInt" Width="70" FontSize="18" Value="0" Maximum="#FFF" Minimum="0" ValueChanged="tileInt_ValueChanged" MaxLength="3"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">Cord:</Label>
-                    <xctk:IntegerUpDown x:Name="cordInt" FontSize="18" Minimum="0" Maximum="#FF" Width="70" ValueChanged="cordInt_ValueChanged"/>
+                    <local:NumInt x:Name="cordInt" FontSize="18" Minimum="0" Maximum="#FF" Width="70" ValueChanged="cordInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">Tpage:</Label>
-                    <xctk:IntegerUpDown x:Name="pageInt" FontSize="18" Minimum="0" Maximum="#7" Width="60" ValueChanged="pageInt_ValueChanged"/>
+                    <local:NumInt x:Name="pageInt" FontSize="18" Minimum="0" Maximum="#7" Width="60" ValueChanged="pageInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,13,3">Clut:</Label>
-                    <xctk:IntegerUpDown x:Name="clutInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="clutInt_ValueChanged"/>
+                    <local:NumInt x:Name="clutInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="clutInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,13,3">Coll:</Label>
-                    <xctk:IntegerUpDown x:Name="colInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="colInt_ValueChanged"/>
+                    <local:NumInt x:Name="colInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="colInt_ValueChanged"/>
                 </StackPanel>
             </WrapPanel>
         </StackPanel>

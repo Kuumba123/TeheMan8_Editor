@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:forms="clr-namespace:TeheMan8_Editor.Forms"
              mc:Ignorable="d" 
@@ -30,7 +31,7 @@
         <!--Enemy Type-->
         <StackPanel Orientation="Horizontal" Grid.Column="1">
             <Label Foreground="White" FontFamily="Consolas" FontSize="18">Enemy Type</Label>
-            <Button>0-1</Button>
+            <Button>1</Button>
             <Button>2</Button>
             <Button>3</Button>
             <Button>4</Button>
@@ -40,30 +41,57 @@
             
         </ScrollViewer>
         <!--Enemy Info-->
-        <StackPanel Grid.Column="1" Grid.Row="3">
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <!--ID-->
+                    <Label Width="55" FontSize="18" Foreground="White" FontFamily="Consolas">ID:</Label>
+                    <local:NumInt x:Name="idInt" Width="60" ButtonSpinnerWidth="20" FontSize="20" Value="0" Maximum="#FF" Minimum="0" MaxLength="3" ValueChanged="idInt_ValueChanged" IsUndoEnabled="False" IsEnabled="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <!--Var-->
+                    <Label Width="55" FontSize="18" Foreground="White" FontFamily="Consolas">Var:</Label>
+                    <local:NumInt x:Name="varInt" Width="60" ButtonSpinnerWidth="20" FontSize="22" Value="0" Maximum="#FF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="varInt_ValueChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <!--Type-->
+                    <Label Width="55" FontSize="18" Foreground="White" FontFamily="Consolas">Type:</Label>
+                    <local:NumInt x:Name="typeInt" Width="60" ButtonSpinnerWidth="20" FontSize="22" Value="0" Maximum="#4" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="typeInt_ValueChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                </StackPanel>
+            </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="12,3,13,3">ID:</Label>
-                <xctk:IntegerUpDown x:Name="idInt" Width="60" FontSize="18" Value="0" Maximum="#FF" Minimum="0" MaxLength="3" ValueChanged="idInt_ValueChanged" IsUndoEnabled="False" IsEnabled="False"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+            </StackPanel>
+            <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
                 <!--X-->
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,0,3">X:</Label>
-                <xctk:IntegerUpDown x:Name="xInt" Width="69" FontSize="18" Value="0" Maximum="#1FFF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="xInt_ValueChanged"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,12,3">Var:</Label>
-                <xctk:IntegerUpDown x:Name="varInt" Width="60" FontSize="18" Value="0" Maximum="#FF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="varInt_ValueChanged"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="33" Foreground="White" FontFamily="Consolas" Padding="3,3,0,3">X:</Label>
+                    <local:NumInt x:Name="xInt" ButtonSpinnerWidth="20" Width="100" Height="40" FontSize="33" Value="0" Maximum="#1FFF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="xInt_ValueChanged"/>
+                </StackPanel>
                 <!--Y-->
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,0,3">Y:</Label>
-                <xctk:IntegerUpDown x:Name="yInt" Width="69" FontSize="18" Value="0" Maximum="#1FFF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="yInt_ValueChanged"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="33" Foreground="White" FontFamily="Consolas" Padding="3,3,0,3">Y:</Label>
+                    <local:NumInt x:Name="yInt" ButtonSpinnerWidth="20" Width="100" Height="40" FontSize="33" Value="0" Maximum="#1FFF" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="yInt_ValueChanged"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">Type:</Label>
-                <xctk:IntegerUpDown x:Name="typeInt" Width="60" FontSize="18" Value="0" Maximum="#4" Minimum="0" MaxLength="3" IsEnabled="False" ValueChanged="typeInt_ValueChanged"/>
-            </StackPanel>
-            <WrapPanel Orientation="Horizontal">
-                <Button Margin="10" Padding="5" Width="140" Height="40" Click="AddEnemy_Click">Add New Enemy</Button>
-                <Button Margin="10" Padding="5" Width="140" Height="40" Click="RemoveEnemy_Click">Remove</Button>
+            <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
+                <Button Margin="5,30,5,5" Width="85" Height="35" Click="AddEnemy_Click">Add</Button>
+                <Button Margin="5,30,5,5" Width="85" Height="35" Click="RemoveEnemy_Click">Remove</Button>
+                <Button Margin="5,30,5,5" Width="85" Height="35" Click="ToolsBtn_Click" HorizontalAlignment="Left">Tools</Button>
+                <Button Margin="5,30,5,5" Width="30" Height="30" Padding="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Help_Click">?</Button>
             </WrapPanel>
-        </StackPanel>
+        </Grid>
 
     </Grid>
 </UserControl>

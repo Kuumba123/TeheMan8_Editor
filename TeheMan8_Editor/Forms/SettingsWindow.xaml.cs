@@ -13,74 +13,71 @@ namespace TeheMan8_Editor.Forms
         #region Properties
         private bool enable = false;
         private bool edited = false;
-        private bool editPacExpan = false;
         #endregion  Properties
 
         #region Constructors
         public SettingsWindow()
         {
             InitializeComponent();
-            argsBox.Text = MainWindow.settings.buildArgs;
-            outputBuildCheck.IsChecked = MainWindow.settings.outputBuild;
-            saveOnExportCheck.IsChecked = MainWindow.settings.saveOnExport;
-            enableExpandedPac.IsChecked = MainWindow.settings.enableExpandedPac;
+
+            //Redux Settings
+            webBox.Text = MainWindow.settings.webPort;
+
+            //NOPS Settings
+            comBox.Text = MainWindow.settings.comPort;
+            useNopsCheck.IsChecked = MainWindow.settings.useNops;
             enable = true;
         }
         #endregion Constructors
 
         #region Events
-        private void argsBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void webBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.buildArgs = argsBox.Text;
+            MainWindow.settings.webPort = webBox.Text;
             edited = true;
         }
-        private void outputBuildCheck_Checked(object sender, RoutedEventArgs e)
+        private void comBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.outputBuild = true;
+            MainWindow.settings.comPort = comBox.Text;
             edited = true;
         }
-
-        private void outputBuildCheck_Unchecked(object sender, RoutedEventArgs e)
+        private void useNopsCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.outputBuild = false;
+            MainWindow.settings.useNops = (bool)useNopsCheck.IsChecked;
             edited = true;
         }
-        private void saveOnExportCheck_Checked(object sender, RoutedEventArgs e)
+        private void screenBackupCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.saveOnExport = true;
+            MainWindow.settings.noScreenReload = (bool)screenCheck.IsChecked;
             edited = true;
         }
-
-        private void saveOnExportCheck_Unchecked(object sender, RoutedEventArgs e)
+        private void clutCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.saveOnExport = false;
+            MainWindow.settings.noClutReload = (bool)clutCheck.IsChecked;
             edited = true;
         }
-
-        private void enableExpandedPac_Checked(object sender, RoutedEventArgs e)
+        private void saveOnReloadCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.enableExpandedPac = true;
+            MainWindow.settings.saveOnReload = (bool)saveReloadCheck.IsChecked;
             edited = true;
-            editPacExpan = true;
         }
-
-        private void enableExpandedPac_Unchecked(object sender, RoutedEventArgs e)
+        private void fastCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
-            MainWindow.settings.enableExpandedPac = false;
+            MainWindow.settings.saveOnReload = (bool)fastCheck.IsChecked;
             edited = true;
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -97,8 +94,6 @@ namespace TeheMan8_Editor.Forms
                     Application.Current.Shutdown();
                 }
             }
-            if (editPacExpan && ISO.levels.Count != 0)
-                MainWindow.window.SaveFiles();
         }
         #endregion Events
     }

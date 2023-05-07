@@ -19,7 +19,8 @@ namespace TeheMan8_Editor.Forms
         byte[] pixels2 = new byte[0x30000];
         public int viewerX = 0;
         public int viewerY = 0;
-        public Button past;
+        public int selectedScreen = 2;
+        public Button pastLayer;
         #endregion Fields
 
         #region Constructors
@@ -30,90 +31,98 @@ namespace TeheMan8_Editor.Forms
         #endregion Constructors
 
         #region Methods
-        public void Load()
-        {
-
-        }
         public void DrawLayout()
         {
             if (Level.BG == 0)
             {
                 //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
                 //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
                 //X2
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
             }else if(Level.BG == 1)
             {
                 //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
                 //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
                 //X2
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
             }
             else
             {
                 //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
                 //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
                 //X2
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
             }
             layoutBMP.WritePixels(new Int32Rect(0, 0, 768, 768), pixels, 2304, 0);
             MainWindow.window.layoutE.layoutImage.Source = layoutBMP;
         }
         public void DrawScreen()
         {
-            Level.DrawScreen(Level.selectedScreen, 768, pixels2);
+            Level.DrawScreen(selectedScreen, 768, pixels2);
             selectBMP.WritePixels(new Int32Rect(0, 0, 256, 256), pixels2, 768, 0);
             MainWindow.window.layoutE.selectImage.Source = selectBMP;
         }
         public void UpdateBtn()
         {
-            if (past != null)
+            if (pastLayer != null)
             {
-                past.Background = Brushes.Black;
-                past.Foreground = Brushes.White;
+                pastLayer.Background = Brushes.Black;
+                pastLayer.Foreground = Brushes.White;
             }
             if (Level.BG == 0)
             {
                 btn1.Background = Brushes.LightBlue;
                 btn1.Foreground = Brushes.Black;
-                past = btn1;
+                pastLayer = btn1;
             }
             else if (Level.BG == 1)
             {
                 btn2.Background = Brushes.LightBlue;
                 btn2.Foreground = Brushes.Black;
-                past = btn2;
+                pastLayer = btn2;
             }
             else
             {
                 btn3.Background = Brushes.LightBlue;
                 btn3.Foreground = Brushes.Black;
-                past = btn3;
+                pastLayer = btn3;
             }
+        }
+        public void AssignLimits()
+        {
+            int screenAmount = PSX.levels[Level.Id].screenData.Length / 0x200;
+            screenAmount--;
+            //Max Screen Settings
+            MainWindow.window.layoutE.screenInt.Maximum = screenAmount;
+            if (MainWindow.window.layoutE.screenInt.Value > screenAmount)
+            {
+                MainWindow.window.layoutE.screenInt.Value = screenAmount;
+            }
+            DrawScreen();
         }
         #endregion Methods
 
@@ -132,21 +141,21 @@ namespace TeheMan8_Editor.Forms
                 {
                     byte screen = 0;
                     if(Level.BG == 0)
-                        screen = ISO.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                        screen = PSX.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                     else if(Level.BG == 1)
-                        screen = ISO.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                        screen = PSX.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                     else
-                        screen = ISO.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                        screen = PSX.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                     MainWindow.window.screenE.screenInt.Value = screen;
                     return;
                 }
                 if (Level.BG == 0)
-                    Level.selectedScreen = ISO.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                    selectedScreen = PSX.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                 else if (Level.BG == 1)
-                    Level.selectedScreen = ISO.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                    selectedScreen = PSX.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                 else
-                    Level.selectedScreen = ISO.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
-                screenInt.Value = Level.selectedScreen;
+                    selectedScreen = PSX.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
+                screenInt.Value = selectedScreen;
                 DrawScreen();
             }
             else
@@ -159,24 +168,24 @@ namespace TeheMan8_Editor.Forms
                     return;
                 }
                 if (Level.BG == 0)
-                    ISO.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)Level.selectedScreen;
+                    PSX.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)selectedScreen;
                 else if (Level.BG == 1)
-                    ISO.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)Level.selectedScreen;
+                    PSX.levels[Level.Id].layout2[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)selectedScreen;
                 else
-                    ISO.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)Level.selectedScreen;
-                ISO.levels[Level.Id].edit = true;
+                    PSX.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)selectedScreen;
+                PSX.levels[Level.Id].edit = true;
                 DrawLayout();
             }
         }
         private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (e.NewValue == null)
+            if (e.NewValue == null || PSX.levels.Count == 0)
                 return;
-            if (Level.selectedScreen == (int)e.NewValue)
+            if (selectedScreen == (int)e.NewValue)
                 return;
-            Level.selectedScreen = (int)e.NewValue;
-            if ((uint)Level.selectedScreen >= 0xEF)
-                Level.selectedScreen = 0xEF;
+            selectedScreen = (int)e.NewValue;
+            if ((uint)selectedScreen >= 0xEF)
+                selectedScreen = 0xEF;
             DrawScreen();
         }
 
@@ -188,21 +197,21 @@ namespace TeheMan8_Editor.Forms
                 layoutGrid.ShowGridLines = true;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e) //Switch Layers Buttons
         {
             var b = (Button)sender;
             int i = Convert.ToInt32(b.Content.ToString(), 16) - 1;
             if (Level.BG == i)
                 return;
             Level.BG = i;
-            if(past != null)
+            if(pastLayer != null)
             {
-                past.Background = Brushes.Black;
-                past.Foreground = Brushes.White;
+                pastLayer.Background = Brushes.Black;
+                pastLayer.Foreground = Brushes.White;
             }
             b.Background = Brushes.LightBlue;
             b.Foreground = Brushes.Black;
-            past = b;
+            pastLayer = b;
             DrawLayout();
             if (MainWindow.layoutWindow != null)
                 MainWindow.layoutWindow.DrawScreens();
@@ -213,6 +222,85 @@ namespace TeheMan8_Editor.Forms
                 return;
             MainWindow.layoutWindow = new ListWindow(0);
             MainWindow.layoutWindow.Show();
+        }
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            HelpWindow h = new HelpWindow(1);
+            h.ShowDialog();
+        }
+        private void SnapButton_Click(object sender, RoutedEventArgs e)
+        {
+            using(var sfd = new System.Windows.Forms.SaveFileDialog())
+            {
+                sfd.Filter = "PNG |*.png";
+                sfd.Title = "Select Level Layout Save Location";
+                try
+                {
+                    if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        WriteableBitmap fileBmp = new WriteableBitmap(8192, 8192, 96, 96, PixelFormats.Rgb24, null);
+                        for (int y = 0; y < 32; y++) //32 Screens  Tall
+                        {
+                            for (int x = 0; x < 32; x++) //32 Screens Wide
+                            {
+                                if (Level.BG == 0)
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout[y * 32 + x], 256 * 3, pixels);
+                                else if (Level.BG == 1)
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout2[y * 32 + x], 256 * 3, pixels);
+                                else
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout3[y * 32 + x], 256 * 3, pixels);
+                                fileBmp.WritePixels(new Int32Rect(x * 256, y * 256, 256, 256), pixels, 256 * 3, 0);
+                            }
+                        }
+                        PngBitmapEncoder encoder = new PngBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(fileBmp));
+                        System.IO.FileStream fs = System.IO.File.Create(sfd.FileName);
+                        encoder.Save(fs);
+                        fs.Close();
+                        MessageBox.Show("Layout Exported");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        private void UpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainWindow.window.layoutE.viewerY != 0)
+            {
+                MainWindow.window.layoutE.viewerY -= 0x100;
+                MainWindow.window.layoutE.DrawLayout();
+                MainWindow.window.UpdateViewrCam();
+            }
+        }
+        private void DownButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainWindow.window.layoutE.viewerY != 0x1D00)
+            {
+                MainWindow.window.layoutE.viewerY += 0x100;
+                MainWindow.window.layoutE.DrawLayout();
+                MainWindow.window.UpdateViewrCam();
+            }
+        }
+        private void LeftButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainWindow.window.layoutE.viewerX != 0)
+            {
+                MainWindow.window.layoutE.viewerX -= 0x100;
+                MainWindow.window.layoutE.DrawLayout();
+                MainWindow.window.UpdateViewrCam();
+            }
+        }
+        private void RightButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainWindow.window.layoutE.viewerX != 0x1D00)
+            {
+                MainWindow.window.layoutE.viewerX += 0x100;
+                MainWindow.window.layoutE.DrawLayout();
+                MainWindow.window.UpdateViewrCam();
+            }
         }
         #endregion Events
     }

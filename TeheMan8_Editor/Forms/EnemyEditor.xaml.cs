@@ -14,7 +14,7 @@ namespace TeheMan8_Editor.Forms
     {
         #region Properties
         WriteableBitmap bmp = new WriteableBitmap(512, 512, 96, 96, PixelFormats.Rgb24, null);
-        byte[] pixels = new byte[0x100000];
+        byte[] pixels = new byte[0xC0000];
         public int viewerX = 0x400;
         public int viewerY = 0;
         UIElement obj;
@@ -37,32 +37,13 @@ namespace TeheMan8_Editor.Forms
                 viewerX = 0x1E00;
             if (viewerY > 0x1E00)
                 viewerY = 0x1E00;
-            if (Level.BG == 0)
-            {
-                //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(viewerX >> 8) + ((viewerY >> 8) * 32)], 0, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(viewerX >> 8) + (((viewerY >> 8) + 1) * 32)], 0, 256, 1536, pixels);
-                //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(viewerX >> 8) + 1 + ((viewerY >> 8) * 32)], 256, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout[(viewerX >> 8) + 1 + (((viewerY >> 8) + 1) * 32)], 256, 256, 1536, pixels);
-            }else if(Level.BG == 1)
-            {
-                //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(viewerX >> 8) + ((viewerY >> 8) * 32)], 0, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(viewerX >> 8) + (((viewerY >> 8) + 1) * 32)], 0, 256, 1536, pixels);
-                //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(viewerX >> 8) + 1 + ((viewerY >> 8) * 32)], 256, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout2[(viewerX >> 8) + 1 + (((viewerY >> 8) + 1) * 32)], 256, 256, 1536, pixels);
-            }
-            else
-            {
-                //X0
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(viewerX >> 8) + ((viewerY >> 8) * 32)], 0, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(viewerX >> 8) + (((viewerY >> 8) + 1) * 32)], 0, 256, 1536, pixels);
-                //X1
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(viewerX >> 8) + 1 + ((viewerY >> 8) * 32)], 256, 0, 1536, pixels);
-                Level.DrawScreen(ISO.levels[Level.Id].layout3[(viewerX >> 8) + 1 + (((viewerY >> 8) + 1) * 32)], 256, 256, 1536, pixels);
-            }
+            //X0
+            Level.DrawScreen(PSX.levels[Level.Id].layout[(viewerX >> 8) + ((viewerY >> 8) * 32)], 0, 0, 1536, pixels);
+            Level.DrawScreen(PSX.levels[Level.Id].layout[(viewerX >> 8) + (((viewerY >> 8) + 1) * 32)], 0, 256, 1536, pixels);
+            //X1
+            Level.DrawScreen(PSX.levels[Level.Id].layout[(viewerX >> 8) + 1 + ((viewerY >> 8) * 32)], 256, 0, 1536, pixels);
+            Level.DrawScreen(PSX.levels[Level.Id].layout[(viewerX >> 8) + 1 + (((viewerY >> 8) + 1) * 32)], 256, 256, 1536, pixels);
+
             MainWindow.window.enemyE.bmp.WritePixels(new Int32Rect(0, 0, 512, 512), pixels, 1536, 0);
             MainWindow.window.enemyE.layoutImage.Source = bmp;
         }
@@ -94,7 +75,7 @@ namespace TeheMan8_Editor.Forms
             }
             int offset = 0;
             //Add Each Enemy if ON SCREEN
-            foreach (var e in ISO.levels[Level.Id].enemies)
+            foreach (var e in PSX.levels[Level.Id].enemies)
             {
                 if (e.x < viewerX || e.x > viewerX + 0x1FF || e.y < viewerY || e.y > viewerY + 0x1FF)
                     continue;
@@ -190,39 +171,47 @@ namespace TeheMan8_Editor.Forms
             var en = (Enemy)((EnemyLabel)obj).Tag;
             en.x = (short)((short)((viewerX & 0x1F00) + x) + Const.EnemyOffset);
             en.y = (short)((short)((viewerY & 0x1F00) + y) + Const.EnemyOffset);
-            ISO.levels[Level.Id].edit = true;
+            PSX.levels[Level.Id].edit = true;
         }
         private void canvas_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Right)
                 return;
             obj = null;
-            down = false;        
+            down = false;
             canvas.ReleaseMouseCapture();
         }
 
         private void AddEnemy_Click(object sender, RoutedEventArgs e)
         {
-            if(ISO.levels[Level.Id].enemies.Count == 255)
+            if(PSX.levels[Level.Id].enemies.Count == 255)
             {
                 MessageBox.Show("Can only have up to 255 Enemies in a single Level");
                 return;
             }
             //Add Enemy
-            ISO.levels[Level.Id].edit = true;
+            PSX.levels[Level.Id].edit = true;
             var en = new Enemy();
             en.x = (short)(viewerX + 0x100);
             en.y = (short)(viewerY + 0x100);
             en.id = 1; //Default is Met
-            ISO.levels[Level.Id].enemies.Add(en);
+            en.type = 1;
+            PSX.levels[Level.Id].enemies.Add(en);
             DrawEnemies();
         }
         private void RemoveEnemy_Click(object sender, RoutedEventArgs e)
         {
             if (control.Tag == null)
                 return;
-            ISO.levels[Level.Id].enemies.Remove((Enemy)((EnemyLabel)control.Tag).Tag);
+            PSX.levels[Level.Id].enemies.Remove((Enemy)((EnemyLabel)control.Tag).Tag);
             DrawEnemies();
+        }
+        private void ToolsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ListWindow l = new ListWindow(3);
+            l.ShowDialog();
+            MainWindow.window.enemyE.DisableSelect();
+            MainWindow.window.enemyE.Draw();
         }
         private void idInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -261,6 +250,11 @@ namespace TeheMan8_Editor.Forms
                 return;
             ((Enemy)((EnemyLabel)control.Tag).Tag).type = (byte)((int)e.NewValue & 0xFF);
             ((EnemyLabel)control.Tag).AssignTypeBorder(((Enemy)((EnemyLabel)control.Tag).Tag).type);
+        }
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            HelpWindow h = new HelpWindow(4);
+            h.ShowDialog();
         }
         #endregion Events
     }

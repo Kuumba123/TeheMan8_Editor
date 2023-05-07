@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="TeheMan 8 Editor Settings" Height="350" Width="350" Closing="Window_Closing" ResizeMode="CanMinimize">
+        Title="TeheMan 8 Editor Settings" Height="350" Width="350" Closing="Window_Closing" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="White"/>
@@ -19,22 +19,38 @@
         <Style TargetType="TextBox">
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="White"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="22"/>
         </Style>
     </Window.Resources>
     <ScrollViewer>
         <Grid Background="#101010">
             <StackPanel>
+                
+                <!--Redux Settings-->
                 <StackPanel Background="#191919">
-                    <Label HorizontalAlignment="Center">Build Arguments</Label>
-                    <TextBox x:Name="argsBox" TextChanged="argsBox_TextChanged"></TextBox>
+                    <Label HorizontalAlignment="Center">Redux Settings</Label>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="webBox" Height="30" Width="55" TextChanged="webBox_TextChanged"></TextBox>
+                    <Label>Web Server PORT</Label>
+                </StackPanel>
+
+                <!--NOPS Settings-->
+                <StackPanel Background="#191919">
+                    <Label HorizontalAlignment="Center">NOPS Settings</Label>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="comBox" Height="30" Width="25" TextChanged="comBox_TextChanged"></TextBox>
+                    <Label>COM-PORT</Label>
+                </StackPanel>
+                <CheckBox x:Name="useNopsCheck" Checked="useNopsCheck_Change" Unchecked="useNopsCheck_Change">Use NOPS for Reload</CheckBox>
+                <CheckBox x:Name="fastCheck" Checked="fastCheck_Change" Unchecked="fastCheck_Change">Use NOPS Fast Mode</CheckBox>
+                <CheckBox x:Name="screenCheck" Checked="screenBackupCheck_Change" Unchecked="screenBackupCheck_Change">DONT reload backup Screen Data</CheckBox>
+                <CheckBox x:Name="clutCheck" Checked="clutCheck_Change" Unchecked="clutCheck_Change">DONT reload backup Clut Data</CheckBox>
                 <StackPanel Background="#191919">
                     <Label HorizontalAlignment="Center">Options</Label>
                 </StackPanel>
-                <CheckBox x:Name="outputBuildCheck" Checked="outputBuildCheck_Checked" Unchecked="outputBuildCheck_Unchecked">Output Build</CheckBox>
-                <CheckBox x:Name="saveOnExportCheck" Checked="saveOnExportCheck_Checked" Unchecked="saveOnExportCheck_Unchecked">Save On Export</CheckBox>
-                <CheckBox x:Name="enableExpandedPac" Checked="enableExpandedPac_Checked" Unchecked="enableExpandedPac_Unchecked">Enable Expaned PAC</CheckBox>
+                <CheckBox x:Name="saveReloadCheck" Checked="saveOnReloadCheck_Change" Unchecked="saveOnReloadCheck_Change">Save On Reload</CheckBox>
             </StackPanel>
         </Grid>
     </ScrollViewer>

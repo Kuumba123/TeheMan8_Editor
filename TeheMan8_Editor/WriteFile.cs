@@ -7,6 +7,8 @@
         public string name;
         public string path;
         public int size;
+        public bool isFolder = false;
+        public long offset = 0;
         #endregion
 
         #region Constructors

@@ -26,7 +26,7 @@
                 <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
                 <RowDefinition/><RowDefinition/>
             </Grid.RowDefinitions>
-            <Image x:Name="screenImage" Grid.RowSpan="16" Grid.ColumnSpan="16" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top" MouseUp="screenImage_MouseUp" MouseDown="screenImage_MouseDown"/>
+            <Image x:Name="screenImage" Grid.RowSpan="16" Grid.ColumnSpan="16" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="screenImage_MouseDown" MouseMove="screenImage_MouseMove"/>
             
         </Grid>
         <StackPanel Grid.Column="1">
@@ -87,15 +87,17 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Image HorizontalAlignment="Left" Margin="0" x:Name="tileImage" MaxWidth="768" Grid.RowSpan="16" Grid.ColumnSpan="16" MouseDown="tileImage_MouseDown"></Image>
+                    <Image HorizontalAlignment="Left" Margin="0" x:Name="tileImage" Grid.RowSpan="16" Grid.ColumnSpan="16" MouseDown="tileImage_MouseDown"></Image>
                 </Grid>
             </Border>
             <WrapPanel Orientation="Horizontal">
-                <xctk:IntegerUpDown FontFamily="Consolas" ParsingNumberStyle="HexNumber" FormatString="X" Width="69" Height="40" Value="1" FontSize="33" Maximum="239" MinHeight="0" Focusable="False" x:Name="screenInt" Minimum="0" AllowTextInput="True" ValueChanged="screenInt_ValueChanged"/>
+                <local:NumInt FontFamily="Consolas" ParsingNumberStyle="HexNumber" FormatString="X" Width="69" Height="40" Value="2" FontSize="33" Maximum="239" MinHeight="0" x:Name="screenInt" Minimum="0" AllowTextInput="True" ValueChanged="screenInt_ValueChanged"/>
+                
                 <StackPanel Orientation="Horizontal">
-                    <Button Margin="5,5,0,5" Padding="10" Width="145" Height="40" Click="ScreenGridBtn_Click">Show Screen Grid</Button>
-                    <Button Margin="5" Padding="10" Width="140" Height="40" Click="TileGridBtn_Click">Show Tile Grid</Button>
+                    <Button Margin="5,5,0,5" Padding="0" Width="130" Height="40" Click="ScreenGridBtn_Click">Show Screen Grid</Button>
+                    <Button Margin="5" Padding="0" Width="110" Height="40" Click="TileGridBtn_Click">Show Tile Grid</Button>
                 </StackPanel>
+                <Button Width="30" Height="30" Padding="0" Margin="2" Click="Extra_Click">&#128681;</Button>
             </WrapPanel>
             <!--Tile Image for Selected 16x16 Tile-->
             <Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Left" Margin="3,1,1,1">
@@ -105,26 +107,31 @@
             <WrapPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">TILE:</Label>
-                    <xctk:IntegerUpDown x:Name="tileInt" Width="70" FontSize="18" Value="0" Maximum="#FFF" Minimum="0" ValueChanged="tileInt_ValueChanged" MaxLength="3"/>
+                    <local:NumInt x:Name="tileInt" Width="70" FontSize="18" Value="0" Maximum="#FFF" Minimum="0" ValueChanged="tileInt_ValueChanged" MaxLength="3"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">Cord:</Label>
-                    <xctk:IntegerUpDown x:Name="cordInt" FontSize="18" Minimum="0" Maximum="#FF" Width="70" ValueChanged="cordInt_ValueChanged"/>
+                    <local:NumInt x:Name="cordInt" FontSize="18" Minimum="0" Maximum="#FF" Width="70" ValueChanged="cordInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3">Tpage:</Label>
-                    <xctk:IntegerUpDown x:Name="pageInt" FontSize="18" Minimum="0" Maximum="#7" Width="60" ValueChanged="pageInt_ValueChanged"/>
+                    <local:NumInt x:Name="pageInt" FontSize="18" Minimum="0" Maximum="#7" Width="60" ValueChanged="pageInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,13,3">Clut:</Label>
-                    <xctk:IntegerUpDown x:Name="clutInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="clutInt_ValueChanged"/>
+                    <local:NumInt x:Name="clutInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="clutInt_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label FontSize="18" Foreground="White" FontFamily="Consolas" Padding="3,3,13,3">Coll:</Label>
-                    <xctk:IntegerUpDown x:Name="colInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="colInt_ValueChanged"/>
+                    <local:NumInt x:Name="colInt" FontSize="18" Minimum="0" Maximum="#3F" Width="60" ValueChanged="colInt_ValueChanged"/>
                 </StackPanel>
             </WrapPanel>
+            
             <!---->
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Width="30" Height="30" Padding="0" Margin="3" Click="SnapButton_Click">&#128247;</Button>
+            <Button Width="30" Height="30" Padding="0" Margin="10" Click="Help_Click">?</Button>
         </StackPanel>
     </Grid>
 </UserControl>

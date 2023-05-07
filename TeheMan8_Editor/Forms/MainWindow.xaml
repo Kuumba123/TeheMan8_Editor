@@ -20,8 +20,11 @@
             <Button Name="saveAsButn" Style="{StaticResource ToolButton}" Click="saveAsButn_Click">Save As</Button>
             <Button Name="toolsBtn" Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Click="toolsBtn_Click" >Tools</Button>
             <Button Name="aboutBtn" Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Click="aboutBtn_Click">About</Button>
-            <Button Name="exportBtn" Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Click="exportBtn_Click">Export</Button>
-            <Button Name="settingsBtn" Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Click="settingsBtn_Click">Settings</Button>
+            <Button Name="reloadBtn" Style="{StaticResource ToolButton}" Click="reloadBtn_Click">ReLoad</Button>
+            <Button Name="settingsBtn" Style="{StaticResource ToolButton}" Click="settingsBtn_Click">Settings</Button>
+            <Button Name="sizeBtn" Style="{StaticResource ToolButton}" Click="sizeBtn_Click">Size</Button>
+            <Button Name="filesBtn" Style="{StaticResource ToolButton}" Click="filesBtn_Click">Files</Button>
+            <Button Name="helpBtn" Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Click="helpBtn_Click">Help</Button>
         </DockPanel>
 
         <dragablz:TabablzControl Grid.Row="1" Name="hub" AllowDrop="True" Visibility="Hidden" Focusable="False" ConsolidateOrphanedItems="True" Background="Black">
@@ -70,7 +73,20 @@
                 </TabItem.Header>
                 <forms:SpawnWindow x:Name="spawnE"/>
             </TabItem>
-            
+
+            <TabItem Name="camTab">
+                <TabItem.Header>
+                    <Button Style="{StaticResource TabButton}">Camera</Button>
+                </TabItem.Header>
+                <forms:CameraEditor x:Name="cameraE"/>
+            </TabItem>
+
+            <TabItem Name="bgTab">
+                <TabItem.Header>
+                    <Button Style="{StaticResource TabButton}">Background</Button>
+                </TabItem.Header>
+                <forms:BackgroundEditor x:Name="bgE"/>
+            </TabItem>
         </dragablz:TabablzControl>
     </Grid>
 </Window>

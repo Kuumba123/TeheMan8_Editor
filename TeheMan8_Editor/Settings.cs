@@ -6,12 +6,11 @@ namespace TeheMan8_Editor
     {
         #region Fields
         static public bool error = false;
-        static public string message;
-        static public Process builder = new Process()
+        static public Process nops = new Process()
         {
             StartInfo = new ProcessStartInfo()
             {
-                FileName = @"TeheMan8_Builder.exe",
+                FileName = "nops.exe",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -21,28 +20,31 @@ namespace TeheMan8_Editor
         #endregion Fields
 
         #region Properties
-        public string buildArgs;
-        public bool outputBuild;
-        public bool saveOnExport;
-        public bool enableExpandedPac;
+        public string webPort; //Redux
+        public string comPort; //NOPS
+        public bool useNops;
+        public bool useFast;
+        public bool noScreenReload;
+        public bool noClutReload;
+        public bool saveOnReload;
         #endregion Properties
-
-        #region Constructors
-        public Settings()
-        {
-
-        }
-        #endregion Constructors
 
         #region Methods
         public static Settings SetDefaultSettings()
         {
             Settings s = new Settings();
-            s.buildArgs = "";
-            s.outputBuild = true;
-            s.saveOnExport = true;
-            s.enableExpandedPac = false;
+            s.webPort = "8080";
+            s.comPort = "5";
+            s.useNops = false;
+            s.saveOnReload = true;
             return s;
+        }
+        public void CheckForValidSettings()
+        {
+            if (webPort == null)
+                webPort = "8080";
+            if (comPort == null)
+                comPort = "5";
         }
         #endregion Methods
     }

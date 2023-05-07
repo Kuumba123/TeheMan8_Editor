@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using TeheMan8_Editor.Forms;
@@ -14,10 +16,11 @@ namespace TeheMan8_Editor
     {
         #region Fields
         internal static MainWindow window;
+        internal static ListWindow fileWindow;
         internal static ListWindow layoutWindow;
-        internal static ListWindow buildWindow;
+        internal static ListWindow extraWindow;
+        internal static ListWindow loadWindow;
         internal static Settings settings = Settings.SetDefaultSettings();
-        internal static bool building = false;
         #endregion Fields
 
         #region Properties
@@ -31,10 +34,16 @@ namespace TeheMan8_Editor
             if (window == null)
             {
                 window = this;
-                ISO.lastSave = null;
-                Settings.builder.EnableRaisingEvents = true;
-                Settings.builder.OutputDataReceived += Builder_OutputDataReceived;
-                Settings.builder.Exited += Builder_Exited;
+                PSX.lastSave = null;
+                Settings.nops.EnableRaisingEvents = true;
+                Settings.nops.OutputDataReceived += NOPS_OutputDataReceived;
+                //Window Sizing
+                {
+                    int Y = (int)(40 * SystemParameters.PrimaryScreenWidth / 100);
+                    window.layoutE.selectImage.MaxWidth = Y;
+                    window.screenE.tileImage.MaxWidth = Y;
+                    window.x16E.textureImage.MaxWidth = Y;
+                }
 
                 //Open Settings
                 if (File.Exists("Settings.json"))
@@ -42,6 +51,7 @@ namespace TeheMan8_Editor
                     try
                     {
                         settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText("Settings.json"));
+                        settings.CheckForValidSettings();
                     }catch(Exception e)
                     {
                         MessageBox.Show(e.Message, "ERROR");
@@ -67,18 +77,18 @@ namespace TeheMan8_Editor
                     //PSX.EXE was Found
                     Level.LoadLevels(args[1]);
 
-                    if (ISO.levels.Count == 0) //Check for any PAC Level Files
+                    if (PSX.levels.Count == 0) //Check for any PAC Level Files
                     {
                         MessageBox.Show("No PAC level files were found.");
                         return;
                     }
-                    ISO.exe = File.ReadAllBytes(args[1] + "/SLUS_004.53");
-                    ISO.time = File.GetLastWriteTime(args[1] + "/SLUS_004.53");
-                    ISO.filePath = args[1];
+                    PSX.exe = File.ReadAllBytes(args[1] + "/SLUS_004.53");
+                    PSX.time = File.GetLastWriteTime(args[1] + "/SLUS_004.53");
+                    PSX.edit = false;
+                    PSX.filePath = args[1];
                     Level.Id = 0;
-                    Level.currentScreen = 1;
                     Level.AssignPallete();
-                    ISO.levels[Level.Id].LoadTextures();
+                    PSX.levels[Level.Id].LoadTextures();
                     //Draw Everything
                     Update();
                     hub.Visibility = Visibility.Visible;
@@ -93,318 +103,26 @@ namespace TeheMan8_Editor
         }
         #endregion Constructors
 
-        #region Events
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (Dragablz.TabablzControl.GetIsClosingAsPartOfDragOperation(this) && this == window)
-            {
-                e.Cancel = true;
-            }
-            else if (this == window)
-            {
-                foreach (var l in ISO.levels)
-                {
-                    if (l.edit)
-                    {
-                        var result = MessageBox.Show("You have edited some of your game files without saving.\nAre you sure you want to exit the editor?", "WARNING", MessageBoxButton.YesNo);
-                        if (result != MessageBoxResult.Yes)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                Application.Current.Shutdown();
-            }
-        }
-        private void toolsBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ToolsWindow tools = new ToolsWindow();
-            tools.ShowDialog();
-        }
-
-        private void aboutBtn_Click(object sender, RoutedEventArgs e)
-        {
-            AboutWindow about = new AboutWindow();
-            about.ShowDialog();
-        }
-
-        private void openBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenGame();
-        }
-
-        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) //HotKeys & Stuff
-        {
-            var key = e.Key.ToString();
-            if (key == "F11")
-            {
-                if (max)
-                {
-                    this.WindowStyle = WindowStyle.SingleBorderWindow;
-                    this.WindowState = WindowState.Normal;
-                    max = false;
-                }
-                else
-                {
-                    this.WindowStyle = WindowStyle.None;
-                    this.WindowState = WindowState.Maximized;
-                    max = true;
-                }
-                return;
-            }
-            if (e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
-            {
-                if (key == "O") //Open
-                {
-                    OpenGame();
-                }
-                else if (key == "S" && ISO.levels.Count != 0) //Save
-                {
-                    SaveFiles();
-                }
-                else if (key == "E" && ISO.levels.Count != 0) //Export
-                {
-                    if(ISO.lastSave == null)
-                    {
-                        using(var fd = new System.Windows.Forms.SaveFileDialog())
-                        {
-                            fd.Filter = "ISO |*.bin";
-                            fd.Title = "Select MegaMan 8 ISO File";
-                            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                            {
-                                ISO.lastSave = fd.FileName;
-                            }
-                            else
-                                return;
-                        }
-                    }
-                    if (settings.saveOnExport)
-                    {
-                        if (!SaveFiles())
-                            return;
-                    }
-
-                    //Start Builder
-                    building = true;
-                    if (settings.buildArgs == "")
-                        Settings.builder.StartInfo.Arguments = "\"" + ISO.filePath + "\"" + ' ' + "\"" + ISO.lastSave + "\"";
-                    else
-                        Settings.builder.StartInfo.Arguments = "\"" + ISO.filePath + "\"" + ' ' + "\"" + ISO.lastSave + "\"" + " \"" + settings.buildArgs + "\"";
-                    try
-                    {
-                        Settings.builder.Start();
-                        Settings.builder.BeginOutputReadLine();
-                    }catch(System.ComponentModel.Win32Exception)
-                    {
-                        MessageBox.Show("Cant find TeheMan8_Builder.exe .\nDid you put it in same folder as TeheMan 8 Editor?");
-                        ISO.lastSave = null;
-                        building = false;
-                        return;
-                    }
-                    if (settings.outputBuild)
-                    {
-                        buildWindow = new ListWindow();
-                        buildWindow.ShowDialog();
-                        return;
-                    }
-                    else
-                    {
-                        Settings.builder.WaitForExit();
-                        if (Settings.error)
-                            MessageBox.Show(Settings.message, "BUILD ERROR"); //TODO: maybe let the user know if file exported correctly
-                        return;
-                    }
-                }
-                else if (key == "Left" && ISO.levels.Count != 0 && this.hub.Items.Count > 1)
-                {
-                    if (this.hub.SelectedIndex == 0)
-                    {
-                        this.hub.SelectedIndex = this.hub.Items.Count - 1;
-                        return;
-                    }
-                    this.hub.SelectedIndex--;
-                }
-                else if (key == "Right" && ISO.levels.Count != 0 && this.hub.Items.Count > 1)
-                {
-                    if (this.hub.SelectedIndex == this.hub.Items.Count - 1)
-                    {
-                        this.hub.SelectedIndex = 0;
-                        return;
-                    }
-                    this.hub.SelectedIndex++;
-                }
-                return;
-            }
-            if (ISO.levels.Count == 0)
-                return;
-            MainKeyCheck(key);
-            if (hub.SelectedItem == null)
-                return;
-            var tab = (TabItem)hub.SelectedItem;
-            switch (tab.Name)
-            {
-                case "layoutTab":
-                    {
-                        LayoutKeyCheck(key);
-                        break;
-                    }
-                case "enemyTab":
-                    {
-                        EnemyKeyCheck(key);
-                        break;
-                    }
-                case "clutTab":
-                    {
-                        ClutKeyCheck(key);
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
-        }
-        private void exportBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (ISO.exe == null)
-                return;
-            using (var fd = new System.Windows.Forms.SaveFileDialog())
-            {
-                fd.Filter = "ISO |*.bin";
-                fd.Title = "Select MegaMan 8 ISO File";
-                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    if (settings.saveOnExport)
-                    {
-                        if (!SaveFiles())
-                            return;
-                    }
-
-                    ISO.lastSave = fd.FileName;
-
-                    //Start Builder
-                    building = true;
-                    if (settings.buildArgs == "")
-                        Settings.builder.StartInfo.Arguments = "\"" + ISO.filePath + "\"" + ' ' + "\"" + fd.FileName + "\"";
-                    else
-                        Settings.builder.StartInfo.Arguments = "\"" + ISO.filePath + "\"" + ' ' + "\"" + fd.FileName + "\"" + " " + settings.buildArgs;
-                    try
-                    {
-                        Settings.builder.Start();
-                        Settings.builder.BeginOutputReadLine();
-                    }catch (System.ComponentModel.Win32Exception)
-                    {
-                        MessageBox.Show("Cant find TeheMan8_Builder.exe .\nDid you put it in same folder as TeheMan 8 Editor?");
-                        ISO.lastSave = null;
-                        building = false;
-                        return;
-                    }
-                    if (settings.outputBuild)
-                    {
-                        buildWindow = new ListWindow();
-                        buildWindow.ShowDialog();
-                        return;
-                    }
-                    else
-                    {
-                        Settings.builder.WaitForExit();
-                        if (Settings.error)
-                            MessageBox.Show(Settings.message, "BUILD ERROR");
-                        else
-                            MessageBox.Show("Export Completed!");
-                    }
-                }
-            }
-        }
-
-        private void saveAsButn_Click(object sender, RoutedEventArgs e)
-        {
-            if (ISO.exe == null)
-                return;
-            using (var fd = new System.Windows.Forms.SaveFileDialog())
-            {
-                fd.Filter = "PAC |*.PAC";
-                fd.Title = "Save " + ISO.levels[Level.Id].pac.filename;
-                fd.FileName = ISO.levels[Level.Id].pac.filename; ;
-                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    Level.ApplyLevelsToPAC();
-                    try
-                    {
-                        File.WriteAllBytes(fd.FileName, ISO.levels[Level.Id].pac.GetEntriesData());
-                    }
-                    catch (Exception ex)
-                    {
-
-                        MessageBox.Show(ex.Message);
-                    }
-                }
-            }
-        }
-        private void saveBtn_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFiles();
-        }
-        private void settingsBtn_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow s = new SettingsWindow();
-            s.ShowDialog();
-        }
-        private void Builder_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
-        {
-            if (e.Data == null)
-                return;
-            if (e.Data.Contains("ERROR"))
-            {
-                Settings.message = e.Data;
-                Settings.error = true;
-            }
-            if (!settings.outputBuild)
-                return;
-            buildWindow.Dispatcher.Invoke(() =>
-            {
-                if (PresentationSource.FromVisual(buildWindow) == null)
-                {
-                    Settings.builder.Kill();
-                }
-                string line = Environment.NewLine;
-                if (((TextBox)buildWindow.grid.Children[0]).Text == "")
-                    line = "";
-                ((TextBox)buildWindow.grid.Children[0]).AppendText(line + e.Data);
-            });
-        }
-        private void Builder_Exited(object sender, EventArgs e)
-        {
-            building = false;
-            Settings.builder.CancelOutputRead();
-        }
-        #endregion Events
-
         #region Methods
         public void Update()
         {
             window.layoutE.DrawLayout();
-            window.layoutE.DrawScreen();
-            window.screenE.DrawScreen();
-            window.screenE.DrawTiles();
-            window.screenE.DrawTile();
-            window.x16E.DrawTiles();
-            window.x16E.DrawTextures();
-            window.x16E.DrawTile();
+            window.layoutE.AssignLimits();
+            window.screenE.AssignLimits();
+            window.x16E.AssignLimits();
             window.enemyE.ReDraw();
             window.clutE.DrawTextures();
             window.clutE.DrawClut();
             window.clutE.UpdateClutTxt();
             window.spawnE.SetSpawnSettings();
+            window.bgE.SetBackgroundSettings();
             if (ListWindow.screenViewOpen)
                 layoutWindow.DrawScreens();
+            if (ListWindow.extraOpen)
+                extraWindow.DrawExtra();
             UpdateViewrCam();
             UpdateEnemyViewerCam();
+            window.cameraE.SetupTab();
             SetFileTitle();
         }
         public void UpdateViewrCam()
@@ -423,7 +141,7 @@ namespace TeheMan8_Editor
         {
             var fd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
             fd.Multiselect = false;
-            fd.Description = "Select Game Folder";
+            fd.Description = "Select the Folder Containing the Game Files";
             fd.UseDescriptionForTitle = true;
             if ((bool)fd.ShowDialog())
             {
@@ -436,18 +154,17 @@ namespace TeheMan8_Editor
                 //PSX.EXE was Found
                 Level.LoadLevels(fd.SelectedPath);
 
-                if (ISO.levels.Count == 0) //Check for any PAC Level Files
+                if (PSX.levels.Count == 0) //Check for any PAC Level Files
                 {
                     MessageBox.Show("No PAC level files were found.");
                     return;
                 }
-                ISO.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
-                ISO.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
-                ISO.filePath = fd.SelectedPath;
+                PSX.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
+                PSX.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
+                PSX.filePath = fd.SelectedPath;
                 Level.Id = 0;
-                Level.currentScreen = 1;
                 Level.AssignPallete();
-                ISO.levels[Level.Id].LoadTextures();
+                PSX.levels[Level.Id].LoadTextures();
                 //Draw Everything
                 Update();
                 hub.Visibility = Visibility.Visible;
@@ -462,18 +179,34 @@ namespace TeheMan8_Editor
                     Level.Id--;
                     //RE-Update
                     Level.AssignPallete();
-                    ISO.levels[Level.Id].LoadTextures();
+                    PSX.levels[Level.Id].LoadTextures();
+                    Update();
+                }
+                else
+                {
+                    Level.Id = PSX.levels.Count - 1;
+                    //RE-Update
+                    Level.AssignPallete();
+                    PSX.levels[Level.Id].LoadTextures();
                     Update();
                 }
             }
             else if (key == "F2")
             {
-                if (Level.Id != ISO.levels.Count - 1 && ISO.levels.Count != 0)
+                if (Level.Id != PSX.levels.Count - 1)
                 {
                     Level.Id++;
                     //RE-Update
                     Level.AssignPallete();
-                    ISO.levels[Level.Id].LoadTextures();
+                    PSX.levels[Level.Id].LoadTextures();
+                    Update();
+                }
+                else
+                {
+                    Level.Id = 0;
+                    //RE-Update
+                    Level.AssignPallete();
+                    PSX.levels[Level.Id].LoadTextures();
                     Update();
                 }
             }
@@ -635,15 +368,41 @@ namespace TeheMan8_Editor
                 }
             }
         }
-        internal bool SaveFiles()
+        internal bool SaveFiles(bool current = false /*option for saving current file*/)
         {
-            if (ISO.exe == null)
+            if (PSX.exe == null)
                 return false;
-            Level.ApplyLevelsToPAC();
-            foreach (var l in ISO.levels) //Save PAC Files
+            if (current)
             {
                 try
                 {
+                    if (File.Exists(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
+                    {
+                        if (!PSX.levels[Level.Id].edit && PSX.levels[Level.Id].time == File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
+                            return true;
+                        File.WriteAllBytes(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename, PSX.levels[Level.Id].pac.GetEntriesData());
+                        PSX.levels[Level.Id].time = File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename);
+                        PSX.levels[Level.Id].edit = false;
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename, PSX.levels[Level.Id].pac.GetEntriesData());
+                        PSX.levels[Level.Id].time = File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename);
+                        PSX.levels[Level.Id].edit = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERROR");
+                    return false;
+                }
+                return true;
+            }
+            foreach (var l in PSX.levels) //Save PAC Files
+            {
+                try
+                {
+                    l.ApplyLevelsToPAC();
                     if (File.Exists(l.pac.path + "/STDATA/" + l.pac.filename))
                     {
                         if (!l.edit && l.time == File.GetLastWriteTime(l.pac.path + "/STDATA/" + l.pac.filename))
@@ -667,19 +426,19 @@ namespace TeheMan8_Editor
             }
             try
             {
-                if (File.Exists(ISO.filePath + "/SLUS_004.53"))
+                if (File.Exists(PSX.filePath + "/SLUS_004.53"))
                 {
-                    if (!ISO.edit && ISO.time == File.GetLastWriteTime(ISO.filePath + "/SLUS_004.53"))
+                    if (!PSX.edit && PSX.time == File.GetLastWriteTime(PSX.filePath + "/SLUS_004.53"))
                         return true;
-                    File.WriteAllBytes(ISO.filePath + "/SLUS_004.53", ISO.exe);
-                    ISO.time = File.GetLastWriteTime(ISO.filePath + "/SLUS_004.53");
-                    ISO.edit = false;
+                    File.WriteAllBytes(PSX.filePath + "/SLUS_004.53", PSX.exe);
+                    PSX.time = File.GetLastWriteTime(PSX.filePath + "/SLUS_004.53");
+                    PSX.edit = false;
                 }
                 else
                 {
-                    File.WriteAllBytes(ISO.filePath + "/SLUS_004.53", ISO.exe);
-                    ISO.time = File.GetLastWriteTime(ISO.filePath + "/SLUS_004.53");
-                    ISO.edit = false;
+                    File.WriteAllBytes(PSX.filePath + "/SLUS_004.53", PSX.exe);
+                    PSX.time = File.GetLastWriteTime(PSX.filePath + "/SLUS_004.53");
+                    PSX.edit = false;
                 }
             }
             catch (Exception ex)
@@ -691,8 +450,332 @@ namespace TeheMan8_Editor
         }
         public void SetFileTitle()
         {
-            window.Title = "TeheMan 8  Editor - " + ISO.levels[Level.Id].pac.filename;
+            window.Title = "TeheMan 8  Editor - " + PSX.levels[Level.Id].pac.filename;
+        }
+        async private void ReLoad()
+        {
+            try
+            {
+                if (settings.saveOnReload)
+                    SaveFiles(true);
+
+                if (settings.useNops) //use NOPS
+                {
+                    loadWindow = new ListWindow();
+                    loadWindow.ShowDialog();
+                }
+                else // use REDUX
+                {
+                    await Redux.Pause();
+
+                    //General Level Data
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(0))
+                        await Redux.Write(0x8016ef34, PSX.levels[Level.Id].layout);
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(1))
+                        await Redux.Write(0x8016f334, PSX.levels[Level.Id].layout2);
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(2))
+                        await Redux.Write(0x8016f734, PSX.levels[Level.Id].layout3);
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(3))
+                    {
+                        await Redux.Write(0x80190040, PSX.levels[Level.Id].screenData);
+                        await Redux.Write(0x80171c3c, PSX.levels[Level.Id].screenData);
+                    }
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(4))
+                        await Redux.Write(0x8015ea88, PSX.levels[Level.Id].tileInfo);
+                    if (PSX.levels[Level.Id].pac.ContainsEntry(9))
+                    {
+                        await Redux.Write(0x8015a064, PSX.levels[Level.Id].pal);
+                        await Redux.Write(0x80158f64, PSX.levels[Level.Id].pal);
+                    }
+                    //Enemy Data
+                    byte[] enemyData = new byte[0x800];
+                    PSX.levels[Level.Id].DumpEnemyData(enemyData);
+                    await Redux.Write(0x801c2b3c, enemyData);
+
+                    //Check Point Data
+                    await SpawnWindow.WriteCheckPoints();
+
+                    //Textures
+                    byte[] data = new byte[0x8000];
+
+                    foreach (var e in PSX.levels[Level.Id].pac.entries)
+                    {
+                        if (e.type >> 8 != 1)
+                            continue;
+                        int x = Const.CordTabe[e.type & 0xFF] & 0xFFFF;
+                        int y = Const.CordTabe[e.type & 0xFF] >> 16;
+
+                        int height = e.data.Length / 128;
+                        int pages = height / 256; //full pages
+                        Array.Clear(data, 0, data.Length);
+
+                        for (int i = 0; i < pages; i++)
+                        {
+                            Array.Copy(e.data, i * 0x8000, data, 0, 0x8000);
+                            await Redux.DrawRect(new Int32Rect(x + i * 64, y, 64, 256), data);
+                        }
+                        if (e.data.Length % 256 != 0)
+                        {
+                            Array.Clear(data, 0, data.Length);
+                            int pageHeight = e.data.Length % 256;
+                            Array.Copy(e.data, pages * 0x8000, data, 0, pageHeight * 128);
+                            await Redux.DrawRect(new Int32Rect(x + pages * 64, y, 64, pageHeight), data);
+                        }
+                    }
+
+                    //Done
+                    await Redux.Resume();
+                }
+            }catch(HttpRequestException e)
+            {
+                MessageBox.Show(e.Message, "REDUX ERROR");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "ERROR");
+            }
+        }
+        private int GetHubIndex()
+        {
+            System.Collections.Generic.IEnumerable<Dragablz.DragablzItem> tabs = this.hub.GetOrderedHeaders();
+
+            int index = 0;
+            foreach (var t in tabs)
+            {
+                if (((TabItem)t.Content).Name == ((TabItem)this.hub.SelectedItem).Name)
+                    return index;
+                index++;
+            }
+
+            return index;
+        }
+        private int GetActualIndex(int i /*Visual Index*/) 
+        {
+            var tabs = this.hub.GetOrderedHeaders().ToList();
+
+            int index = 0;
+            foreach (var item in this.hub.Items)
+            {
+                if (((TabItem)item).Name == ((TabItem)tabs[i].Content).Name)
+                    return index;
+                index++;
+            }
+            return -1;
         }
         #endregion Methods
+
+        #region Events
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Dragablz.TabablzControl.GetIsClosingAsPartOfDragOperation(this) && this == window)
+            {
+                e.Cancel = true;
+            }
+            else if (this == window)
+            {
+                foreach (var l in PSX.levels)
+                {
+                    if (l.edit)
+                    {
+                        var result = MessageBox.Show("You have edited some of your game files without saving.\nAre you sure you want to exit the editor?", "WARNING", MessageBoxButton.YesNo);
+                        if (result != MessageBoxResult.Yes)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                        else
+                        {
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
+                if (PSX.edit)
+                {
+                    var result = MessageBox.Show("You have edited the PSX.EXE without saving.\nAre you sure you want to exit the editor?", "WARNING", MessageBoxButton.YesNo);
+                    if (result != MessageBoxResult.Yes)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+                Application.Current.Shutdown();
+            }
+        }
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) //HotKeys & Stuff
+        {
+            var key = e.Key.ToString();
+            if (key == "F11")
+            {
+                if (max)
+                {
+                    this.WindowStyle = WindowStyle.SingleBorderWindow;
+                    this.WindowState = WindowState.Normal;
+                    max = false;
+                }
+                else
+                {
+                    this.WindowStyle = WindowStyle.None;
+                    this.WindowState = WindowState.Maximized;
+                    max = true;
+                }
+                return;
+            }
+            if (e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
+            {
+                if (key == "O") //Open
+                {
+                    OpenGame();
+                }
+                else if (key == "S" && PSX.levels.Count != 0) //Save
+                {
+                    SaveFiles();
+                }
+                else if (key == "E" && PSX.levels.Count != 0) //Export
+                {
+
+                }
+                else if (key == "R" && PSX.levels.Count != 0)
+                {
+                    ReLoad();
+                    return;
+                }
+                else if (key == "Left" && PSX.levels.Count != 0 && this.hub.Items.Count > 1)
+                {
+                    int hubIndex = GetHubIndex();
+                    if (hubIndex == 0)
+                    {
+                        this.hub.SelectedIndex = GetActualIndex(this.hub.Items.Count - 1);
+                        return;
+                    }
+                    this.hub.SelectedIndex = GetActualIndex(hubIndex - 1);
+                }
+                else if (key == "Right" && PSX.levels.Count != 0 && this.hub.Items.Count > 1)
+                {
+                    int hubIndex = GetHubIndex();
+                    if (hubIndex == this.hub.Items.Count - 1)
+                    {
+                        this.hub.SelectedIndex = GetActualIndex(0);
+                        return;
+                    }
+                    this.hub.SelectedIndex = GetActualIndex(hubIndex + 1);
+                }
+                return;
+            }
+            if (PSX.levels.Count == 0)
+                return;
+            MainKeyCheck(key);
+            if (hub.SelectedItem == null)
+                return;
+            var tab = (TabItem)hub.SelectedItem;
+            switch (tab.Name)
+            {
+                case "layoutTab":
+                    {
+                        LayoutKeyCheck(key);
+                        break;
+                    }
+                case "enemyTab":
+                    {
+                        EnemyKeyCheck(key);
+                        break;
+                    }
+                case "clutTab":
+                    {
+                        ClutKeyCheck(key);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+        private void toolsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ToolsWindow tools = new ToolsWindow();
+            tools.ShowDialog();
+        }
+
+        private void aboutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow about = new AboutWindow();
+            about.ShowDialog();
+        }
+
+        private void openBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenGame();
+        }
+        private void saveAsButn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PSX.exe == null)
+                return;
+            using (var fd = new System.Windows.Forms.SaveFileDialog())
+            {
+                fd.Filter = "PAC |*.PAC";
+                fd.Title = "Save " + PSX.levels[Level.Id].pac.filename;
+                fd.FileName = PSX.levels[Level.Id].pac.filename; ;
+                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    foreach (var l in PSX.levels)
+                        l.ApplyLevelsToPAC();
+                    try
+                    {
+                        File.WriteAllBytes(fd.FileName, PSX.levels[Level.Id].pac.GetEntriesData());
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
+        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFiles();
+        }
+        private void settingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow s = new SettingsWindow();
+            s.ShowDialog();
+        }
+        private void filesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PSX.levels.Count == 0 || ListWindow.fileViewOpen)
+                return;
+            fileWindow = new ListWindow(4);
+            fileWindow.Show();
+        }
+        private void sizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PSX.levels.Count == 0)
+                return;
+            SizeWindow s = new SizeWindow();
+            s.ShowDialog();
+        }
+        private void helpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HelpWindow h = new HelpWindow(0);
+            h.ShowDialog();
+        }
+        private void reloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PSX.levels.Count != 0)
+                ReLoad();
+        }
+        public void NOPS_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        {
+            if (loadWindow.mode > 1)
+            {
+                loadWindow.Dispatcher.Invoke(() =>
+                {
+                    TextBox t = loadWindow.grid.Children[0] as TextBox;
+                    t.Text += "\n" + e.Data;
+                    ScrollViewer s = loadWindow.outGrid.Children[0] as ScrollViewer;
+                    s.ScrollToEnd();
+                });
+            }
+        }
+        #endregion Events
     }
 }

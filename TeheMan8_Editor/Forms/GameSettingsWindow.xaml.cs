@@ -38,10 +38,10 @@ namespace TeheMan8_Editor.Forms
                     foreach (var c3 in ((StackPanel)c2).Children)
                     {
 
-                        if (c3.GetType() != typeof(Xceed.Wpf.Toolkit.IntegerUpDown))
+                        if (c3.GetType() != typeof(NumInt))
                             continue;
 
-                        Xceed.Wpf.Toolkit.IntegerUpDown t = (Xceed.Wpf.Toolkit.IntegerUpDown)c3;
+                        NumInt t = (NumInt)c3;
                         var words = t.Uid.Split();
                         uint addr = Convert.ToUInt32(words[0], 16);
                         int type = 0;
@@ -50,15 +50,15 @@ namespace TeheMan8_Editor.Forms
                         switch (type)
                         {
                             case 1:
-                                br.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                                br.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                                 t.Value = br.ReadByte();
                                 break;
                             case 2:
-                                br.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                                br.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                                 t.Value = br.ReadUInt16();
                                 break;
                             default:
-                                bw.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                                bw.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                                 t.Value = br.Read();
                                 break;
                         }
@@ -83,15 +83,21 @@ namespace TeheMan8_Editor.Forms
             switch (type)
             {
                 case 1:
-                    bw.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                    bw.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                     bw.Write((byte)(int)e.NewValue);
+
+                    if(addr == 0x801009E8) //Lives
+                    {
+                        bw.BaseStream.Position = PSX.CpuToOffset(0x801213f0, 0x800C0000);
+                        bw.Write((byte)(int)e.NewValue);
+                    }
                     break;
                 case 2:
-                    bw.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                    bw.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                     bw.Write((ushort)(int)e.NewValue);
                     break;
                 default:
-                    bw.BaseStream.Position = ISO.CpuToOffset(addr, 0x800C0000);
+                    bw.BaseStream.Position = PSX.CpuToOffset(addr, 0x800C0000);
                     bw.Write((int)e.NewValue);
                     break;
             }
@@ -123,6 +129,30 @@ namespace TeheMan8_Editor.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR");
+            }
+        }
+        private void SaveAsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using(var fd = new System.Windows.Forms.SaveFileDialog())
+            {
+                fd.Filter = "PSX-EXE |*.53";
+                fd.Title = "Select PSX-EXE Save Location";
+                if(fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    path = fd.FileName;
+                    try
+                    {
+                        var fs = File.Create(path);
+                        ms.WriteTo(fs);
+                        fs.Close();
+                        saved = true;
+                        MessageBox.Show("Parameters Saved!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR");
+                    }
+                }
             }
         }
         #endregion Events

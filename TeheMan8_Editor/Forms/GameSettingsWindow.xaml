@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Game Settings" Height="300" Width="360" Closing="Window_Closing">
+        Title="Game Settings" Height="370" Width="360" Closing="Window_Closing" ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
@@ -18,23 +18,37 @@
                 <Setter Property="Background" Value="#222222"/>
                 <Setter Property="Foreground" Value="White"/>
             </Style>
+            <Style TargetType="local:NumInt">
+                <Setter Property="FontSize" Value="22"/>
+                <Setter Property="AllowTextInput" Value="True"/>
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontFamily" Value="Consolas"/>
+                <Setter Property="ParsingNumberStyle" Value="HexNumber"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
         <!--Uid = Address & DataTypeSize-->
         <ScrollViewer>
             <StackPanel x:Name="mainPannel" Background="Black">
-                <Border BorderThickness="2" BorderBrush="White">
-                    <Button Click="SaveBtn_Click">Save Parameters</Button>
-                </Border>
                 <Expander>
                     <Expander.Header>
                         <TextBlock>MegaMan Settings</TextBlock>
                     </Expander.Header>
                     <StackPanel>
                         <StackPanel Background="#111111" Orientation="Horizontal">
-                            <xctk:IntegerUpDown Maximum="9" Uid="801009E8 1" Minimum="0" MaxLength="1" ValueChanged="IntegerUpDown_ValueChanged"></xctk:IntegerUpDown>
+                            <local:NumInt Maximum="9" Uid="801009E8 1" Minimum="0" MaxLength="1" ValueChanged="IntegerUpDown_ValueChanged"></local:NumInt>
                             <Label>Lives</Label>
+                        </StackPanel>
+                        <StackPanel Background="#111111" Orientation="Horizontal">
+                            <local:NumInt Maximum="9" Uid="801213EC 1" Minimum="0" MaxLength="1" ValueChanged="IntegerUpDown_ValueChanged"></local:NumInt>
+                            <Label>Spare Extra Lives</Label>
                         </StackPanel>
                     </StackPanel>
                 </Expander>
@@ -44,32 +58,38 @@
                     </Expander.Header>
                     <StackPanel>
                         <StackPanel Background="#111111" Orientation="Horizontal">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="800fd344 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"></xctk:IntegerUpDown>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="800fd344 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"></local:NumInt>
                             <Label Foreground="White">CAPCOM15.STR Length</Label>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Background="#111111">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="801378f6 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="801378f6 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
                             <Label Foreground="White">ROCK8-0.STR Length</Label>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Background="#111111">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="801378fA 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="801378fA 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
                             <Label Foreground="White">ROCK8-1.STR Length</Label>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Background="#111111">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="801378fe 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="801378fe 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
                             <Label Foreground="White">ROCK8-2.STR Length</Label>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Background="#111111">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="80137902 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="80137902 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
                             <Label Foreground="White">ROCK8-3.STR Length</Label>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Background="#111111">
-                            <xctk:IntegerUpDown Maximum="#FFFF" Uid="80137906 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
+                            <local:NumInt Width="73" Maximum="#FFFF" Uid="80137906 2" Minimum="0" ValueChanged="IntegerUpDown_ValueChanged"/>
                             <Label Foreground="White">ROCK8-4.STR Length</Label>
                         </StackPanel>
                     </StackPanel>
                 </Expander>
             </StackPanel>
         </ScrollViewer>
+
+        <Canvas Grid.Row="1">
+            <Button Canvas.Top="25" Canvas.Left="180"  Width="60" Height="30" Click="SaveBtn_Click">Save</Button>
+            <Button Canvas.Top="25" Canvas.Left="260"  Width="70" Height="30" Click="SaveAsBtn_Click">Save As</Button>
+        </Canvas>
+
     </Grid>
 </Window>

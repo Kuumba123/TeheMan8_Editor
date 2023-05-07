@@ -179,7 +179,6 @@ namespace TeheMan8_Editor.Forms
 
         private void insertBinBtn_Click(object sender, RoutedEventArgs e) //INSERT TEX as BIN
         {
-            //System.Windows.MessageBox.Show("Not implimented yet...");
             using (var fd = new OpenFileDialog())
             {
                 fd.Filter = "PAC |*.PAC";
@@ -225,9 +224,20 @@ namespace TeheMan8_Editor.Forms
                     sfd.UseDescriptionForTitle = true;
                     if ((bool)sfd.ShowDialog())
                     {
-                        ISO.Extract(fd.FileName,sfd.SelectedPath);
-                        System.Windows.MessageBox.Show("Extraction Completed");
+                        PSX.Extract(fd.FileName,sfd.SelectedPath);
                     }
+                }
+            }
+        }
+        private void replaceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using(var fd = new OpenFileDialog())
+            {
+                fd.Filter = "ISO |*BIN";
+                fd.Title = "Open an ISO 9660 File";
+                if(fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    PSX.OpenFileBrowser(fd.FileName);
                 }
             }
         }
@@ -400,7 +410,7 @@ namespace TeheMan8_Editor.Forms
                                     if (en.type != 1)
                                         continue;
                                     //SEQ data found
-                                    File.WriteAllBytes(sfd.SelectedPath + "\\" + fd.SafeFileNames[f] + "_" + "SEQ" + ".vab", en.data);
+                                    File.WriteAllBytes(sfd.SelectedPath + "\\" + fd.SafeFileNames[f] + "_" + ".seq", en.data);
                                     seqflag = true;
                                     break;
                                 }
@@ -418,7 +428,6 @@ namespace TeheMan8_Editor.Forms
                 }
             }
         }
-         
         private void seqInsertBtn_Click(object sender, RoutedEventArgs e) //INSERT SEQ
         {
             using(var fd = new OpenFileDialog())
@@ -464,6 +473,68 @@ namespace TeheMan8_Editor.Forms
             }
         }
 
+
+        private void fixBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using (var fd = new OpenFileDialog())
+            {
+                fd.Filter = "PSX-EXE |*53";
+                fd.Title = "Select MegaMan 8 PSX-EXE";
+                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    using(var fd2 = new OpenFileDialog())
+                    {
+                        try
+                        {
+                            fd2.Filter = "C HEADER |*h";
+                            fd2.Title = "Select C Header File Contain Files LBA";
+                            if (fd2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            {
+                                string[] lines = File.ReadAllLines(fd2.FileName);
+                                MemoryStream ms = new MemoryStream(File.ReadAllBytes(fd.FileName));
+                                BinaryWriter bw = new BinaryWriter(ms);
+
+                                foreach (var line in lines)
+                                {
+                                    if (line.Trim() == "")
+                                        continue;
+                                    string[] words = System.Text.RegularExpressions.Regex.Replace(line.Trim(), " {2,}", " ").Split();
+                                    if (words[0] != "#define")
+                                        continue;
+
+                                    foreach (var file in Const.DiscFiles)
+                                    {
+                                        if (file != words[1])
+                                            continue;
+                                        int i = Array.FindIndex(Const.DiscFiles, x => x.Contains(file));
+                                        i *= 12;
+                                        i += (int)PSX.CpuToOffset(Const.FileDataAddress, 0x800C0000);
+                                        bw.BaseStream.Position = i;
+
+                                        int sector;
+                                        if (words[2].Contains("0x"))
+                                            sector = Convert.ToInt32(words[2], 16);
+                                        else
+                                            sector = Convert.ToInt32(words[2]);
+                                        bw.Write(sector);
+                                    }
+                                }
+                                //Save PSX.EXE
+                                File.WriteAllBytes(fd.FileName, ms.ToArray());
+                                System.Windows.MessageBox.Show("LBA Fixed !");
+                            }
+                        }catch(Exception ex)
+                        {
+                            System.Windows.MessageBox.Show(ex.Message);
+                        }
+                    }
+                }
+            }
+        }
+        private void tracksBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        } 
         private void gameSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             using(var fd = new OpenFileDialog())
@@ -474,6 +545,32 @@ namespace TeheMan8_Editor.Forms
                 {
                     GameSettingsWindow s = new GameSettingsWindow(fd.FileName);
                     s.Show();
+                }
+            }
+        }
+        private void createPacBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ListWindow listWindow = new ListWindow(new PAC());
+            listWindow.ShowDialog();
+        }
+
+        private void editPacBtn_Click(object sender, RoutedEventArgs e)
+        {
+            using(var fd = new OpenFileDialog())
+            {
+                fd.Filter = "|*.PAC;*ARC";
+                fd.Title = "Open an MegaMan 8 PAC File or an MegaMan X4 ARC File";
+                if(fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    PAC pac = new PAC(File.ReadAllBytes(fd.FileName));
+                    if(pac.entries.Count == 0)
+                    {
+                        System.Windows.MessageBox.Show(pac.filename + " is an invalid PAC file", "ERROR");
+                        return;
+                    }
+                    pac.filename = Path.GetFileName(fd.FileName);
+                    ListWindow listWindow = new ListWindow(pac);
+                    listWindow.ShowDialog();
                 }
             }
         }

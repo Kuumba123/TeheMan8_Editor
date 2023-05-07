@@ -5,53 +5,120 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="Tools Window" Height="450" Width="450" ResizeMode="NoResize">
-    <Grid x:Name="grid" Background="#060606">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="4*"/>
-        </Grid.RowDefinitions>
-        <!--PAC Tools-->
-        <GroupBox Margin="10,0,10,10" Background="#222222">
-            <GroupBox.Header>
-                <Label Foreground="White">PAC Tools</Label>
-            </GroupBox.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+        Title="Tools Window" Height="400" Width="450" ResizeMode="NoResize">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style TargetType="Expander">
+                <Setter Property="Background" Value="#222222"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="#111111"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="DarkBlue"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="grid" Background="#111111">
+        <ScrollViewer>
+            <StackPanel>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <Label>Texture Tools</Label>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="texBmpBtn" Width="auto" Click="texBmpBtn_Click">Extract Textures as BMP</Button>
+                            <Button x:Name="texBinBtn" Grid.Column="1" Click="texBinBtn_Click">Extract Textures as BIN</Button>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="inertTexBtn" Grid.Row="1" Click="inertTexBtn_Click">Replace Texture  from BMP</Button>
+                            <Button x:Name="InsertBinBtn" Grid.Row="1" Grid.Column="1" Click="insertBinBtn_Click">Replace Texture from BIN</Button>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <Label>Sound Tools</Label>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="vabExtBtn" Click="vabExtBtn_Click">Extract VAB</Button>
+                            <Button x:Name="vabInsertBtn" Grid.Column="1" Click="vabInsertBtn_Click">Insert VAB</Button>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="seqExtBtn" Click="seqExtBtn_Click">Extract SEQ</Button>
+                            <Button x:Name="seqInsertBtn" Grid.Column="1" Click="seqInsertBtn_Click">Insert SEQ</Button>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
 
-                <Button x:Name="texBmpBtn" Width="auto" Click="texBmpBtn_Click">Extract Textures as BMP</Button>
-                <Button x:Name="texBinBtn" Grid.Column="1" Click="texBinBtn_Click">Extract Textures as BIN</Button>
-                <Button x:Name="inertTexBtn" Grid.Row="1" Click="inertTexBtn_Click">Replace Texture  from BMP</Button>
-                <Button x:Name="InsertBinBtn" Grid.Row="1" Grid.Column="1" Click="insertBinBtn_Click">Replace Texture from BIN</Button>
-                <Button x:Name="vabExtBtn" Grid.Row="2" Click="vabExtBtn_Click">Extract VAB</Button>
-                <Button x:Name="vabInsertBtn" Grid.Row="2" Grid.Column="1" Click="vabInsertBtn_Click">Insert VAB</Button>
-                <Button x:Name="seqExtBtn" Grid.Row="3" Click="seqExtBtn_Click">Extract SEQ</Button>
-                <Button x:Name="seqInsertBtn" Grid.Row="3" Grid.Column="1" Click="seqInsertBtn_Click">Insert SEQ</Button>
-            </Grid>
-        </GroupBox>
-        <!--ISO Tools-->
-        <GroupBox Grid.Row="1" Margin="10,-5,10,10" Background="#222222">
-            <GroupBox.Header>
-                <Label Foreground="White">Other Tools</Label>
-            </GroupBox.Header>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="extractIsoBtn" Click="extractIsoBtn_Click">Extract ISO</Button>
-                <Button x:Name="gameSettingsBtn" Grid.Column="1" Click="gameSettingsBtn_Click" >Game Settings</Button>
-            </Grid>
-        </GroupBox>
+                <Expander>
+                    <Expander.Header>
+                        <Label>ISO 9660 Tools</Label>
+                    </Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="extractIsoBtn" Click="extractIsoBtn_Click">Extract ISO</Button>
+                        <Button x:Name="replaceBtn" Grid.Column="1" Click="replaceBtn_Click">Replace File</Button>
+                        <Button x:Name="fixBtn" Grid.Row="1" Click="fixBtn_Click">Fix PSX.EXE LBA Table</Button>
+                        <!--<Button x:Name="tracksBtn" Grid.Column="1" Grid.Row="1" Click="tracksBtn_Click">Combine Tracks</Button>-->
+                    </Grid>
+                </Expander>
+                <Expander>
+                    <Expander.Header>
+                        <Label>Other</Label>
+                    </Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="createPacBtn" Click="createPacBtn_Click">Create New PAC</Button>
+                        <Button x:Name="editPacBtn" Grid.Column="1" Click="editPacBtn_Click">Edit Existing PAC</Button>
 
+                        <Button Grid.Row="1" x:Name="gameSettingsBtn" Grid.Column="1" Click="gameSettingsBtn_Click" >Game Settings</Button>
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

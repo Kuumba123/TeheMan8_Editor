@@ -13,6 +13,19 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="22"/>
+        </Style>
+        <Style TargetType="local:NumInt">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="AllowTextInput" Value="True"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="ParsingNumberStyle" Value="HexNumber"/>
+            <Setter Property="FormatString" Value="X"/>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,48 +38,84 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Image x:Name="screenImage" HorizontalAlignment="Left" VerticalAlignment="Top"></Image>
-        
+
+        <!--Mid CheckPoint-->
+        <StackPanel  Grid.Column="1" Orientation="Horizontal">
+            <Label FontSize="22">Mid Checkpoint</Label>
+            <local:NumInt FontSize="33" ButtonSpinnerWidth="30" AllowTextInput="False" Width="69" Height="40" MinHeight="0" x:Name="midInt" Minimum="0" ValueChanged="midInt_ValueChanged"/>
+        </StackPanel>
+
+
         <!--Spawn Info-->
         <StackPanel Grid.Column="1" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Spawn</Label>
-                <xctk:IntegerUpDown FontSize="18" x:FieldModifier="public" x:Name="spawnInt" ValueChanged="spawnInt_ValueChanged" Minimum="0"/>
-                <!--<CheckBox Uid="0" Checked="SettingBox_Checked" Unchecked="SettingBox_Unchecked">Mega Related</CheckBox>-->
+                <Label FontFamily="Consolas">Spawn</Label>
+                <local:NumInt FontSize="18" x:FieldModifier="public" x:Name="spawnInt" ValueChanged="spawnInt_ValueChanged" Minimum="0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Label FontSize="18" Foreground="White" FontFamily="Consolas">BG1 Priority</Label>
-                <xctk:IntegerUpDown Uid="1" FontSize="18" x:FieldModifier="public" x:Name="prorityInt" Minimum="0" Maximum="#2" Width="80" ValueChanged="setting_ValueChanged"/>
+                <local:NumInt Uid="1 1" FontSize="18" x:FieldModifier="public" x:Name="prorityInt" Minimum="0" Maximum="#2" Width="80" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Collision Timer</Label>
+                <local:NumInt Uid="0 1" x:Name="colTimer" Width="50" FontSize="18" Minimum="0" Maximum="#FF" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Scroll Type</Label>
+                <local:NumInt Uid="2 1" FontSize="18" x:FieldModifier="public" x:Name="scrollInt" Minimum="0" Maximum="#1" Width="80" ValueChanged="setting_ValueChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <CheckBox Uid="3" x:FieldModifier="public" x:Name="bg2Check" Checked="SettingBox_Checked" Unchecked="SettingBox_Unchecked">BG2 Toggle</CheckBox>
                 <CheckBox Uid="4" x:FieldModifier="public" x:Name="bg3Check" Checked="SettingBox_Checked" Unchecked="SettingBox_Unchecked">BG3 Toggle</CheckBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Mega X</Label>
-                <xctk:IntegerUpDown Uid="8" FontSize="18" x:FieldModifier="public" x:Name="megaIntX" Minimum="0" Maximum="#1FFF" Width="80" ValueChanged="setting_ValueChanged"/>
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Mega Y</Label>
-                <xctk:IntegerUpDown Uid="A" FontSize="18" x:FieldModifier="public" x:Name="megaIntY" Minimum="0" Maximum="#1FFF" Width="80" ValueChanged="setting_ValueChanged"/>
+                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Tex Anime Type</Label>
+                <local:NumInt Uid="5 1" FontSize="18" x:FieldModifier="public" x:Name="texInt" Minimum="0" Maximum="#1" Width="80" ValueChanged="setting_ValueChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam X</Label>
-                <xctk:IntegerUpDown  Uid="C" FontSize="18" x:FieldModifier="public" x:Name="camIntX" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
-                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam Y</Label>
-                <xctk:IntegerUpDown Uid="E" FontSize="18" x:FieldModifier="public" x:Name="camIntY" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
+                <Label FontSize="18" Foreground="White" FontFamily="Consolas">Clut Anime Type</Label>
+                <local:NumInt Uid="6 1" FontSize="18" x:FieldModifier="public" x:Name="clutId" Minimum="0" Maximum="#1" Width="80" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontSize="18" Foreground="White" FontFamily="Consolas">BG Type</Label>
+                <local:NumInt Uid="7 1" FontSize="18" x:FieldModifier="public" x:Name="bgInt" Minimum="0" Maximum="#1" Width="80" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontFamily="Consolas">Mega X</Label>
+                <local:NumInt Uid="8" x:FieldModifier="public" x:Name="megaIntX" Minimum="0" Maximum="#1FFF" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontFamily="Consolas">Mega Y</Label>
+                <local:NumInt Uid="A" x:FieldModifier="public" x:Name="megaIntY" Minimum="0" Maximum="#1FFF" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontFamily="Consolas">Cam X</Label>
+                <local:NumInt  Uid="C" FontSize="18" x:FieldModifier="public" x:Name="camIntX" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label FontFamily="Consolas">Cam Y</Label>
+                <local:NumInt Uid="E" FontSize="18" x:FieldModifier="public" x:Name="camIntY" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam BD-L</Label>
-                    <xctk:IntegerUpDown Uid="10" FontSize="18" x:FieldModifier="public" x:Name="camLeftInt" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
+                    <Label Foreground="White" FontFamily="Consolas">Cam BD-L</Label>
+                    <local:NumInt Uid="10" x:FieldModifier="public" x:Name="camLeftInt" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam BD-R</Label>
-                    <xctk:IntegerUpDown Uid="12" FontSize="18" x:Name="camRightInt" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
+                    <Label Foreground="White" FontFamily="Consolas">Cam BD-R</Label>
+                    <local:NumInt Uid="12" x:Name="camRightInt" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam BD-T</Label>
-                    <xctk:IntegerUpDown Uid="14" FontSize="18" x:FieldModifier="public" x:Name="camTopInt" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
+                    <Label FontFamily="Consolas">Cam BD-T</Label>
+                    <local:NumInt Uid="14" x:FieldModifier="public" x:Name="camTopInt" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label FontSize="18" Foreground="White" FontFamily="Consolas">Cam BD-B</Label>
-                    <xctk:IntegerUpDown Uid="16" FontSize="18" x:FieldModifier="public" x:Name="camBottomInt" Minimum="0" Maximum="#1F00" Width="80" ValueChanged="setting_ValueChanged"/>
+                    <Label FontFamily="Consolas">Cam BD-B</Label>
+                    <local:NumInt Uid="16" FontSize="18" x:FieldModifier="public" x:Name="camBottomInt" Minimum="0" Maximum="#1F00" Width="100" ButtonSpinnerWidth="25" ValueChanged="setting_ValueChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="22" Foreground="White">Water Level</Label>
+                    <local:NumInt x:Name="waterInt" ValueChanged="waterInt_ValueChanged" ButtonSpinnerWidth="30" Width="120" Height="45" FontSize="33" Minimum="0" Maximum="#7FFF"></local:NumInt>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

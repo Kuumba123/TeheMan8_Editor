@@ -1,28 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TeheMan8_Editor
 {
     public class PAC
     {
-        #region Fields
+        #region Properties
         public List<Entry> entries = new List<Entry>();
         public string path;
         public string filename;
         public string error;
-        #endregion Fields
+        public bool isMSB = false;
+        #endregion Properties
 
         #region Constructors
+        public PAC()
+        {
+        }
         public PAC(byte[] data)
         {
-            if (data.Length < 0x100)
+            if (data.Length < 0x800)
                 return;
+            int fileSize = BitConverter.ToInt32(data, 4);
+            if (fileSize == BitConverter.ToInt32(BitConverter.GetBytes(data.Length).Reverse().ToArray(), 0))
+            {
+                fileSize = BitConverter.ToInt32(BitConverter.GetBytes(fileSize).Reverse().ToArray(), 0);
+                isMSB = true;
+            }
+            else if (fileSize != data.Length)
+            {
+                return;
+            }
+
             int type;
             int size;
             int o = 0x800;
             try
             {
-                for (int i = 0; i < data[0]; i++)
+                int fileCount = BitConverter.ToInt32(data, 0);
+                if (isMSB)
+                {
+                    fileCount = BitConverter.ToInt32(BitConverter.GetBytes(fileCount).Reverse().ToArray(), 0);
+                }
+                for (int i = 0; i < fileCount; i++)
                 {
                     if (i == 0)
                     {
@@ -34,7 +55,12 @@ namespace TeheMan8_Editor
                         type = BitConverter.ToInt32(data, (i - 1) * 8 + 0x10);
                         size = BitConverter.ToInt32(data, (i - 1) * 8 + 0x14);
                     }
-                    
+                    if (isMSB)
+                    {
+                        type = BitConverter.ToInt32(BitConverter.GetBytes(type).Reverse().ToArray(),0);
+                        size = BitConverter.ToInt32(BitConverter.GetBytes(size).Reverse().ToArray(), 0);
+                    }
+
                     //Add in new Entry
                     var e = new Entry();
                     e.type = type & 0xFFFF;
@@ -166,13 +192,33 @@ namespace TeheMan8_Editor
         }
         public bool ContainsEntry(int type)
         {
-            for (int i = 0; i < this.entries.Count; i++)
+            for (int i = 0; i < entries.Count; i++)
             {
                 if (entries[i].type != type)
                     continue;
                 return true;
             }
             return false;
+        }
+        public int GetIndexOfType(int type)
+        {
+            for (int i = 0; i < entries.Count; i++)
+            {
+                if (entries[i].type != type)
+                    continue;
+                return i;
+            }
+            return -1;
+        }
+        public int GetEntrySize(int id)
+        {
+            foreach (var e in entries)
+            {
+                if (e.type != id)
+                    continue;
+                return e.data.Length;
+            }
+            return -1;
         }
         public int GetSize()
         {

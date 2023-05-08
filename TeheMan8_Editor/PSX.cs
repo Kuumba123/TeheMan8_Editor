@@ -86,7 +86,6 @@ namespace TeheMan8_Editor
                     }
                     for (int i = 0; i < list.Count; i++)
                     {
-                        //TODO: make these some sort of labels (in ListView) instead & put button on bottom
                         Button b = new Button();
                         b.Content = list[i].name;
                         b.Uid = list[i].lba.ToString() + " " + list[i].offset + " " + list[i].size;
@@ -106,7 +105,6 @@ namespace TeheMan8_Editor
                 }
                 for (int i = 0; i < rootFolders.Count; i++)
                 {
-                    //TODO: make these some sort of labels (in ListView) instead & put button on bottom
                     Button b = new Button();
                     b.Content = rootFolders[i].name;
                     b.Uid = rootFolders[i].lba.ToString() + " " + rootFolders[i].offset + " " + rootFolders[i].size;
@@ -552,7 +550,6 @@ namespace TeheMan8_Editor
 
                                         if(data.Length != Convert.ToInt64(((Button)sender).Uid.Split()[2]))
                                         {
-                                            //TODO: update EDC/ECC for directory data
                                             long backup = bw.BaseStream.Position;
                                             bw.BaseStream.Position = Convert.ToInt64(((Button)sender).Uid.Split()[1]) + 10;
                                             byte[] sz = BitConverter.GetBytes(data.Length);
@@ -643,7 +640,6 @@ namespace TeheMan8_Editor
                 }
                 for (int i = 0; i < list.Count; i++)
                 {
-                    //TODO: make these some sort of labels (in ListView) instead & put button on bottom
                     Button b = new Button();
                     b.Content = list[i].name;
                     b.Uid = list[i].lba.ToString() + " " + list[i].offset + " " + list[i].size;

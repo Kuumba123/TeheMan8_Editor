@@ -681,7 +681,7 @@ namespace TeheMan8_Editor.Forms
                 else
                     arg = 0x10;
 
-                for (int i = 0; i < 0x200; i++)
+                for (int i = 0; i < 0x100; i++)
                 {
                     byte flag = PSX.levels[Level.Id].screenData[MainWindow.window.screenE.screenId * 0x200 + 1 + i * 2];
                     flag &= (byte)(arg ^ 0xFF);

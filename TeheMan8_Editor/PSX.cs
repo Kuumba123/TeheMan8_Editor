@@ -190,7 +190,6 @@ namespace TeheMan8_Editor
 
         private static List<WriteFile> GetDirectory(uint lba)
         {
-            //TODO: re-open/check for file
             br.BaseStream.Position = lba * 0x930;
             sector = br.ReadBytes(0x930);
             int offset = sector[0x18] + 0x18;

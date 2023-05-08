@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using TeheMan8_Editor.Forms;
 
 namespace TeheMan8_Editor
@@ -296,7 +297,18 @@ namespace TeheMan8_Editor
         }
         private void ScreenKeyCheck(string key)
         {
+            //Clear Screen
+            if(key == "Delete")
+            {
+                Array.Clear(PSX.levels[Level.Id].screenData, window.screenE.screenId * 0x200, 0x200);
+                PSX.levels[Level.Id].edit = true;
+                window.layoutE.DrawLayout();
+                if (window.layoutE.selectedScreen == window.screenE.screenId)
+                    window.layoutE.DrawScreen();
 
+                window.screenE.DrawScreen();
+                window.enemyE.Draw();
+            }
         }
         private void ClutKeyCheck(string key)
         {
@@ -630,10 +642,6 @@ namespace TeheMan8_Editor
                 {
                     SaveFiles();
                 }
-                else if (key == "E" && PSX.levels.Count != 0) //Export
-                {
-
-                }
                 else if (key == "R" && PSX.levels.Count != 0)
                 {
                     ReLoad();
@@ -672,6 +680,11 @@ namespace TeheMan8_Editor
                 case "layoutTab":
                     {
                         LayoutKeyCheck(key);
+                        break;
+                    }
+                case "screenTab":
+                    {
+                        ScreenKeyCheck(key);
                         break;
                     }
                 case "enemyTab":

@@ -63,7 +63,6 @@ namespace TeheMan8_Editor.Forms
         public void DrawTile()
         {
             Level.Draw16xTile(selectedTile, 0, 0, 48, pixels);
-            UpdateTileText();
             MainWindow.window.x16E.tileBMP_S.WritePixels(new Int32Rect(0, 0, 16, 16), pixels, 48, 0);
             MainWindow.window.x16E.tileImageS.Source = tileBMP_S;
         }
@@ -88,6 +87,7 @@ namespace TeheMan8_Editor.Forms
             }
             DrawTiles();
             DrawTile();
+            UpdateTileText();
             DrawTextures();
         }
         #endregion Methods
@@ -148,6 +148,7 @@ namespace TeheMan8_Editor.Forms
             }
             selectedTile = id;
             DrawTile();
+            UpdateTileText();
         }
         private void textureImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -156,7 +157,8 @@ namespace TeheMan8_Editor.Forms
             int y = (int)p.Y;
             int cX = Level.GetSelectedTile(x, textureImage.ActualWidth, 16);
             int cY = Level.GetSelectedTile(y, textureImage.ActualHeight, 16);
-            if (e.ChangedButton == MouseButton.Right)
+
+            if (e.ChangedButton == MouseButton.Right) //Cycle forward through CLUT
             {
                 if (clut != 0x3F)
                     clut++;
@@ -169,12 +171,26 @@ namespace TeheMan8_Editor.Forms
                 PSX.levels[Level.Id].tileInfo[selectedTile * 4] = (byte)(cX + (cY * 16));
                 PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1] = (byte)page;
                 PSX.levels[Level.Id].edit = true;
-                DrawTile();
+
+                //Update
+                MainWindow.window.x16E.cordInt.Value = PSX.levels[Level.Id].tileInfo[selectedTile * 4];
+                MainWindow.window.x16E.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
                 MainWindow.window.layoutE.DrawLayout();
                 MainWindow.window.layoutE.DrawScreen();
                 MainWindow.window.screenE.DrawScreen();
-                MainWindow.window.screenE.DrawTiles();
-                MainWindow.window.screenE.DrawTile();
+                MainWindow.window.enemyE.Draw();
+                DrawTile();
+
+                if (MainWindow.window.screenE.selectedTile == selectedTile)
+                {
+                    MainWindow.window.screenE.cordInt.Value = PSX.levels[Level.Id].tileInfo[selectedTile * 4];
+                    MainWindow.window.screenE.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
+                    MainWindow.window.screenE.DrawTile();
+                }
+                if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
+                    MainWindow.window.screenE.DrawTiles();
+                if (MainWindow.window.x16E.tileCol == (selectedTile >> 8))
+                    MainWindow.window.x16E.DrawTiles();
             }
         }
 
@@ -231,57 +247,81 @@ namespace TeheMan8_Editor.Forms
         {
             if (e.NewValue == null || e.OldValue == null)
                 return;
-            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[selectedTile * 4] == (byte)(int)e.NewValue)
+            byte val = (byte)(int)e.NewValue;
+            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[selectedTile * 4] == val)
                 return;
-            PSX.levels[Level.Id].tileInfo[selectedTile * 4] = (byte)(int)e.NewValue;
+            PSX.levels[Level.Id].tileInfo[selectedTile * 4] = val;
             PSX.levels[Level.Id].edit = true;
-            DrawTile();
+
+            //Update
             MainWindow.window.layoutE.DrawLayout();
             MainWindow.window.layoutE.DrawScreen();
             MainWindow.window.screenE.DrawScreen();
-            MainWindow.window.screenE.DrawTiles();
+            MainWindow.window.enemyE.Draw();
+
+            DrawTile();
+
             if (MainWindow.window.screenE.selectedTile == selectedTile)
             {
+                MainWindow.window.screenE.cordInt.Value = val;
                 MainWindow.window.screenE.DrawTile();
             }
+            if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
+                MainWindow.window.screenE.DrawTiles();
         }
 
         private void pageInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue == null || e.OldValue == null)
                 return;
-            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1] == (byte)(int)e.NewValue)
+            byte val = (byte)(int)e.NewValue;
+            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1] == val)
                 return;
-            PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1] = (byte)(int)e.NewValue;
+            PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1] = val;
             PSX.levels[Level.Id].edit = true;
-            DrawTile();
+
+            //Update
             MainWindow.window.layoutE.DrawLayout();
             MainWindow.window.layoutE.DrawScreen();
             MainWindow.window.screenE.DrawScreen();
-            MainWindow.window.screenE.DrawTiles();
+            MainWindow.window.enemyE.Draw();
+
+            DrawTile();
+
             if (MainWindow.window.screenE.selectedTile == selectedTile)
             {
+                MainWindow.window.screenE.pageInt.Value = val;
                 MainWindow.window.screenE.DrawTile();
             }
+            if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
+                MainWindow.window.screenE.DrawTiles();
         }
 
         private void clutInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue == null || e.OldValue == null)
                 return;
-            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2] == (byte)(int)e.NewValue)
+            byte val = (byte)(int)e.NewValue;
+            if (PSX.levels.Count == 0 || PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2] == val)
                 return;
-            PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2] = (byte)(int)e.NewValue;
+            PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2] = val;
             PSX.levels[Level.Id].edit = true;
-            DrawTile();
+
+            //Update
             MainWindow.window.layoutE.DrawLayout();
             MainWindow.window.layoutE.DrawScreen();
             MainWindow.window.screenE.DrawScreen();
-            MainWindow.window.screenE.DrawTiles();
+            MainWindow.window.enemyE.Draw();
+
+            DrawTile();
+
             if (MainWindow.window.screenE.selectedTile == selectedTile)
             {
+                MainWindow.window.screenE.clutInt.Value = val;
                 MainWindow.window.screenE.DrawTile();
             }
+            if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
+                MainWindow.window.screenE.DrawTiles();
         }
 
         private void colInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

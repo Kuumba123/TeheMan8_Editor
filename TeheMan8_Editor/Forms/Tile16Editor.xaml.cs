@@ -268,6 +268,9 @@ namespace TeheMan8_Editor.Forms
             }
             if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
                 MainWindow.window.screenE.DrawTiles();
+
+            if (tileCol == (selectedTile >> 8))
+                DrawTiles();
         }
 
         private void pageInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -295,6 +298,9 @@ namespace TeheMan8_Editor.Forms
             }
             if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
                 MainWindow.window.screenE.DrawTiles();
+
+            if (tileCol == (selectedTile >> 8))
+                DrawTiles();
         }
 
         private void clutInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -322,6 +328,9 @@ namespace TeheMan8_Editor.Forms
             }
             if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))
                 MainWindow.window.screenE.DrawTiles();
+
+            if (tileCol == (selectedTile >> 8))
+                DrawTiles();
         }
 
         private void colInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

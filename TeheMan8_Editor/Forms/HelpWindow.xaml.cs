@@ -26,7 +26,8 @@ namespace TeheMan8_Editor.Forms
             "You can move around by using W A S D . " +
             "Right Click = Copy , Left Click = Paste and " +
             "Hold Shift + Right Click = Selecting the Clicked screen in the Screen Tab. " +
-            "Hold Shift + Left Click = Manually setting the screen Id",
+            "Hold Shift + Left Click = Manually setting the screen Id. " +
+            "Lastly if you press the Delete Key (Num Pad) it will delete the selected screen!",
             //2
             "This is where you can edit what tiles make up a screen , Left Click = Paste , Right Click = Copy . Clicking the flag icon will " +
             "bring up the tile flags window. " +

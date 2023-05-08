@@ -649,7 +649,7 @@ namespace TeheMan8_Editor.Forms
                 Content = "Fill",
                 Width = 55,
                 Style = Application.Current.FindResource("TileButton") as Style
-            };
+            }; //Fill
             bt1.Click += (s, e) =>
             {
                 byte arg;
@@ -658,7 +658,7 @@ namespace TeheMan8_Editor.Forms
                 else
                     arg = 0x10;
 
-                for (int i = 0; i < 0x200; i++)
+                for (int i = 0; i < 0x200 / 2; i++)
                 {
                     byte flag = PSX.levels[Level.Id].screenData[MainWindow.window.screenE.screenId * 0x200 + 1 + i * 2];
                     flag |= arg;
@@ -672,7 +672,7 @@ namespace TeheMan8_Editor.Forms
                 Content = "Clear",
                 Width = 55,
                 Style = Application.Current.FindResource("TileButton") as Style
-            };
+            }; //Clear
             bt2.Click += (s, e) =>
             {
                 byte arg;
@@ -695,7 +695,7 @@ namespace TeheMan8_Editor.Forms
                 Content = "Toggle",
                 Width = 65,
                 Style = Application.Current.FindResource("TileButton") as Style
-            };
+            }; //Toggle
             bt3.Click += (s, e) =>
             {
                 if (rect.Fill == Brushes.Blue)

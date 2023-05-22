@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              Width="20"
              Height="17"
-             d:DesignHeight="17" d:DesignWidth="20">
+             d:DesignHeight="17" d:DesignWidth="20" MinHeight="17" MinWidth="20">
     <Grid>
         <Border BorderBrush="Red" x:Name="border" x:FieldModifier="public" BorderThickness="1" Canvas.Left="128" Canvas.Top="128">
             <Label x:Name="text" x:FieldModifier="public" Padding="0" Background="Black" Foreground="White" FontFamily="Consolas" FontSize="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">30</Label>

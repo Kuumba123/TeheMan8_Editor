@@ -142,10 +142,7 @@ namespace TeheMan8_Editor.Forms
                     {
                         //Edit Clut in PAC
                         PSX.levels[Level.Id].edit = true;
-                        byte b1 = (byte)(newC & 0xFF);
-                        byte b2 = (byte)((newC >> 8) & 0xFF);
-                        PSX.levels[Level.Id].pal[(c + (r + (bgF * 0x40)) * 16) * 2] = b1;
-                        PSX.levels[Level.Id].pal[((c + (r + (bgF * 0x40)) * 16) * 2) + 1] = b2;
+                        BitConverter.GetBytes(newC).CopyTo(PSX.levels[Level.Id].pal, (c + (r + (bgF * 0x40)) * 16) * 2);
                         Level.AssignPallete(r + (bgF * 0x40));
 
                         //Convert & Change Clut in GUI
@@ -223,6 +220,6 @@ namespace TeheMan8_Editor.Forms
             DrawTextures();
             MainWindow.window.clutE.cursor.Fill = Brushes.Transparent;
         }
-#endregion Events
+        #endregion Events
     }
 }

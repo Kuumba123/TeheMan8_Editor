@@ -26,6 +26,10 @@ namespace TeheMan8_Editor.Forms
             //NOPS Settings
             comBox.Text = MainWindow.settings.comPort;
             useNopsCheck.IsChecked = MainWindow.settings.useNops;
+
+            //Options
+            dontUpdateCheck.IsChecked = MainWindow.settings.dontUpdate;
+            saveReloadCheck.IsChecked = MainWindow.settings.saveOnReload;
             enable = true;
         }
         #endregion Constructors
@@ -66,18 +70,18 @@ namespace TeheMan8_Editor.Forms
             MainWindow.settings.noClutReload = (bool)clutCheck.IsChecked;
             edited = true;
         }
+        private void dontUpdateCheck_Change(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.dontUpdate = (bool)dontUpdateCheck.IsChecked;
+            edited = true;
+        }
         private void saveOnReloadCheck_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;
             MainWindow.settings.saveOnReload = (bool)saveReloadCheck.IsChecked;
-            edited = true;
-        }
-        private void fastCheck_Change(object sender, RoutedEventArgs e)
-        {
-            if (!enable)
-                return;
-            MainWindow.settings.saveOnReload = (bool)fastCheck.IsChecked;
             edited = true;
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

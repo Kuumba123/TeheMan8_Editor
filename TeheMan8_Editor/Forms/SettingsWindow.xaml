@@ -44,12 +44,12 @@
                     <Label>COM-PORT</Label>
                 </StackPanel>
                 <CheckBox x:Name="useNopsCheck" Checked="useNopsCheck_Change" Unchecked="useNopsCheck_Change">Use NOPS for Reload</CheckBox>
-                <CheckBox x:Name="fastCheck" Checked="fastCheck_Change" Unchecked="fastCheck_Change">Use NOPS Fast Mode</CheckBox>
                 <CheckBox x:Name="screenCheck" Checked="screenBackupCheck_Change" Unchecked="screenBackupCheck_Change">DONT reload backup Screen Data</CheckBox>
                 <CheckBox x:Name="clutCheck" Checked="clutCheck_Change" Unchecked="clutCheck_Change">DONT reload backup Clut Data</CheckBox>
                 <StackPanel Background="#191919">
                     <Label HorizontalAlignment="Center">Options</Label>
                 </StackPanel>
+                <CheckBox x:Name="dontUpdateCheck" Checked="dontUpdateCheck_Change" Unchecked="dontUpdateCheck_Change">Dont check for Updates</CheckBox>
                 <CheckBox x:Name="saveReloadCheck" Checked="saveOnReloadCheck_Change" Unchecked="saveOnReloadCheck_Change">Save On Reload</CheckBox>
             </StackPanel>
         </Grid>

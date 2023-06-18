@@ -11,7 +11,7 @@
             <RowDefinition Height="0.5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Image Width="56" Source="..\Resources\MegaPogFrogYou 56.png"/>
+        <Image Width="56" RenderOptions.BitmapScalingMode="Unspecified" Source="..\Resources\MegaPogFrogYou 56.png"/>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center">
             <Label Foreground="White" FontSize="13">by PogYouGuy AKA Kuumba</Label>
         </StackPanel>

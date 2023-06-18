@@ -12,6 +12,7 @@ namespace TeheMan8_Editor.Forms
         public AboutWindow()
         {
             InitializeComponent();
+            Title += Const.Version;
         }
         #endregion Constructors
 

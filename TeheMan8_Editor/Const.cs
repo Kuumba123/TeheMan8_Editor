@@ -5,7 +5,15 @@ namespace TeheMan8_Editor
 {
     static class Const
     {
-        public const uint CheckPointPoiners = 0x80138288;
+        public static readonly string reproURL = "https://api.github.com/repos/Kuumba123/TeheMan8_Editor/releases/latest";
+        public const string Version = "1.1.2";
+        public static readonly string[] pastVersions =
+        {
+            "1.0",
+            "1.1",
+            "1.1.1"
+        };
+        public const uint CheckPointPointers = 0x80138288;
         public const uint MidCheckPointAddress = 0x80137af4;
         public const uint WaterLevelAddress = 0x80137a94;
         public const uint BorderDataAddress = 0x8013e020;
@@ -253,5 +261,5 @@ namespace TeheMan8_Editor
                                 Color.FromRgb(0xFF,0xFF,0xFF)
                             };
 
-	}
+    }
 }

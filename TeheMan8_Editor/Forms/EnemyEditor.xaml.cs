@@ -18,7 +18,7 @@ namespace TeheMan8_Editor.Forms
         public int viewerX = 0x400;
         public int viewerY = 0;
         UIElement obj;
-        FrameworkElement control = new FrameworkElement();
+        public FrameworkElement control = new FrameworkElement();
         bool down = false;
         Point point;
         #endregion Properties
@@ -205,6 +205,7 @@ namespace TeheMan8_Editor.Forms
                 return;
             PSX.levels[Level.Id].enemies.Remove((Enemy)((EnemyLabel)control.Tag).Tag);
             DrawEnemies();
+            PSX.levels[Level.Id].edit = true;
         }
         private void ToolsBtn_Click(object sender, RoutedEventArgs e)
         {

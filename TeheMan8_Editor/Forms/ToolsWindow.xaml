@@ -71,11 +71,12 @@
                         </Grid>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="213*"/>
+                                <ColumnDefinition Width="176*"/>
+                                <ColumnDefinition Width="36*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="seqExtBtn" Click="seqExtBtn_Click">Extract SEQ</Button>
-                            <Button x:Name="seqInsertBtn" Grid.Column="1" Click="seqInsertBtn_Click">Insert SEQ</Button>
+                            <Button x:Name="seqInsertBtn" Grid.Column="1" Click="seqInsertBtn_Click" Grid.ColumnSpan="2">Insert SEQ</Button>
                         </Grid>
                     </StackPanel>
                 </Expander>
@@ -95,7 +96,7 @@
                         </Grid.RowDefinitions>
                         <Button x:Name="extractIsoBtn" Click="extractIsoBtn_Click">Extract ISO</Button>
                         <Button x:Name="replaceBtn" Grid.Column="1" Click="replaceBtn_Click">Replace File</Button>
-                        <Button x:Name="fixBtn" Grid.Row="1" Click="fixBtn_Click">Fix PSX.EXE LBA Table</Button>
+                        <Button x:Name="fixBtn" Grid.Row="1" Grid.ColumnSpan="2" Click="fixBtn_Click">Fix MegaMan 8 PSX.EXE LBA Table</Button>
                         <!--<Button x:Name="tracksBtn" Grid.Column="1" Grid.Row="1" Click="tracksBtn_Click">Combine Tracks</Button>-->
                     </Grid>
                 </Expander>

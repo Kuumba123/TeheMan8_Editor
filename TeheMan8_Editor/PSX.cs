@@ -50,7 +50,7 @@ namespace TeheMan8_Editor
                 br.BaseStream.Position = BitConverter.ToUInt32(sector, 0x1A) * 0x930;
 
                 //Make WINDOW + CONTROLS
-                ListWindow win = new ListWindow(true);
+                ListWindow win = new ListWindow();
 
                 //Use Title to save Path
                 win.Title = path;

@@ -17,7 +17,7 @@ namespace TeheMan8_Editor.Forms
         private static byte[] pixels = new byte[0x8000];
         public static int page = 0;
         public static int clut = 0;
-        private static int bgF = 1;
+        public static int bgF = 1;
         private static Button pastPage;
         #endregion Fields
 
@@ -34,10 +34,23 @@ namespace TeheMan8_Editor.Forms
         #region Methods
         public void DrawTextures()
         {
-            var b = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Indexed4, Level.palette[clut + (bgF * 0x40)]);
-            Level.bmp[page + (bgF * 8)].CopyPixels(new Int32Rect(0, 0, 256, 256), pixels, 128, 0);
-            b.WritePixels(new Int32Rect(0, 0, 256, 256), pixels, 128, 0);
-            MainWindow.window.clutE.textureImage.Source = b;
+            IntPtr pixelDataPtr = Level.bmp[page + (bgF * 8)].BackBuffer;
+
+            int pixelWidth = Level.bmp[page + (bgF * 8)].PixelWidth;
+            int pixelHeight = Level.bmp[page + (bgF * 8)].PixelHeight;
+            int stride = 128;
+
+
+            MainWindow.window.clutE.textureImage.Source = BitmapSource.Create(pixelWidth,
+                pixelHeight,
+                Level.bmp[page + (bgF * 8)].DpiX,
+                Level.bmp[page + (bgF * 8)].DpiY,
+                Level.bmp[page + (bgF * 8)].Format,
+                Level.palette[clut + (bgF * 0x40)],
+                pixelDataPtr,
+                Level.bmp[page + (bgF * 8)].PixelHeight * stride,
+                stride
+            );
         }
         public void DrawClut()
         {
@@ -82,8 +95,7 @@ namespace TeheMan8_Editor.Forms
         public void UpdateClutTxt() //also update Cursor
         {
             MainWindow.window.clutE.palBtn.Content = "CLUT: " + Convert.ToString(clut, 16).ToUpper().PadLeft(2, '0'); //Update Txt
-            Grid.SetRow(MainWindow.window.clutE.cursor, clut);
-            MainWindow.window.clutE.cursor.Fill = Brushes.Transparent;
+            Canvas.SetTop(MainWindow.window.clutE.cursor, clut * 16);
         }
         public void UpdateSelectedTexture(int type)
         {
@@ -199,6 +211,11 @@ namespace TeheMan8_Editor.Forms
         private void palBtn_Click(object sender, RoutedEventArgs e)
         {
             //...
+        }
+        private void GearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ListWindow l = new ListWindow(5);
+            l.ShowDialog();
         }
 
         private void BackgroudTex_Click(object sender, RoutedEventArgs e) //For Toggle Between Obj & BG

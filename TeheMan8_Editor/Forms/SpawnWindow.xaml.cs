@@ -58,7 +58,7 @@ namespace TeheMan8_Editor.Forms
                 int stageId = GetSpawnIndex();
                 MainWindow.window.spawnE.spawnInt.Value = 0;
                 MainWindow.window.spawnE.spawnInt.Maximum = Const.MaxPoints[stageId];
-                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
                 uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
                 SetIntValues((int)PSX.CpuToOffset(dataAddress));
                 SetWaterIntValue();
@@ -141,7 +141,7 @@ namespace TeheMan8_Editor.Forms
             for (int i = 0; i < Const.MaxPoints[stageId] + 1; i++)
             {
                 byte[] data = new byte[24];
-                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
                 uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (i * 4)));
                 Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
                 await Redux.Write(dataAddress, data);
@@ -210,7 +210,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + ((int)e.NewValue * 4)));
 
             SetIntValues((int)PSX.CpuToOffset(dataAddress));
@@ -223,7 +223,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             NumInt updown = (NumInt)sender;
@@ -260,7 +260,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             var c = (CheckBox)sender;
@@ -283,7 +283,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             var c = (CheckBox)sender;

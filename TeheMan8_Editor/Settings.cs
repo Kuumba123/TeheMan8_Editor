@@ -23,9 +23,9 @@ namespace TeheMan8_Editor
         public string webPort; //Redux
         public string comPort; //NOPS
         public bool useNops;
-        public bool useFast;
         public bool noScreenReload;
         public bool noClutReload;
+        public bool dontUpdate;
         public bool saveOnReload;
         #endregion Properties
 
@@ -45,6 +45,15 @@ namespace TeheMan8_Editor
                 webPort = "8080";
             if (comPort == null)
                 comPort = "5";
+        }
+        public static bool IsPastVersion(string ver)
+        {
+            foreach (var v in Const.pastVersions)
+            {
+                if (v == ver)
+                    return true;
+            }
+            return false;
         }
         #endregion Methods
     }

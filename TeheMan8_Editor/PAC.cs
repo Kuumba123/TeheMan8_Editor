@@ -63,7 +63,7 @@ namespace TeheMan8_Editor
 
                     //Add in new Entry
                     var e = new Entry();
-                    e.type = type & 0xFFFF;
+                    e.type = type;
                     e.data = new byte[size];
                     Array.Copy(data, o, e.data, 0, size);
                     entries.Add(e);
@@ -130,7 +130,7 @@ namespace TeheMan8_Editor
             foreach (var e in entries)
             {
                 int s = e.data.Length;
-                if(s % 0x800 != 0)
+                if (s % 0x800 != 0)
                 {
                     s += 0x800 - (s % 0x800);
                 }
@@ -144,49 +144,49 @@ namespace TeheMan8_Editor
                 Array.Copy(e.data, 0, data, addr_W, e.data.Length);
                 int s = e.data.Length;
                 //Padding
-                if(s % 0x800 != 0)
+                if (s % 0x800 != 0)
                 {
                     s += 0x800 - (s % 0x800);
                 }
                 addr_W += s;
             }
-            addr_W = 0;
+
             for (int i = 0; i < entries.Count; i++)
             {
                 if (i == 0)
                 {
                     //Amount of Entries
-                    data[0] = (byte)(entries.Count & 0xFF);
-                    data[1] = (byte)((entries.Count >> 8) & 0xFF);
-                    data[2] = (byte)((entries.Count >> 16) & 0xFF);
-                    data[3] = (byte)((entries.Count >> 24) & 0xFF);
+                    if (!this.isMSB)
+                        BitConverter.GetBytes(entries.Count).CopyTo(data, 0);
+                    else
+                        BitConverter.GetBytes(entries.Count).Reverse().ToArray().CopyTo(data, 0);
                     //File Size
-                    data[4] = (byte)(size & 0xFF);
-                    data[5] = (byte)((size >> 8) & 0xFF);
-                    data[6] = (byte)((size >> 16) & 0xFF);
-                    data[7] = (byte)((size >> 24) & 0xFF);
+                    if (!this.isMSB)
+                        BitConverter.GetBytes(size).CopyTo(data, 4);
+                    else
+                        BitConverter.GetBytes(size).Reverse().ToArray().CopyTo(data, 4);
                     //Type
-                    data[8] = (byte)(entries[i].type & 0xFF);
-                    data[9] = (byte)((entries[i].type >> 8) & 0xFF);
-                    data[0xA] = (byte)((entries[i].type >> 16) & 0xFF);
-                    data[0xB] = (byte)((entries[i].type >> 24) & 0xFF);
+                    if (!this.isMSB)
+                        BitConverter.GetBytes(entries[i].type).CopyTo(data, 8);
+                    else
+                        BitConverter.GetBytes(entries[i].type).Reverse().ToArray().CopyTo(data, 8);
                     //Size
-                    data[0xC] = (byte)(entries[i].data.Length & 0xFF);
-                    data[0xD] = (byte)((entries[i].data.Length >> 8) & 0xFF);
-                    data[0xE] = (byte)((entries[i].data.Length >> 16) & 0xFF);
-                    data[0xF] = (byte)((entries[i].data.Length >> 24) & 0xFF);
+                    if (!this.isMSB)
+                        BitConverter.GetBytes(entries[i].data.Length).CopyTo(data, 0xC);
+                    else
+                        BitConverter.GetBytes(entries[i].data.Length).Reverse().ToArray().CopyTo(data, 0xC);
                     continue;
                 }
                 //Type
-                data[((i - 1) * 8) + 0x10] = (byte)(entries[i].type & 0xFF);
-                data[((i - 1) * 8) + 0x11] = (byte)((entries[i].type >> 8) & 0xFF);
-                data[((i - 1) * 8) + 0x12] = (byte)((entries[i].type >> 16) & 0xFF);
-                data[((i - 1) * 8) + 0x13] = (byte)((entries[i].type >> 24) & 0xFF);
+                if (!this.isMSB)
+                    BitConverter.GetBytes(entries[i].type).CopyTo(data, ((i - 1) * 8) + 0x10);
+                else
+                    BitConverter.GetBytes(entries[i].type).Reverse().ToArray().CopyTo(data, ((i - 1) * 8) + 0x10);
                 //Size
-                data[((i - 1) * 8) + 0x14] = (byte)(entries[i].data.Length & 0xFF);
-                data[((i - 1) * 8) + 0x15] = (byte)((entries[i].data.Length >> 8) & 0xFF);
-                data[((i -  1) * 8) + 0x16] = (byte)((entries[i].data.Length >> 16) & 0xFF);
-                data[((i - 1) * 8) + 0x17] = (byte)((entries[i].data.Length >> 24) & 0xFF);
+                if (!this.isMSB)
+                    BitConverter.GetBytes(entries[i].data.Length).CopyTo(data, ((i - 1) * 8) + 0x14);
+                else
+                    BitConverter.GetBytes(entries[i].data.Length).Reverse().ToArray().CopyTo(data, ((i - 1) * 8) + 0x14);
             }
             return data;
         }

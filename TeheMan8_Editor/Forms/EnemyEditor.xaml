@@ -25,7 +25,7 @@
                 <Image x:Name="layoutImage" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Canvas>
         </Viewbox>
-        <Label x:Name="camLbl" Grid.Row="0" Foreground="White" FontFamily="Consolas" HorizontalAlignment="Left" FontSize="20"></Label>
+        <Label x:Name="camLbl" IsHitTestVisible="False" Grid.Row="0" Foreground="White" FontFamily="Consolas" HorizontalAlignment="Left" FontSize="20"></Label>
         <!--============-->
         
         <!--Enemy Type-->

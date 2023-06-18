@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,7 +21,7 @@ namespace TeheMan8_Editor.Forms
         public static bool screenViewOpen = false;
         public static bool extraOpen = false;
         public static bool fileViewOpen;
-        public string tab = "";
+        public static string tab = "";
         public static int layoutOffset = 0;
         public static bool enemyOpen = false;
         #endregion Fields
@@ -30,256 +31,9 @@ namespace TeheMan8_Editor.Forms
         #endregion Properties
 
         #region Constructors
-        public ListWindow() //For viewering Serial Loading
+        public ListWindow() //Dummy
         {
             InitializeComponent();
-            this.Title = "NOPS Output";
-            this.Width = 460;
-            this.Height = 400;
-            this.ResizeMode = ResizeMode.NoResize;
-            this.mode = 0;
-            TextBox t = new TextBox();
-            t.FontSize = 16;
-            t.TextWrapping = TextWrapping.NoWrap;
-            t.AcceptsReturn = true;
-            t.IsReadOnly = true;
-            t.Foreground = Brushes.White;
-            t.Background = Brushes.Black;
-            this.grid.Children.Add(t);
-
-            DispatcherTimer dt = new DispatcherTimer();
-            dt.Interval = TimeSpan.FromMilliseconds(1000 / 30);
-            dt.Tick += (s, e) =>
-            {
-                if(mode >= 66) //Done
-                {
-                    if (Settings.nops.HasExited)
-                    {
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialCont();
-                        mode = -1;
-                        dt.Stop();
-                        this.Close();
-                    }
-                    return;
-                }
-                if((mode & 1) == 1) //Wait
-                {
-                    if (Settings.nops.HasExited)
-                        mode++;
-                    return;
-                }
-                if(mode > 25 && mode < 46) //Checkpoint
-                {
-                    int stageId = (int)SpawnWindow.GetSpawnIndex();
-                    int checkPoint = (mode - 26) / 2;
-                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxPoints[stageId])
-                    {
-                        mode = 46;
-                        return;
-                    }
-                    byte[] data = new byte[24];
-                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPoiners + (stageId * 4))));
-                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
-                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
-
-                    Settings.nops.CancelOutputRead();
-                    PSX.SerialWrite(dataAddress, data);
-                    this.Title = "Writting Checkpoint Data";
-                    Settings.nops.BeginOutputReadLine();
-                    mode++;
-                    return;
-                }
-                if(mode > 45 && mode < 66) //Background Info
-                {
-                    int checkPoint = (mode - 46) / 2;
-                    int stageId = SpawnWindow.GetSpawnIndex();
-                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxBGEffects[stageId])
-                    {
-                        mode = 66;
-                        return;
-                    }
-
-                    byte[] data = new byte[12];
-                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.EffectsBGAddress + (stageId * 4))));
-                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
-                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
-
-                    Settings.nops.CancelOutputRead();
-                    PSX.SerialWrite(dataAddress, data);
-                    this.Title = "Writting Background Info";
-                    Settings.nops.BeginOutputReadLine();
-                    mode++;
-                    return;
-                }
-
-                switch (mode)
-                {
-                    case 0:
-                        PSX.SerialHalt();
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 2: //Layout 1
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016ef34, PSX.levels[Level.Id].layout);
-                        this.Title = "Writting LAYOUT 1 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 4: //Layout 2
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(1))
-                        {
-                            mode += 2;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016f334, PSX.levels[Level.Id].layout2);
-                        this.Title = "Writting LAYOUT 2 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 6: //Layout 3
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(1))
-                        {
-                            mode += 2;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016f734, PSX.levels[Level.Id].layout3);
-                        this.Title = "Writting LAYOUT 3 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-                    case 8: //Screen Data
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80171c3c, PSX.levels[Level.Id].screenData);
-                        this.Title = "Writting Active Screen DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 10: //Screen Data (Backup)
-                        if (MainWindow.settings.noScreenReload)
-                        {
-                            mode += 2;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80190040, PSX.levels[Level.Id].screenData);
-                        this.Title = "Writting Backup Screen DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 12: //Enemy Data
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(10))
-                        {
-                            mode += 2;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        byte[] enemyData = new byte[0x800];
-                        PSX.levels[Level.Id].DumpEnemyData(enemyData);
-                        PSX.SerialWrite(0x801c2b3c, enemyData);
-                        this.Title = "Writting Enemy Data";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 14: //Clut
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80158f64, PSX.levels[Level.Id].pal);
-                        this.Title = "Writting Clut DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 16: //Backup Clut
-                        if (MainWindow.settings.noClutReload)
-                        {
-                            mode += 2;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8015a064, PSX.levels[Level.Id].pal);
-                        this.Title = "Writting Backup Clut DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-                    case 18: //Tile Info
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8015ea88, PSX.levels[Level.Id].tileInfo);
-                        this.Title = "Writting Tile Info DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 20: //Water Level
-                        if (SpawnWindow.GetSpawnIndex() == -1)
-                        {
-                            mode += 4;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        uint stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        uint addr = Const.WaterLevelAddress;
-                        if (SpawnWindow.MidCheck())
-                            addr += 2;
-                        addr += stageId * 4;
-
-                        PSX.SerialWrite(0x801b2988, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
-                        this.Title = "Writting Water Height";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 22: //Water ...
-                        Settings.nops.CancelOutputRead();
-                        stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        addr = Const.WaterLevelAddress;
-                        if (SpawnWindow.MidCheck())
-                            addr += 2;
-                        addr += stageId * 4;
-                        PSX.SerialWrite(addr, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 24: //Mid Point
-                        if(SpawnWindow.GetSpawnIndex() == -1)
-                        {
-                            mode += 2;
-                            break;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        PSX.SerialWrite(Const.MidCheckPointAddress + stageId, PSX.exe[PSX.CpuToOffset(Const.MidCheckPointAddress + stageId)]);
-                        this.Title = "Writting Mid Point";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    default:
-                        break;
-                }
-            };
-            dt.Start();
         }
         public ListWindow(PAC pac) //For Editing PAC files
         {
@@ -352,11 +106,25 @@ namespace TeheMan8_Editor.Forms
                 }
                 //Time to Export new PAC file
                 System.Windows.Forms.SaveFileDialog fd = new System.Windows.Forms.SaveFileDialog();
-                fd.Filter = "PAC |*.PAC";
+                fd.Filter = "PAC Files (*.PAC)|*.PAC|ARC Files (*.ARC)|*.ARC";
 
-                if(fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    File.WriteAllBytes(fd.FileName, newPAC.GetEntriesData());
+                    pac.entries.Clear();
+                    foreach (var c in pannel.Children)
+                    {
+                        if (c.GetType() != typeof(PacEntry))
+                            continue;
+
+                        PacEntry pacEntry = c as PacEntry;
+
+                        Entry entry = new Entry();
+                        entry.type = pacEntry.entry.type;
+                        entry.data = pacEntry.entry.data;
+                        pac.entries.Add(entry);
+                    }
+                    File.WriteAllBytes(fd.FileName, pac.GetEntriesData());
+                    MessageBox.Show("ARC/PAC Saved!");
                 }
             };
             Grid.SetRow(saveAsBtn, 2);
@@ -369,7 +137,9 @@ namespace TeheMan8_Editor.Forms
                 VerticalContentAlignment = VerticalAlignment.Center,
                 IsChecked = pac.isMSB
             };
-
+            RoutedEventHandler r = new RoutedEventHandler((s, e) => { pac.isMSB = (bool)msbCheck.IsChecked; return; });
+            msbCheck.Checked += r;
+            msbCheck.Unchecked += r;
             StackPanel stackP = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
@@ -508,13 +278,330 @@ namespace TeheMan8_Editor.Forms
                 pannel.Children.Add(b);
             }
         }
-        public ListWindow(bool t) //Dummy
+        public ListWindow(bool single) //For viewering Serial Loading
         {
             InitializeComponent();
+            this.Title = "NOPS Output";
+            this.Width = 460;
+            this.Height = 400;
+            this.ResizeMode = ResizeMode.NoResize;
+            this.mode = 0;
+            TextBox t = new TextBox();
+            t.FontSize = 16;
+            t.TextWrapping = TextWrapping.NoWrap;
+            t.AcceptsReturn = true;
+            t.IsReadOnly = true;
+            t.Foreground = Brushes.White;
+            t.Background = Brushes.Black;
+            this.grid.Children.Add(t);
+
+            DispatcherTimer dt = new DispatcherTimer();
+            dt.Interval = TimeSpan.FromMilliseconds(1000 / 30);
+            dt.Tick += (s, e) =>
+            {
+                if (mode >= 66) //Done
+                {
+                    if (Settings.nops.HasExited)
+                    {
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialCont();
+                        mode = -1;
+                        dt.Stop();
+                        this.Close();
+                    }
+                    return;
+                }
+                if ((mode & 1) == 1) //Wait
+                {
+                    if (Settings.nops.HasExited)
+                        mode++;
+                    return;
+                }
+                if (mode > 25 && mode < 46) //Checkpoint
+                {
+                    int stageId = (int)SpawnWindow.GetSpawnIndex();
+                    int checkPoint = (mode - 26) / 2;
+                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxPoints[stageId])
+                    {
+                        mode = 46;
+                        return;
+                    }
+                    if(single && tab != "spawnTab")
+                    {
+                        mode = 46;
+                        return;
+                    }
+                    byte[] data = new byte[24];
+                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
+                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
+
+                    Settings.nops.CancelOutputRead();
+                    PSX.SerialWrite(dataAddress, data);
+                    this.Title = "Writting Checkpoint Data";
+                    Settings.nops.BeginOutputReadLine();
+                    mode++;
+                    return;
+                }
+                if (mode > 45 && mode < 66) //Background Info
+                {
+                    int checkPoint = (mode - 46) / 2;
+                    int stageId = SpawnWindow.GetSpawnIndex();
+                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxBGEffects[stageId])
+                    {
+                        mode = 66;
+                        return;
+                    }
+                    if(single && tab != "bgTab")
+                    {
+                        mode = 66;
+                        return;
+                    }
+                    byte[] data = new byte[12];
+                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.EffectsBGAddress + (stageId * 4))));
+                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
+                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
+
+                    Settings.nops.CancelOutputRead();
+                    PSX.SerialWrite(dataAddress, data);
+                    this.Title = "Writting Background Info";
+                    Settings.nops.BeginOutputReadLine();
+                    mode++;
+                    return;
+                }
+
+                switch (mode)
+                {
+                    case 0:
+                        PSX.SerialHalt();
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 2: //Layout 1
+                        if (!PSX.levels[Level.Id].pac.ContainsEntry(0))
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        if(single && tab != "layoutTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x8016ef34, PSX.levels[Level.Id].layout);
+                        this.Title = "Writting LAYOUT 1 DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 4: //Layout 2
+                        if (!PSX.levels[Level.Id].pac.ContainsEntry(1))
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "layoutTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x8016f334, PSX.levels[Level.Id].layout2);
+                        this.Title = "Writting LAYOUT 2 DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 6: //Layout 3
+                        if (!PSX.levels[Level.Id].pac.ContainsEntry(2))
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "layoutTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x8016f734, PSX.levels[Level.Id].layout3);
+                        this.Title = "Writting LAYOUT 3 DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 8: //Screen Data
+                        if (single && tab != "screenTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x80171c3c, PSX.levels[Level.Id].screenData);
+                        this.Title = "Writting Active Screen DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 10: //Screen Data (Backup)
+                        if (MainWindow.settings.noScreenReload)
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "screenTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x80190040, PSX.levels[Level.Id].screenData);
+                        this.Title = "Writting Backup Screen DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 12: //Enemy Data
+                        if (!PSX.levels[Level.Id].pac.ContainsEntry(10))
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "enemyTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        byte[] enemyData = new byte[0x800];
+                        PSX.levels[Level.Id].DumpEnemyData(enemyData);
+                        PSX.SerialWrite(0x801c2b3c, enemyData);
+                        this.Title = "Writting Enemy Data";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 14: //Clut
+                        if (single && tab != "clutTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x80158f64, PSX.levels[Level.Id].pal);
+                        this.Title = "Writting Clut DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 16: //Backup Clut
+                        if (MainWindow.settings.noClutReload)
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "clutTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x8015a064, PSX.levels[Level.Id].pal);
+                        this.Title = "Writting Backup Clut DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 18: //Tile Info
+                        if (single && tab != "x16Tab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(0x8015ea88, PSX.levels[Level.Id].tileInfo);
+                        this.Title = "Writting Tile Info DATA";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 20: //Water Level
+                        if (SpawnWindow.GetSpawnIndex() == -1)
+                        {
+                            mode += 4;
+                            break;
+                        }
+                        if (single && tab != "spawnTab")
+                        {
+                            mode += 4;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        uint stageId = (uint)SpawnWindow.GetSpawnIndex();
+                        uint addr = Const.WaterLevelAddress;
+                        if (SpawnWindow.MidCheck())
+                            addr += 2;
+                        addr += stageId * 4;
+
+                        PSX.SerialWrite(0x801b2988, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
+                        this.Title = "Writting Water Height";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 22: //Water ...
+                        Settings.nops.CancelOutputRead();
+                        stageId = (uint)SpawnWindow.GetSpawnIndex();
+                        addr = Const.WaterLevelAddress;
+                        if (SpawnWindow.MidCheck())
+                            addr += 2;
+                        addr += stageId * 4;
+                        PSX.SerialWrite(addr, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    case 24: //Mid Point
+                        if (SpawnWindow.GetSpawnIndex() == -1)
+                        {
+                            mode += 2;
+                            break;
+                        }
+                        if (single && tab != "spawnTab")
+                        {
+                            mode += 2;
+                            return;
+                        }
+                        Settings.nops.CancelOutputRead();
+                        stageId = (uint)SpawnWindow.GetSpawnIndex();
+                        PSX.SerialWrite(Const.MidCheckPointAddress + stageId, PSX.exe[PSX.CpuToOffset(Const.MidCheckPointAddress + stageId)]);
+                        this.Title = "Writting Mid Point";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+
+                    default:
+                        break;
+                }
+            };
+            dt.Start();
         }
         public ListWindow(int action) //Various
         {
-            Action[] acts = new Action[] { ScreenGrid, LayoutEdit, ExtraGrid , EnemyTools , FileViewer};
+            Action[] acts = new Action[] { ScreenGrid, LayoutEdit, ExtraGrid , EnemyTools , FileViewer , ClutTools };
             InitializeComponent();
             mode = -action;
             acts[action]();
@@ -563,6 +650,25 @@ namespace TeheMan8_Editor.Forms
                     Grid.SetColumn(b, x);
                     Grid.SetRow(b, y);
                     grid.Children.Add(b);
+                }
+            }
+        }
+        public void EditScreen(int x, int y)
+        {
+            foreach (var c in grid.Children)
+            {
+                if (c.GetType() != typeof(Button))
+                    continue;
+                Button button = c as Button;
+                if (Grid.GetColumn(button) == x && Grid.GetRow(button) == y)
+                {
+                    if(Level.BG == 0)
+                        button.Content = Convert.ToString(PSX.levels[Level.Id].layout[layoutOffset], 16).ToUpper();
+                    else if(Level.BG == 1)
+                        button.Content = Convert.ToString(PSX.levels[Level.Id].layout2[layoutOffset], 16).ToUpper();
+                    else
+                        button.Content = Convert.ToString(PSX.levels[Level.Id].layout3[layoutOffset], 16).ToUpper();
+                    return;
                 }
             }
         }
@@ -960,10 +1066,201 @@ namespace TeheMan8_Editor.Forms
                 pannel.Children.Add(b);
             }
         }
+        private void ClutTools()
+        {
+            this.Title = "CLUT TOOLS";
+            this.Height = 200;
+            this.ResizeMode = ResizeMode.NoResize;
+            this.scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+
+            Button importSet = new Button()
+            {
+                Content = $"Replace at Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} from Txt"
+            };
+            importSet.Click += (s, e) =>
+            {
+                using (var fd = new System.Windows.Forms.OpenFileDialog())
+                {
+                    try
+                    {
+                        fd.Filter = "Text File |*.TXT";
+                        fd.Title = "Select the Text File containning your CLUT";
+                        if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            string[] lines = File.ReadAllLines(fd.FileName);
+                            List<Color> colors = new List<Color>();
+
+                            foreach (var l in lines)
+                            {
+                                if (l.Trim() == "" || l.Trim() == "\n") continue;
+
+                                uint val = Convert.ToUInt32(l.Replace("#", "").Trim(), 16);
+                                Color color;
+                                color = Color.FromRgb((byte)(val >> 16), (byte)((val >> 8) & 0xFF), (byte)(val & 0xFF));
+                                colors.Add(color);
+                            }
+                            if (colors.Count < 16)
+                            {
+                                while (colors.Count < 16) colors.Add(Color.FromRgb(0, 0, 0));
+                            }
+                            int i = 0;
+                            foreach (var c in colors)
+                            {
+                                int color = Level.To15Rgb(c.B, c.G, c.R);
+
+                                BitConverter.GetBytes((ushort)color).CopyTo(PSX.levels[Level.Id].pal, (i + (ClutWindow.clut + ClutWindow.bgF * 64) * 16) * 2);
+                                PSX.levels[Level.Id].edit = true;
+                                i++;
+                            }
+                            MessageBox.Show("Clut Imported!");
+
+                            //Close Window
+                            Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive).Close();
+                            Level.AssignPallete();
+                            //Updating the rest of GUI
+                            MainWindow.window.clutE.DrawTextures();
+                            MainWindow.window.clutE.DrawClut();
+                            if (ClutWindow.bgF == 0)
+                                return;
+                            //Enemy Tab
+                            MainWindow.window.enemyE.Draw();
+                            //16x16 Tab
+                            MainWindow.window.x16E.DrawTextures();
+                            MainWindow.window.x16E.DrawTile();
+                            MainWindow.window.x16E.DrawTiles();
+                            //Screen Tab
+                            MainWindow.window.screenE.DrawTile();
+                            MainWindow.window.screenE.DrawScreen();
+                            MainWindow.window.screenE.DrawTiles();
+                            //Layout Tab
+                            MainWindow.window.layoutE.DrawLayout();
+                            MainWindow.window.layoutE.DrawScreen();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + ".\nClut might have still been modified");
+                    }
+                }
+            };
+
+            Button importPAL = new Button()
+            {
+                Content = $"Replace at Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} from PAL"
+            };
+            importPAL.Click += (s, e) =>
+            {
+                using (var fd = new System.Windows.Forms.OpenFileDialog())
+                {
+                    try
+                    {
+                        fd.Filter = "YYCHR PAL File |*.PAL";
+                        fd.Title = "Select the PAL File containning your CLUT";
+                        if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            List<Color> colors = new List<Color>();
+                            byte[] data = File.ReadAllBytes(fd.FileName);
+                            int i = 0;
+                            while (true)
+                            {
+                                Color color = Color.FromRgb(data[i], data[i + 1], data[i + 2]);
+                                colors.Add(color);
+                                i += 3;
+                                if (i >= data.Length)
+                                    break;
+                            }
+                            if (colors.Count < 16)
+                            {
+                                while (colors.Count < 16) colors.Add(Color.FromRgb(0, 0, 0));
+                            }
+
+                            i = (ClutWindow.clut + (ClutWindow.bgF * 64)) * 16 * 2;
+
+                            foreach (var c in colors)
+                            {
+                                int color = Level.To15Rgb(c.B, c.G, c.R);
+
+                                BitConverter.GetBytes((ushort)color).CopyTo(PSX.levels[Level.Id].pal, i);
+                                PSX.levels[Level.Id].edit = true;
+                                i += 2;
+                            }
+                            MessageBox.Show("Clut Imported!");
+
+                            //Close Window
+                            Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive).Close();
+                            Level.AssignPallete();
+                            //Updating the rest of GUI
+                            MainWindow.window.clutE.DrawTextures();
+                            MainWindow.window.clutE.DrawClut();
+                            if (ClutWindow.bgF == 0)
+                                return;
+                            //Enemy Tab
+                            MainWindow.window.enemyE.Draw();
+                            //16x16 Tab
+                            MainWindow.window.x16E.DrawTextures();
+                            MainWindow.window.x16E.DrawTile();
+                            MainWindow.window.x16E.DrawTiles();
+                            //Screen Tab
+                            MainWindow.window.screenE.DrawTile();
+                            MainWindow.window.screenE.DrawScreen();
+                            MainWindow.window.screenE.DrawTiles();
+                            //Layout Tab
+                            MainWindow.window.layoutE.DrawLayout();
+                            MainWindow.window.layoutE.DrawScreen();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + ".\nClut might have still been modified");
+                    }
+                }
+            };
+
+            Button exportSet = new Button()
+            {
+                Content = $"Export Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} as Txt"
+            };
+            exportSet.Click += (s, e) =>
+            {
+                using (var sfd = new System.Windows.Forms.SaveFileDialog())
+                {
+                    sfd.FileName = $"clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()}.txt";
+                    sfd.Title = $"Select Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} save location";
+
+                    if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        string lines = null;
+
+                        for (int i = 0; i < 16; i++)
+                        {
+                            int color;
+
+                            color = Level.To32Rgb(BitConverter.ToUInt16(PSX.levels[Level.Id].pal, ((ClutWindow.clut + (ClutWindow.bgF * 64)) * 16 + i) * 2));
+
+                            string r = Convert.ToString(color >> 16, 16).ToUpper().PadLeft(2, '0');
+                            string g = Convert.ToString((color >> 8) & 0xFF, 16).ToUpper().PadLeft(2, '0');
+                            string b = Convert.ToString(color & 0xFF, 16).ToUpper().PadLeft(2, '0');
+
+                            if (lines == null)
+                                lines = "#" + r + g + b;
+                            else
+                                lines += "\n#" + r + g + b;
+                        }
+                        File.WriteAllText(sfd.FileName, lines);
+                        MessageBox.Show("Clut Set Exported!");
+                        //Close Window
+                        Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive).Close();
+                    }
+                }
+            };
+
+            pannel.Children.Add(importSet);
+            pannel.Children.Add(importPAL);
+            pannel.Children.Add(exportSet);
+        }
         public void DrawScreens()
         {
-            if (this.Visibility != Visibility.Visible)
-                return;
             foreach (var u in this.grid.Children)
             {
                 if (u.GetType() != typeof(Button))

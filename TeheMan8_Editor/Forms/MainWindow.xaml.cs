@@ -230,6 +230,8 @@ namespace TeheMan8_Editor
                             PSX.levels[Level.Id].layout3[i] = 0;
                     }
                     window.layoutE.DrawLayout();
+                    if (ListWindow.screenViewOpen)
+                        layoutWindow.DrawScreens();
                 }
                 return;
             }

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:TeheMan8_Editor"
         xmlns:forms="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="TeheMan 8 Editor" Width="1205" Height="930" MinHeight="523" MinWidth="700" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown">
+        Title="TeheMan 8 Editor" Width="1205" Height="930" MinHeight="523" MinWidth="700" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown" Loaded="Window_Loaded" MouseDown="Window_MouseDown">
     <Grid Name="grid" Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

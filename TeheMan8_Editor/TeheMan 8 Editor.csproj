@@ -104,6 +104,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\EnemyEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\EnemyLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -149,6 +153,9 @@
     </Compile>
     <Compile Include="Forms\EnemyEditor.xaml.cs">
       <DependentUpon>EnemyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EnemyEntry.xaml.cs">
+      <DependentUpon>EnemyEntry.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\EnemyLabel.xaml.cs">
       <DependentUpon>EnemyLabel.xaml</DependentUpon>

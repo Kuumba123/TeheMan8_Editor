@@ -30,7 +30,7 @@
             </Grid.RowDefinitions>
             <Image x:Name="layoutImage" Grid.RowSpan="3" Grid.ColumnSpan="3" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="layoutImage_MouseDown"/>
         </Grid>
-        <Label x:Name="camLbl" Grid.Row="0" Foreground="White" FontFamily="Consolas" HorizontalAlignment="Left" FontSize="20"></Label>
+        <Label x:Name="camLbl" IsHitTestVisible="False" Grid.Row="0" Foreground="White" FontFamily="Consolas" HorizontalAlignment="Left" FontSize="20"></Label>
         
         <!--Selected Screen-->
         <StackPanel Grid.Column="1" Background="#101010">

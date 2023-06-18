@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="TeheMan 8 Editor - 1.1.1" Height="240" Width="280" ResizeMode="NoResize">
+        Title="TeheMan 8 Editor - " Height="240" Width="280" ResizeMode="NoResize">
     <Grid Background="#0A0A0A">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>

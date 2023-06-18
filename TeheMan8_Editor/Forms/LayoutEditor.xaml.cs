@@ -139,7 +139,7 @@ namespace TeheMan8_Editor.Forms
             {
                 if (Keyboard.IsKeyDown(Key.LeftShift))  //For Selecting in the Screen Tab
                 {
-                    byte screen = 0;
+                    byte screen;
                     if(Level.BG == 0)
                         screen = PSX.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)];
                     else if(Level.BG == 1)
@@ -163,8 +163,10 @@ namespace TeheMan8_Editor.Forms
                 if (Keyboard.IsKeyDown(Key.LeftShift))  //For Modifying the Clicked Screen
                 {
                     ListWindow.layoutOffset = cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32);
-                    var l = new ListWindow(1);
+                    ListWindow l = new ListWindow(1);
                     l.ShowDialog();
+                    if (ListWindow.screenViewOpen)
+                        MainWindow.layoutWindow.EditScreen(cX + (MainWindow.window.layoutE.viewerX >> 8), cY + (MainWindow.window.layoutE.viewerY >> 8));
                     return;
                 }
                 if (Level.BG == 0)
@@ -175,6 +177,8 @@ namespace TeheMan8_Editor.Forms
                     PSX.levels[Level.Id].layout3[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)selectedScreen;
                 PSX.levels[Level.Id].edit = true;
                 DrawLayout();
+                if (ListWindow.screenViewOpen)
+                    MainWindow.layoutWindow.EditScreen(cX + (MainWindow.window.layoutE.viewerX >> 8), cY + (MainWindow.window.layoutE.viewerY >> 8));
             }
         }
         private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

@@ -212,8 +212,29 @@ namespace TeheMan8_Editor
                 }
             }
         }
-        private void LayoutKeyCheck(string key)
+        private void LayoutKeyCheck(string key, bool notFocus)
         {
+            if (key == "Delete")
+            {
+                var result = MessageBox.Show("Are you sure you want to delete all of Layer " + (Level.BG + 1) + "?", "", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    for (int i = 0; i < 0x400; i++)
+                    {
+                        if (Level.BG == 0)
+                            PSX.levels[Level.Id].layout[i] = 0;
+                        else if (Level.BG == 1)
+                            PSX.levels[Level.Id].layout2[i] = 0;
+                        else
+                            PSX.levels[Level.Id].layout3[i] = 0;
+                    }
+                    window.layoutE.DrawLayout();
+                }
+                return;
+            }
+            if (!notFocus)  //check if NumInt is focused
+                return;
             if (key == "W")
             {
                 if (window.layoutE.viewerY != 0)
@@ -341,8 +362,17 @@ namespace TeheMan8_Editor
                 window.clutE.UpdateSelectedTexture(1);
             }
         }
-        private void EnemyKeyCheck(string key)
+        private void EnemyKeyCheck(string key, bool notFocus)
         {
+            if (key == "Delete" && window.enemyE.control.Tag != null)
+            {
+                PSX.levels[Level.Id].enemies.Remove((Enemy)((EnemyLabel)window.enemyE.control.Tag).Tag);
+                window.enemyE.DrawEnemies();
+                PSX.levels[Level.Id].edit = true;
+                return;
+            }
+            if (!notFocus)  //check if NumInt is focused
+                return;
             if (key == "W")
             {
                 if (window.enemyE.viewerY != 0)
@@ -464,7 +494,7 @@ namespace TeheMan8_Editor
         {
             window.Title = "TeheMan 8  Editor - " + PSX.levels[Level.Id].pac.filename;
         }
-        async private void ReLoad()
+        async private void ReLoad(bool single = false)
         {
             try
             {
@@ -473,7 +503,8 @@ namespace TeheMan8_Editor
 
                 if (settings.useNops) //use NOPS
                 {
-                    loadWindow = new ListWindow();
+                    ListWindow.tab = ((TabItem)hub.SelectedItem).Name;
+                    loadWindow = new ListWindow(single);
                     loadWindow.ShowDialog();
                 }
                 else // use REDUX
@@ -577,6 +608,66 @@ namespace TeheMan8_Editor
         #endregion Methods
 
         #region Events
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Check for Update
+            if (settings.dontUpdate) return;
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; Grand/3.0)");
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(Const.reproURL);
+                    response.EnsureSuccessStatusCode();
+                    string json = await response.Content.ReadAsStringAsync();
+                    dynamic release = JsonConvert.DeserializeObject(json);
+                    string tag = release.tag_name;
+                    if (tag != Const.Version && !Settings.IsPastVersion(tag))
+                    {
+                        var result = MessageBox.Show($"There is a new version of this editor ({tag}) do you want to download the update?", "New Version", MessageBoxButton.YesNo);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            //Start Downloading
+                            string url = release.assets[0].browser_download_url;
+                            response = await client.GetAsync(url);
+                            response.EnsureSuccessStatusCode();
+                            using (Stream contentStream = await response.Content.ReadAsStreamAsync())
+                            {
+                                using (FileStream fileStream = new FileStream("TeheMan8 Editor " + tag + ".exe", FileMode.Create, FileAccess.Write, FileShare.None))
+                                {
+                                    await contentStream.CopyToAsync(fileStream);
+                                }
+                            }
+                            System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/" + "TeheMan8 Editor " + tag + ".exe");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
+                catch(HttpRequestException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Xceed.Wpf.Toolkit.WatermarkTextBox num = Keyboard.FocusedElement as Xceed.Wpf.Toolkit.WatermarkTextBox;
+            if (num != null)
+            {
+                TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
+                num.MoveFocus(tRequest);
+
+                while (true)
+                {
+                    if (Keyboard.FocusedElement.GetType() != typeof(Xceed.Wpf.Toolkit.WatermarkTextBox))
+                        break;
+                    ((Xceed.Wpf.Toolkit.WatermarkTextBox)Keyboard.FocusedElement).MoveFocus(tRequest);
+                }
+            }
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Dragablz.TabablzControl.GetIsClosingAsPartOfDragOperation(this) && this == window)
@@ -647,6 +738,11 @@ namespace TeheMan8_Editor
                     ReLoad();
                     return;
                 }
+                else if(key == "E" && PSX.levels.Count != 0)
+                {
+                    ReLoad(true);
+                    return;
+                }
                 else if (key == "Left" && PSX.levels.Count != 0 && this.hub.Items.Count > 1)
                 {
                     int hubIndex = GetHubIndex();
@@ -674,12 +770,14 @@ namespace TeheMan8_Editor
             MainKeyCheck(key);
             if (hub.SelectedItem == null)
                 return;
+            bool nonNumInt = false;
+            if (Keyboard.FocusedElement.GetType() != typeof(Xceed.Wpf.Toolkit.WatermarkTextBox)) nonNumInt = true;
             var tab = (TabItem)hub.SelectedItem;
             switch (tab.Name)
             {
                 case "layoutTab":
                     {
-                        LayoutKeyCheck(key);
+                        LayoutKeyCheck(key, nonNumInt);
                         break;
                     }
                 case "screenTab":
@@ -689,7 +787,7 @@ namespace TeheMan8_Editor
                     }
                 case "enemyTab":
                     {
-                        EnemyKeyCheck(key);
+                        EnemyKeyCheck(key, nonNumInt);
                         break;
                     }
                 case "clutTab":

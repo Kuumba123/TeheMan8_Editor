@@ -35,6 +35,7 @@
             <Button>2</Button>
             <Button>3</Button>
             <Button>4</Button>
+            <Label Foreground="White" FontFamily="Consolas" FontSize="18" x:Name="nameLbl"></Label>
         </StackPanel>
         <!--Selection-->
         <ScrollViewer Grid.Column="1" Grid.Row="1">

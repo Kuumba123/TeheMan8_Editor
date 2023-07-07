@@ -14,7 +14,6 @@ namespace TeheMan8_Editor.Forms
     {
         #region Fields
         private static bool added = false;
-        private static byte[] pixels = new byte[0x8000];
         public static int page = 0;
         public static int clut = 0;
         public static int bgF = 1;

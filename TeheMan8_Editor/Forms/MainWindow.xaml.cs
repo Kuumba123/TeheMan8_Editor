@@ -87,6 +87,9 @@ namespace TeheMan8_Editor
                     PSX.time = File.GetLastWriteTime(args[1] + "/SLUS_004.53");
                     PSX.edit = false;
                     PSX.filePath = args[1];
+
+                    Settings.DefineCheckpoints();
+
                     Level.Id = 0;
                     Level.AssignPallete();
                     PSX.levels[Level.Id].LoadTextures();
@@ -163,6 +166,7 @@ namespace TeheMan8_Editor
                 PSX.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
                 PSX.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
                 PSX.filePath = fd.SelectedPath;
+                Settings.DefineCheckpoints();
                 Level.Id = 0;
                 Level.AssignPallete();
                 PSX.levels[Level.Id].LoadTextures();
@@ -280,12 +284,12 @@ namespace TeheMan8_Editor
                     Level.BG = 0;
                     window.layoutE.DrawLayout();
                     window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
                     if (ListWindow.screenViewOpen)
                     {
                         layoutWindow.DrawScreens();
                         layoutWindow.Title = "All Screens in Layer " + (Level.BG + 1);
                     }
-
                 }
             }
             else if (key == "D2")
@@ -295,6 +299,7 @@ namespace TeheMan8_Editor
                     Level.BG = 1;
                     window.layoutE.DrawLayout();
                     window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
                     if (ListWindow.screenViewOpen)
                     {
                         layoutWindow.DrawScreens();
@@ -309,6 +314,7 @@ namespace TeheMan8_Editor
                     Level.BG = 2;
                     window.layoutE.DrawLayout();
                     window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
                     if (ListWindow.screenViewOpen)
                     {
                         layoutWindow.DrawScreens();
@@ -414,16 +420,14 @@ namespace TeheMan8_Editor
         }
         internal bool SaveFiles(bool current = false /*option for saving current file*/)
         {
-            if (PSX.exe == null)
-                return false;
-            if (current)
+            try
             {
-                try
+                if (current)
                 {
                     if (File.Exists(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
                     {
                         if (!PSX.levels[Level.Id].edit && PSX.levels[Level.Id].time == File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
-                            return true;
+                            goto Skip;
                         File.WriteAllBytes(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename, PSX.levels[Level.Id].pac.GetEntriesData());
                         PSX.levels[Level.Id].time = File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename);
                         PSX.levels[Level.Id].edit = false;
@@ -434,17 +438,11 @@ namespace TeheMan8_Editor
                         PSX.levels[Level.Id].time = File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename);
                         PSX.levels[Level.Id].edit = false;
                     }
+                Skip:
+                    goto SaveExe;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "ERROR");
-                    return false;
-                }
-                return true;
-            }
-            foreach (var l in PSX.levels) //Save PAC Files
-            {
-                try
+
+                foreach (var l in PSX.levels) //Save PAC Files
                 {
                     l.ApplyLevelsToPAC();
                     if (File.Exists(l.pac.path + "/STDATA/" + l.pac.filename))
@@ -462,14 +460,22 @@ namespace TeheMan8_Editor
                         l.edit = false;
                     }
                 }
-                catch (Exception ex)
+                if (Settings.ExtractedPoints)
                 {
-                    MessageBox.Show(ex.Message, "ERROR");
-                    return false;
+                    for (int i = 0; i < Settings.EditedPoints.Length; i++)
+                    {
+                        if (Settings.EditedPoints[i])
+                        {
+                            foreach (var l in PSX.levels)
+                            {
+                                if (l.GetIndex() == i)
+                                    File.WriteAllBytes(PSX.filePath + "/CHECKPOINT/" + l.pac.filename + ".BIN", l.GetSpawnData());
+                            }
+                            Settings.EditedPoints[i] = false;
+                        }
+                    }
                 }
-            }
-            try
-            {
+            SaveExe:
                 if (File.Exists(PSX.filePath + "/SLUS_004.53"))
                 {
                     if (!PSX.edit && PSX.time == File.GetLastWriteTime(PSX.filePath + "/SLUS_004.53"))
@@ -484,14 +490,14 @@ namespace TeheMan8_Editor
                     PSX.time = File.GetLastWriteTime(PSX.filePath + "/SLUS_004.53");
                     PSX.edit = false;
                 }
-            }
-            catch (Exception ex)
+            }catch(Exception e)
             {
-                MessageBox.Show(ex.Message, "ERROR");
+                MessageBox.Show(e.Message, "SAVE ERROR");
                 return false;
             }
             return true;
         }
+
         public void SetFileTitle()
         {
             window.Title = "TeheMan 8  Editor - " + PSX.levels[Level.Id].pac.filename;
@@ -506,6 +512,7 @@ namespace TeheMan8_Editor
                 if (settings.useNops) //use NOPS
                 {
                     ListWindow.tab = ((TabItem)hub.SelectedItem).Name;
+                    ListWindow.checkpoingGo = false;
                     loadWindow = new ListWindow(single);
                     loadWindow.ShowDialog();
                 }
@@ -539,6 +546,29 @@ namespace TeheMan8_Editor
 
                     //Check Point Data
                     await SpawnWindow.WriteCheckPoints();
+
+                    if(PSX.levels[Level.Id].GetIndex() != -1)
+                    {
+                        byte[] camData = new byte[0x7E * 8];
+                        //Camera Settings
+                        Array.Copy(PSX.exe, PSX.CpuToOffset(Const.BorderDataAddress), camData, 0, camData.Length);
+                        await Redux.Write(Const.BorderDataAddress, camData);
+
+                        //Horizontal Settings
+                        Array.Resize(ref camData, 0x72 * 2);
+                        Array.Copy(PSX.exe, PSX.CpuToOffset(Const.HoriDataAddress), camData, 0, camData.Length);
+                        await Redux.Write(PSX.CpuToOffset(Const.HoriDataAddress), camData);
+
+                        //Door Settings
+                        Array.Resize(ref camData, 0x32 * 2);
+                        Array.Copy(PSX.exe, PSX.CpuToOffset(Const.DoorDataAddress), camData, 0, camData.Length);
+                        await Redux.Write(PSX.CpuToOffset(Const.DoorDataAddress), camData);
+
+                        //Vertical Settings
+                        Array.Resize(ref camData, 0x18 * 2);
+                        Array.Copy(PSX.exe, PSX.CpuToOffset(Const.VertDataAddress), camData, 0, camData.Length);
+                        await Redux.Write(PSX.CpuToOffset(Const.VertDataAddress), camData);
+                    }
 
                     //Textures
                     byte[] data = new byte[0x8000];
@@ -606,6 +636,13 @@ namespace TeheMan8_Editor
                 index++;
             }
             return -1;
+        }
+        private void CloseChildWindows()
+        {
+            var childWindows = Application.Current.Windows.Cast<Window>().Where(w => w != Application.Current.MainWindow).ToList();
+            window.hub.ConsolidateOrphanedItems = false;
+            foreach (var window in childWindows)
+                window.Close();
         }
         #endregion Methods
 
@@ -689,9 +726,7 @@ namespace TeheMan8_Editor
                             return;
                         }
                         else
-                        {
-                            Application.Current.Shutdown();
-                        }
+                            goto End;
                     }
                 }
                 if (PSX.edit)
@@ -703,10 +738,11 @@ namespace TeheMan8_Editor
                         return;
                     }
                 }
-                Application.Current.Shutdown();
+            End:
+                CloseChildWindows();
             }
         }
-        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) //HotKeys & Stuff
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e) //HotKeys & Stuff
         {
             var key = e.Key.ToString();
             if (key == "F11")
@@ -725,7 +761,7 @@ namespace TeheMan8_Editor
                 }
                 return;
             }
-            if (e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
             {
                 if (key == "O") //Open
                 {

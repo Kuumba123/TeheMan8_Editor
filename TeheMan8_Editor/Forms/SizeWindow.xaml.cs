@@ -17,11 +17,18 @@ namespace TeheMan8_Editor.Forms
         public SizeWindow()
         {
             InitializeComponent();
-            Title = PSX.levels[Level.Id].pac.filename + " Sizes";
 
+            if (ListWindow.screenViewOpen)
+                MainWindow.layoutWindow.Close();
+            if (ListWindow.extraOpen)
+                MainWindow.extraWindow.Close();
+
+            Title = PSX.levels[Level.Id].pac.filename + " Sizes";
+            enable = false;
             //Setup Ints
             screenInt.Value = PSX.levels[Level.Id].screenData.Length / 0x200;
             tileInt.Value = PSX.levels[Level.Id].tileInfo.Length / 4;
+            enable = true;
         }
         #endregion Constructors
 
@@ -48,11 +55,12 @@ namespace TeheMan8_Editor.Forms
         {
             screenInt.Value = screenInt.Maximum;
             tileInt.Value = tileInt.Maximum;
+            edit = true;
         }
 
         private void Int_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (e.NewValue == null || e.OldValue == null)
+            if (e.NewValue == null || e.OldValue == null || !enable)
                 return;
             edit = true;
         }

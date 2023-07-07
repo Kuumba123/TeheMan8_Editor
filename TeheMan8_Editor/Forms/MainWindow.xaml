@@ -73,19 +73,17 @@
                 </TabItem.Header>
                 <forms:SpawnWindow x:Name="spawnE"/>
             </TabItem>
-
-            <TabItem Name="camTab">
-                <TabItem.Header>
-                    <Button Style="{StaticResource TabButton}">Camera</Button>
-                </TabItem.Header>
-                <forms:CameraEditor x:Name="cameraE"/>
-            </TabItem>
-
             <TabItem Name="bgTab">
                 <TabItem.Header>
                     <Button Style="{StaticResource TabButton}">Background</Button>
                 </TabItem.Header>
                 <forms:BackgroundEditor x:Name="bgE"/>
+            </TabItem>
+            <TabItem Name="camTab">
+                <TabItem.Header>
+                    <Button Style="{StaticResource TabButton}">Camera</Button>
+                </TabItem.Header>
+                <forms:CameraEditor x:Name="cameraE"/>
             </TabItem>
         </dragablz:TabablzControl>
     </Grid>

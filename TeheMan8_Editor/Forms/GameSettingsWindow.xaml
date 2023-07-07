@@ -25,6 +25,7 @@
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="FontFamily" Value="Consolas"/>
                 <Setter Property="ParsingNumberStyle" Value="HexNumber"/>
+                <Setter Property="FormatString" Value="X"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>

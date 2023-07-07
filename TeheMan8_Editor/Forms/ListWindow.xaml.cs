@@ -18,6 +18,7 @@ namespace TeheMan8_Editor.Forms
     public partial class ListWindow : Window
     {
         #region Fields
+        public static bool checkpoingGo = false;
         public static bool screenViewOpen = false;
         public static bool extraOpen = false;
         public static bool fileViewOpen;
@@ -297,311 +298,439 @@ namespace TeheMan8_Editor.Forms
 
             DispatcherTimer dt = new DispatcherTimer();
             dt.Interval = TimeSpan.FromMilliseconds(1000 / 30);
-            dt.Tick += (s, e) =>
+
+            if (checkpoingGo)
             {
-                if (mode >= 66) //Done
+                dt.Tick += (s, e) =>
                 {
-                    if (Settings.nops.HasExited)
+                    if ((mode & 1) == 1) //Wait
                     {
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialCont();
-                        mode = -1;
-                        dt.Stop();
-                        this.Close();
-                    }
-                    return;
-                }
-                if ((mode & 1) == 1) //Wait
-                {
-                    if (Settings.nops.HasExited)
-                        mode++;
-                    return;
-                }
-                if (mode > 25 && mode < 46) //Checkpoint
-                {
-                    int stageId = (int)SpawnWindow.GetSpawnIndex();
-                    int checkPoint = (mode - 26) / 2;
-                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxPoints[stageId])
-                    {
-                        mode = 46;
+                        if (Settings.nops.HasExited)
+                            mode++;
                         return;
                     }
-                    if(single && tab != "spawnTab")
+                    else if (mode == 18)
                     {
-                        mode = 46;
+                        if (Settings.nops.HasExited)
+                        {
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialCont();
+                            mode = -1;
+                            dt.Stop();
+                            this.Close();
+                        }
                         return;
                     }
-                    byte[] data = new byte[24];
-                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
-                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
-                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
+                    int index = PSX.levels[Level.Id].GetIndex();
 
-                    Settings.nops.CancelOutputRead();
-                    PSX.SerialWrite(dataAddress, data);
-                    this.Title = "Writting Checkpoint Data";
-                    Settings.nops.BeginOutputReadLine();
-                    mode++;
-                    return;
-                }
-                if (mode > 45 && mode < 66) //Background Info
+                    switch (mode)
+                    {
+                        case 0:
+                            PSX.SerialHalt();
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 2: //Checkpoints
+                            {
+                                byte[] data = new byte[0x78C];
+                                Array.Copy(PSX.exe, PSX.CpuToOffset(0x80137b34), data, 0, data.Length);
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(0x80137b34, data);
+                                this.Title = "Writting Checkpoint DATA";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+
+                        case 4:
+                            {
+                                //Water Level
+                                int offset = index *= 4;
+                                uint addr = Const.WaterLevelAddress;
+                                addr += (uint)offset;
+
+                                if (SpawnWindow.MidCheck())
+                                    addr += 2;
+                                ushort val = BitConverter.ToUInt16(PSX.exe, PSX.CpuToOffset(addr));
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(0x801b2988, val);
+                                this.Title = "Writting Water Level DATA";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+                        case 6:
+                            {
+                                int offset = index *= 4;
+                                uint addr = Const.WaterLevelAddress;
+                                addr += (uint)offset;
+
+                                if (SpawnWindow.MidCheck())
+                                    addr += 2;
+                                ushort val = BitConverter.ToUInt16(PSX.exe, PSX.CpuToOffset(addr));
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(addr, val);
+                                this.Title = "Writting Water Level DATA";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+                        case 8:  //Mid Checkpoint
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite((uint)(Const.MidCheckPointAddress + index), PSX.exe[PSX.CpuToOffset((uint)(Const.MidCheckPointAddress + index))]);
+                            this.Title = "Writting Mid Pointer";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 10: //Background
+                            {
+                                byte[] data = new byte[0x4F8];
+                                Array.Copy(PSX.exe, PSX.CpuToOffset(0x8013c658), data, 0, data.Length);
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(0x8013c658, data);
+                                this.Title = "Writting Background Data";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+                        case 12: //Lives
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(Const.LivesAddress, (byte)3);
+                            this.Title = "Writting General Variables";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 14: //Current Checkpoint
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(Const.CheckPointAddress, (byte)(int)MainWindow.window.spawnE.spawnInt.Value);
+                            this.Title = "Writting General Variables";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 16: //Mega Alive
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(Const.MegaAliveAddress, (byte)0);
+                            this.Title = "Writting General Variables";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+                        default:
+                            break;
+                    }
+                };
+            }
+            else
+            {
+                dt.Tick += (s, e) =>
                 {
-                    int checkPoint = (mode - 46) / 2;
-                    int stageId = SpawnWindow.GetSpawnIndex();
-                    if (SpawnWindow.GetSpawnIndex() == -1 || checkPoint > Const.MaxBGEffects[stageId])
+                    if (mode >= 30) //Done
                     {
-                        mode = 66;
+                        if (Settings.nops.HasExited)
+                        {
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialCont();
+                            mode = -1;
+                            dt.Stop();
+                            this.Close();
+                        }
                         return;
                     }
-                    if(single && tab != "bgTab")
+                    if ((mode & 1) == 1) //Wait
                     {
-                        mode = 66;
+                        if (Settings.nops.HasExited)
+                            mode++;
                         return;
                     }
-                    byte[] data = new byte[12];
-                    uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.EffectsBGAddress + (stageId * 4))));
-                    uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (checkPoint * 4)));
-                    Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
 
-                    Settings.nops.CancelOutputRead();
-                    PSX.SerialWrite(dataAddress, data);
-                    this.Title = "Writting Background Info";
-                    Settings.nops.BeginOutputReadLine();
-                    mode++;
-                    return;
-                }
-
-                switch (mode)
-                {
-                    case 0:
-                        PSX.SerialHalt();
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 2: //Layout 1
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(0))
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        if(single && tab != "layoutTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016ef34, PSX.levels[Level.Id].layout);
-                        this.Title = "Writting LAYOUT 1 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 4: //Layout 2
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(1))
-                        {
-                            mode += 2;
+                    switch (mode)
+                    {
+                        case 0:
+                            PSX.SerialHalt();
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "layoutTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016f334, PSX.levels[Level.Id].layout2);
-                        this.Title = "Writting LAYOUT 2 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    case 6: //Layout 3
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(2))
-                        {
-                            mode += 2;
+                        case 2: //Layout 1
+                            if (!PSX.levels[Level.Id].pac.ContainsEntry(0))
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            if (single && tab != "layoutTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8016ef34, PSX.levels[Level.Id].layout);
+                            this.Title = "Writting LAYOUT 1 DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "layoutTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8016f734, PSX.levels[Level.Id].layout3);
-                        this.Title = "Writting LAYOUT 3 DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-                    case 8: //Screen Data
-                        if (single && tab != "screenTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80171c3c, PSX.levels[Level.Id].screenData);
-                        this.Title = "Writting Active Screen DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    case 10: //Screen Data (Backup)
-                        if (MainWindow.settings.noScreenReload)
-                        {
-                            mode += 2;
+                        case 4: //Layout 2
+                            if (!PSX.levels[Level.Id].pac.ContainsEntry(1))
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "layoutTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8016f334, PSX.levels[Level.Id].layout2);
+                            this.Title = "Writting LAYOUT 2 DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "screenTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80190040, PSX.levels[Level.Id].screenData);
-                        this.Title = "Writting Backup Screen DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    case 12: //Enemy Data
-                        if (!PSX.levels[Level.Id].pac.ContainsEntry(10))
-                        {
-                            mode += 2;
+                        case 6: //Layout 3
+                            if (!PSX.levels[Level.Id].pac.ContainsEntry(2))
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "layoutTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8016f734, PSX.levels[Level.Id].layout3);
+                            this.Title = "Writting LAYOUT 3 DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "enemyTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        byte[] enemyData = new byte[0x800];
-                        PSX.levels[Level.Id].DumpEnemyData(enemyData);
-                        PSX.SerialWrite(0x801c2b3c, enemyData);
-                        this.Title = "Writting Enemy Data";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
-
-                    case 14: //Clut
-                        if (single && tab != "clutTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x80158f64, PSX.levels[Level.Id].pal);
-                        this.Title = "Writting Clut DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 16: //Backup Clut
-                        if (MainWindow.settings.noClutReload)
-                        {
-                            mode += 2;
+                        case 8: //Screen Data
+                            if (single && tab != "screenTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x80171c3c, PSX.levels[Level.Id].screenData);
+                            this.Title = "Writting Active Screen DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "clutTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8015a064, PSX.levels[Level.Id].pal);
-                        this.Title = "Writting Backup Clut DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-                    case 18: //Tile Info
-                        if (single && tab != "x16Tab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        PSX.SerialWrite(0x8015ea88, PSX.levels[Level.Id].tileInfo);
-                        this.Title = "Writting Tile Info DATA";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    case 20: //Water Level
-                        if (SpawnWindow.GetSpawnIndex() == -1)
-                        {
-                            mode += 4;
+                        case 10: //Screen Data (Backup)
+                            if (MainWindow.settings.noScreenReload)
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "screenTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x80190040, PSX.levels[Level.Id].screenData);
+                            this.Title = "Writting Backup Screen DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "spawnTab")
-                        {
-                            mode += 4;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        uint stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        uint addr = Const.WaterLevelAddress;
-                        if (SpawnWindow.MidCheck())
-                            addr += 2;
-                        addr += stageId * 4;
-
-                        PSX.SerialWrite(0x801b2988, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
-                        this.Title = "Writting Water Height";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    case 22: //Water ...
-                        Settings.nops.CancelOutputRead();
-                        stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        addr = Const.WaterLevelAddress;
-                        if (SpawnWindow.MidCheck())
-                            addr += 2;
-                        addr += stageId * 4;
-                        PSX.SerialWrite(addr, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
-
-
-                    case 24: //Mid Point
-                        if (SpawnWindow.GetSpawnIndex() == -1)
-                        {
-                            mode += 2;
+                        case 12: //Enemy Data
+                            if (!PSX.levels[Level.Id].pac.ContainsEntry(10))
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "enemyTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            byte[] enemyData = new byte[0x800];
+                            PSX.levels[Level.Id].DumpEnemyData(enemyData);
+                            PSX.SerialWrite(0x801c2b3c, enemyData);
+                            this.Title = "Writting Enemy Data";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
                             break;
-                        }
-                        if (single && tab != "spawnTab")
-                        {
-                            mode += 2;
-                            return;
-                        }
-                        Settings.nops.CancelOutputRead();
-                        stageId = (uint)SpawnWindow.GetSpawnIndex();
-                        PSX.SerialWrite(Const.MidCheckPointAddress + stageId, PSX.exe[PSX.CpuToOffset(Const.MidCheckPointAddress + stageId)]);
-                        this.Title = "Writting Mid Point";
-                        Settings.nops.BeginOutputReadLine();
-                        mode++;
-                        break;
 
 
-                    default:
-                        break;
-                }
-            };
+                        case 14: //Clut
+                            if (single && tab != "clutTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x80158f64, PSX.levels[Level.Id].pal);
+                            this.Title = "Writting Clut DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+
+                        case 16: //Backup Clut
+                            if (MainWindow.settings.noClutReload)
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "clutTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8015a064, PSX.levels[Level.Id].pal);
+                            this.Title = "Writting Backup Clut DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 18: //Tile Info
+                            if (single && tab != "x16Tab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8015ea88, PSX.levels[Level.Id].tileInfo);
+                            this.Title = "Writting Tile Info DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+
+                        case 20: //Water Level
+                            if (SpawnWindow.GetSpawnIndex() == -1)
+                            {
+                                mode += 4;
+                                break;
+                            }
+                            if (single && tab != "spawnTab")
+                            {
+                                mode += 4;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            uint stageId = (uint)SpawnWindow.GetSpawnIndex();
+                            uint addr = Const.WaterLevelAddress;
+                            if (SpawnWindow.MidCheck())
+                                addr += 2;
+                            addr += stageId * 4;
+
+                            PSX.SerialWrite(0x801b2988, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
+                            this.Title = "Writting Water Height";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+
+                        case 22: //Water ...
+                            Settings.nops.CancelOutputRead();
+                            stageId = (uint)SpawnWindow.GetSpawnIndex();
+                            addr = Const.WaterLevelAddress;
+                            if (SpawnWindow.MidCheck())
+                                addr += 2;
+                            addr += stageId * 4;
+                            PSX.SerialWrite(addr, BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset(addr)));
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+
+                        case 24: //Mid Point
+                            if (SpawnWindow.GetSpawnIndex() == -1)
+                            {
+                                mode += 2;
+                                break;
+                            }
+                            if (single && tab != "spawnTab")
+                            {
+                                mode += 2;
+                                return;
+                            }
+                            Settings.nops.CancelOutputRead();
+                            stageId = (uint)SpawnWindow.GetSpawnIndex();
+                            PSX.SerialWrite(Const.MidCheckPointAddress + stageId, PSX.exe[PSX.CpuToOffset(Const.MidCheckPointAddress + stageId)]);
+                            this.Title = "Writting Mid Point";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+
+                        case 26: //Checkpoint
+                            {
+                                if (SpawnWindow.GetSpawnIndex() == -1)
+                                {
+                                    mode += 2;
+                                    break;
+                                }
+                                if (single && tab != "spawnTab")
+                                {
+                                    mode += 2;
+                                    return;
+                                }
+
+                                byte[] data = new byte[0x78C];
+                                Array.Copy(PSX.exe, PSX.CpuToOffset(0x80137b34), data, 0, data.Length);
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(0x80137b34, data);
+                                this.Title = "Writting Checkpoint DATA";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+
+                        case 28:
+                            {
+                                if (SpawnWindow.GetSpawnIndex() == -1)
+                                {
+                                    mode += 2;
+                                    break;
+                                }
+                                if (single && tab != "bgTab")
+                                {
+                                    mode += 2;
+                                    return;
+                                }
+                                byte[] data = new byte[0x4F8];
+                                Array.Copy(PSX.exe, PSX.CpuToOffset(0x8013c658), data, 0, data.Length);
+
+                                Settings.nops.CancelOutputRead();
+                                PSX.SerialWrite(0x8013c658, data);
+                                this.Title = "Writting Background Data";
+                                Settings.nops.BeginOutputReadLine();
+                                mode++;
+                                break;
+                            }
+
+                        default:
+                            break;
+                    }
+                };
+            }
+
+
             dt.Start();
         }
         public ListWindow(int action) //Various
         {
-            Action[] acts = new Action[] { ScreenGrid, LayoutEdit, ExtraGrid , EnemyTools , FileViewer , ClutTools };
+            Action[] acts = new Action[] { ScreenGrid, LayoutEdit, ExtraGrid , EnemyTools , FileViewer , ClutTools , CheckpointEdit , CheckpointNops };
             InitializeComponent();
             mode = -action;
             acts[action]();
@@ -1045,9 +1174,11 @@ namespace TeheMan8_Editor.Forms
         {
             InitializeComponent();
             this.Title = "Level Files";
-            this.ResizeMode = ResizeMode.CanMinimize;
-            this.Width = 400;
+            this.ResizeMode = ResizeMode.CanResize;
+            this.Width = 290;
             this.Height = 500;
+            this.MaxWidth = 290;
+            this.MinWidth = 290;
             fileViewOpen = true;
             int i = 0;
             foreach (var l in PSX.levels)
@@ -1258,6 +1389,273 @@ namespace TeheMan8_Editor.Forms
             pannel.Children.Add(importSet);
             pannel.Children.Add(importPAL);
             pannel.Children.Add(exportSet);
+        }
+        private void CheckpointEdit()
+        {
+            this.Title = "Checkpoints";
+
+            this.Height = 500;
+            this.Width = 300;
+            this.MaxWidth = 300;
+            this.MinWidth = 300;
+            int pastIndex = -1;
+
+
+            foreach (var l in PSX.levels)
+            {
+                int index = l.GetIndex();
+                if (index == pastIndex || index == -1)
+                    continue;
+                else
+                    pastIndex = index;
+                Grid g = new Grid();
+                g.ColumnDefinitions.Add(new ColumnDefinition());
+                g.ColumnDefinitions.Add(new ColumnDefinition());
+                g.ColumnDefinitions[1].Width = GridLength.Auto;
+                Label lbl = new Label() { Foreground = Brushes.White, Content = l.pac.filename, FontSize = 20 };
+                NumInt num = new NumInt() { Value = Settings.MaxPoints[index] + 1, FontSize = 20, Width = 70, HorizontalAlignment = HorizontalAlignment.Right, Minimum = 1, Maximum = 0xFF };
+
+                //For Tracking during Resize
+                num.Uid = l.GetIndex().ToString();
+
+                Grid.SetColumn(num, 1);
+                g.Children.Add(num);    //Keep at Index
+                g.Children.Add(lbl);
+                this.pannel.Children.Add(g);
+            }
+            Button confirm = new Button() { Content = "Confirm" };
+            Grid.SetRow(confirm, 1);
+
+            confirm.Click += (s, e) =>
+            {
+                int totalMax = 0;
+                int total = 0;
+                foreach (var b in Settings.MaxPoints) //Calculate Max Amount of Checkpoints
+                {
+                    if (b == 0xFF)
+                        continue;
+
+                    totalMax += b + 1;
+                }
+
+                bool change = false;
+                foreach (var c in this.pannel.Children) //Validation
+                {
+                    if (c.GetType() != typeof(Grid))
+                        continue;
+                    Grid loopG = c as Grid;
+                    if (loopG.Children.Count != 2)
+                        continue;
+
+                    total += (int)((NumInt)loopG.Children[0]).Value;
+                }
+
+                if (total > totalMax)
+                    MessageBox.Show($"Max total checkpoints is {totalMax} , you have entered  {total} witch is more than the max!");
+                else
+                {
+                    foreach (var c in this.pannel.Children) //Editing Change Checkpoints
+                    {
+                        if (c.GetType() != typeof(Grid))
+                            continue;
+                        Grid loopG = c as Grid;
+                        if (loopG.Children.Count != 2)
+                            continue;
+
+                        int val = (int)((NumInt)loopG.Children[0]).Value;
+                        int index = Convert.ToInt32(((NumInt)loopG.Children[0]).Uid);
+
+                        if (Settings.MaxPoints[index] == val - 1)
+                            continue;
+
+                        //Resize Checkpoint File
+                        try
+                        {
+                            byte[] data = new byte[24];
+                            MemoryStream ms = new MemoryStream();
+                            BinaryWriter bw = new BinaryWriter(ms);
+                            for (int i = 0; i < Settings.MaxPoints[index] + 1; i++)
+                            {
+                                uint addr = BitConverter.ToUInt32(PSX.exe, PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + index * 4)));
+                                uint read = BitConverter.ToUInt32(PSX.exe, PSX.CpuToOffset((uint)(addr + i * 4)));
+
+                                Array.Copy(PSX.exe, PSX.CpuToOffset(read), data, 0, 24);
+                                bw.Write(data);
+                            }
+                            byte[] file = ms.ToArray();
+                            Array.Resize(ref file, val * 24);
+                            File.WriteAllBytes(PSX.filePath + "/CHECKPOINT/" + PSX.levels[index].pac.filename + ".BIN", file);
+                            change = true;
+                            PSX.edit = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"ERROR on {PSX.levels[index].pac.filename} - " + ex.Message);
+                            return;
+                        }
+                    }
+                    //End of LOOP
+                    if (!change)
+                    {
+                        this.Close();
+                        return;
+                    }
+                    Settings.DefineCheckpoints();
+                    MessageBox.Show("Checkpoint Sizes Edited!");
+                    MainWindow.window.spawnE.SetSpawnSettings();
+                    this.Close();
+                }
+            };
+
+            this.outGrid.RowDefinitions.Add(new RowDefinition());
+            this.outGrid.RowDefinitions.Add(new RowDefinition());
+            this.outGrid.RowDefinitions[1].Height = GridLength.Auto;
+            outGrid.Children.Add(confirm);
+        }
+        private void CheckpointNops()
+        {
+            this.Title = "NOPS Output";
+            this.Width = 460;
+            this.Height = 400;
+            this.ResizeMode = ResizeMode.NoResize;
+            this.mode = 0;
+            TextBox t = new TextBox();
+            t.FontSize = 16;
+            t.TextWrapping = TextWrapping.NoWrap;
+            t.AcceptsReturn = true;
+            t.IsReadOnly = true;
+            t.Foreground = Brushes.White;
+            t.Background = Brushes.Black;
+            this.grid.Children.Add(t);
+
+            DispatcherTimer dt = new DispatcherTimer();
+            dt.Interval = TimeSpan.FromMilliseconds(1000 / 30);
+
+            dt.Tick += (s, e) =>
+            {
+                if ((mode & 1) == 1) //Wait
+                {
+                    if (Settings.nops.HasExited)
+                        mode++;
+                    return;
+                }else if(mode == 18)
+                {
+                    if (Settings.nops.HasExited)
+                    {
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialCont();
+                        mode = -1;
+                        dt.Stop();
+                        this.Close();
+                    }
+                    return;
+                }
+                int index = PSX.levels[Level.Id].GetIndex();
+
+                switch (mode)
+                {
+                    case 0:
+                        PSX.SerialHalt();
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 2: //Checkpoints
+                        {
+                            byte[] data = new byte[0x78C];
+                            Array.Copy(PSX.exe, PSX.CpuToOffset(0x80137b34), data, 0, data.Length);
+
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x80137b34, data);
+                            this.Title = "Writting Checkpoint DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+                        }
+
+                    case 4:
+                        {
+                            //Water Level
+                            int offset = index *= 4;
+                            uint addr = Const.WaterLevelAddress;
+                            addr += (uint)offset;
+
+                            if (SpawnWindow.MidCheck())
+                                addr += 2;
+                            ushort val = BitConverter.ToUInt16(PSX.exe, PSX.CpuToOffset(addr));
+
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x801b2988, val);
+                            this.Title = "Writting Water Level DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+                        }
+                    case 6:
+                        {
+                            int offset = index *= 4;
+                            uint addr = Const.WaterLevelAddress;
+                            addr += (uint)offset;
+
+                            if (SpawnWindow.MidCheck())
+                                addr += 2;
+                            ushort val = BitConverter.ToUInt16(PSX.exe, PSX.CpuToOffset(addr));
+
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(addr, val);
+                            this.Title = "Writting Water Level DATA";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+                        }
+                    case 8:  //Mid Checkpoint
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite((uint)(Const.MidCheckPointAddress + index), PSX.exe[PSX.CpuToOffset((uint)(Const.MidCheckPointAddress + index))]);
+                        this.Title = "Writting Mid Pointer";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 10: //Background
+                        {
+                            byte[] data = new byte[0x4F8];
+                            Array.Copy(PSX.exe, PSX.CpuToOffset(0x8013c658), data, 0, data.Length);
+
+                            Settings.nops.CancelOutputRead();
+                            PSX.SerialWrite(0x8013c658, data);
+                            this.Title = "Writting Background Data";
+                            Settings.nops.BeginOutputReadLine();
+                            mode++;
+                            break;
+                        }
+                    case 12: //Lives
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(Const.LivesAddress, (byte)3);
+                        this.Title = "Writting General Variables";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 14: //Current Checkpoint
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(Const.CheckPointAddress, (byte)(int)MainWindow.window.spawnE.spawnInt.Value);
+                        this.Title = "Writting General Variables";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+
+                    case 16: //Mega Alive
+                        Settings.nops.CancelOutputRead();
+                        PSX.SerialWrite(Const.MegaAliveAddress, (byte)0);
+                        this.Title = "Writting General Variables";
+                        Settings.nops.BeginOutputReadLine();
+                        mode++;
+                        break;
+                    default:
+                        break;
+                }
+            };
+            dt.Start();
         }
         public void DrawScreens()
         {

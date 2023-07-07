@@ -37,7 +37,7 @@
 
                 <!--NOPS Settings-->
                 <StackPanel Background="#191919">
-                    <Label HorizontalAlignment="Center">NOPS Settings</Label>
+                    <Label HorizontalAlignment="Center">PS1-NOPS Settings</Label>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="comBox" Height="30" Width="25" TextChanged="comBox_TextChanged"></TextBox>
@@ -50,7 +50,7 @@
                     <Label HorizontalAlignment="Center">Options</Label>
                 </StackPanel>
                 <CheckBox x:Name="dontUpdateCheck" Checked="dontUpdateCheck_Change" Unchecked="dontUpdateCheck_Change">Dont check for Updates</CheckBox>
-                <CheckBox x:Name="saveReloadCheck" Checked="saveOnReloadCheck_Change" Unchecked="saveOnReloadCheck_Change">Save On Reload</CheckBox>
+                <CheckBox x:Name="saveReloadCheck" Checked="saveOnReloadCheck_Change" Unchecked="saveOnReloadCheck_Change">Save Current Level On Reload</CheckBox>
             </StackPanel>
         </Grid>
     </ScrollViewer>

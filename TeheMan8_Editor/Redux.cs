@@ -9,7 +9,7 @@ namespace TeheMan8_Editor
     static class Redux
     {
         #region Fields
-        static internal HttpClient client = new HttpClient(new HttpClientHandler() { UseProxy = false });
+        static private HttpClient client = new HttpClient(new HttpClientHandler() { UseProxy = false });
         #endregion Fields
 
         #region Methods
@@ -23,6 +23,17 @@ namespace TeheMan8_Editor
             HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:" + MainWindow.settings.webPort + "/api/v1/execution-flow?function=<resume>&type=-", null);
             response.EnsureSuccessStatusCode();
         }
+        static async internal Task Write(int offset, byte val)
+        {
+            offset &= 0x1FFFFFFF;
+            string url = string.Format("http://127.0.0.1:" + MainWindow.settings.webPort + "/api/v1/cpu/ram/raw?offset={0}&size=1", offset);
+            MultipartFormDataContent content = new MultipartFormDataContent();
+
+            StreamContent fileStreamContent = new StreamContent(new MemoryStream(new byte[] { val }));
+            content.Add(fileStreamContent);
+            var response = await client.PostAsync(url, content);
+            response.EnsureSuccessStatusCode();
+        }
         static async internal Task Write(uint offset, byte val)
         {
             offset &= 0x1FFFFFFF;
@@ -30,6 +41,18 @@ namespace TeheMan8_Editor
             MultipartFormDataContent content = new MultipartFormDataContent();
 
             StreamContent fileStreamContent = new StreamContent(new MemoryStream(new byte[] { val }));
+            content.Add(fileStreamContent);
+            var response = await client.PostAsync(url, content);
+            response.EnsureSuccessStatusCode();
+        }
+        static async internal Task Write(int offset, byte[] vals)
+        {
+            offset &= 0x1FFFFFFF;
+            string url = string.Format(@"http://127.0.0.1:" + MainWindow.settings.webPort + "/api/v1/cpu/ram/raw?offset={0}&size={1}", offset, vals.Length);
+            MultipartFormDataContent content = new MultipartFormDataContent();
+
+
+            StreamContent fileStreamContent = new StreamContent(new MemoryStream(vals));
             content.Add(fileStreamContent);
             var response = await client.PostAsync(url, content);
             response.EnsureSuccessStatusCode();

@@ -30,7 +30,7 @@ namespace TeheMan8_Editor.Forms
                         this.border.BorderBrush = Brushes.BlueViolet;
                         break;
                     }
-                case 4:
+                case 4: //Effect Objects
                     {
                         this.border.BorderBrush = Brushes.HotPink;
                         break;

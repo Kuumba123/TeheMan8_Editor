@@ -13,46 +13,48 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--Tile Grid-->
-        <Grid x:Name="tileGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Image x:Name="tileImage" Grid.RowSpan="16" Grid.ColumnSpan="16" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="tileImage_MouseDown"/>
+        <Grid>
+            <Image x:Name="tileImage" Grid.RowSpan="16" Grid.ColumnSpan="16" x:FieldModifier="public"  HorizontalAlignment="Left" VerticalAlignment="Top" MouseMove="tileImage_MouseMove" MouseDown="tileImage_MouseDown" MouseUp="tileImage_MouseUp" MouseLeave="tileImage_MouseLeave"/>
+            <Grid x:Name="tileGrid" IsHitTestVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Rectangle x:Name="cursor" IsHitTestVisible="False" StrokeThickness="2.5" StrokeDashArray="2 2"  Stroke="#AFFF0000"></Rectangle>
+            </Grid>
         </Grid>
-
         <StackPanel Grid.Column="1">
             <WrapPanel Orientation="Horizontal">
                 <Label Foreground="White" FontSize="18" FontFamily="Consolas">T-Page</Label>

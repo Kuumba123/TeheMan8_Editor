@@ -400,9 +400,9 @@ namespace TeheMan8_Editor
                 src[major + major_count + offset] = (byte)(ecc_a ^ ecc_b);
             }
         }
-        public static uint CpuToOffset(uint cpu)
+        public static int CpuToOffset(uint cpu)
         {
-            return (uint)(cpu - BitConverter.ToInt32(exe, 0x18) + 0x800);
+            return (int)(cpu - BitConverter.ToInt32(exe, 0x18) + 0x800);
         }
         public static uint CpuToOffset(uint cpu, uint text)
         {

@@ -15,8 +15,6 @@ namespace TeheMan8_Editor.Forms
         #region Fields
         WriteableBitmap layoutBMP = new WriteableBitmap(768, 768, 96, 96, PixelFormats.Rgb24, null);
         WriteableBitmap selectBMP = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Rgb24, null);
-        byte[] pixels = new byte[0x1B0000];
-        byte[] pixels2 = new byte[0x30000];
         public int viewerX = 0;
         public int viewerY = 0;
         public int selectedScreen = 2;
@@ -33,57 +31,62 @@ namespace TeheMan8_Editor.Forms
         #region Methods
         public void DrawLayout()
         {
+            IntPtr ptr = layoutBMP.BackBuffer;
+            layoutBMP.Lock();
             if (Level.BG == 0)
             {
                 //X0
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, ptr);
                 //X1
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, ptr);
                 //X2
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, ptr);
             }else if(Level.BG == 1)
             {
                 //X0
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, ptr);
                 //X1
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, ptr);
                 //X2
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout2[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, ptr);
             }
             else
             {
                 //X0
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 0, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 0, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 0, 512, 2304, ptr);
                 //X1
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 256, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 256, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 1 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 256, 512, 2304, ptr);
                 //X2
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, pixels);
-                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, pixels);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + ((MainWindow.window.layoutE.viewerY >> 8) * 32)], 512, 0, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 1) * 32)], 512, 256, 2304, ptr);
+                Level.DrawScreen(PSX.levels[Level.Id].layout3[(MainWindow.window.layoutE.viewerX >> 8) + 2 + (((MainWindow.window.layoutE.viewerY >> 8) + 2) * 32)], 512, 512, 2304, ptr);
             }
-            layoutBMP.WritePixels(new Int32Rect(0, 0, 768, 768), pixels, 2304, 0);
+            layoutBMP.AddDirtyRect(new Int32Rect(0, 0, 768, 768));
+            layoutBMP.Unlock();
             MainWindow.window.layoutE.layoutImage.Source = layoutBMP;
         }
         public void DrawScreen()
         {
-            Level.DrawScreen(selectedScreen, 768, pixels2);
-            selectBMP.WritePixels(new Int32Rect(0, 0, 256, 256), pixels2, 768, 0);
+            selectBMP.Lock();
+            Level.DrawScreen(selectedScreen, 768, selectBMP.BackBuffer);
+            selectBMP.AddDirtyRect(new Int32Rect(0, 0, 256, 256));
+            selectBMP.Unlock();
             MainWindow.window.layoutE.selectImage.Source = selectBMP;
         }
         public void UpdateBtn()
@@ -217,6 +220,7 @@ namespace TeheMan8_Editor.Forms
             b.Foreground = Brushes.Black;
             pastLayer = b;
             DrawLayout();
+            MainWindow.window.enemyE.Draw();
             if (MainWindow.layoutWindow != null)
                 MainWindow.layoutWindow.DrawScreens();
         }
@@ -243,19 +247,21 @@ namespace TeheMan8_Editor.Forms
                     if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         WriteableBitmap fileBmp = new WriteableBitmap(8192, 8192, 96, 96, PixelFormats.Rgb24, null);
+                        fileBmp.Lock();
                         for (int y = 0; y < 32; y++) //32 Screens  Tall
                         {
                             for (int x = 0; x < 32; x++) //32 Screens Wide
                             {
                                 if (Level.BG == 0)
-                                    Level.DrawScreen(PSX.levels[Level.Id].layout[y * 32 + x], 256 * 3, pixels);
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout[y * 32 + x], 256 * x, 256 * y, 0x6000, fileBmp.BackBuffer);
                                 else if (Level.BG == 1)
-                                    Level.DrawScreen(PSX.levels[Level.Id].layout2[y * 32 + x], 256 * 3, pixels);
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout2[y * 32 + x], 256 * x, 256 * y, 0x6000, fileBmp.BackBuffer);
                                 else
-                                    Level.DrawScreen(PSX.levels[Level.Id].layout3[y * 32 + x], 256 * 3, pixels);
-                                fileBmp.WritePixels(new Int32Rect(x * 256, y * 256, 256, 256), pixels, 256 * 3, 0);
+                                    Level.DrawScreen(PSX.levels[Level.Id].layout3[y * 32 + x], 256 * x, 256 * y, 0x6000, fileBmp.BackBuffer);
                             }
                         }
+                        fileBmp.AddDirtyRect(new Int32Rect(0, 0, 8192, 8192));
+                        fileBmp.Unlock();
                         PngBitmapEncoder encoder = new PngBitmapEncoder();
                         encoder.Frames.Add(BitmapFrame.Create(fileBmp));
                         System.IO.FileStream fs = System.IO.File.Create(sfd.FileName);

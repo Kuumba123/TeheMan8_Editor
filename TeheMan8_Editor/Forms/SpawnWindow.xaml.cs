@@ -57,8 +57,8 @@ namespace TeheMan8_Editor.Forms
             {
                 int stageId = GetSpawnIndex();
                 MainWindow.window.spawnE.spawnInt.Value = 0;
-                MainWindow.window.spawnE.spawnInt.Maximum = Const.MaxPoints[stageId];
-                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+                MainWindow.window.spawnE.spawnInt.Maximum = Settings.MaxPoints[stageId];
+                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + (stageId * 4))));
                 uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
                 SetIntValues((int)PSX.CpuToOffset(dataAddress));
                 SetWaterIntValue();
@@ -87,15 +87,13 @@ namespace TeheMan8_Editor.Forms
                     MainWindow.window.spawnE.waterInt.IsEnabled = true;
                 }
                 MainWindow.window.spawnE.midInt.Value = PSX.exe[PSX.CpuToOffset((uint)(Const.MidCheckPointAddress + stageId))];
-                MainWindow.window.spawnE.midInt.Maximum = Const.MaxPoints[stageId];
+                MainWindow.window.spawnE.midInt.Maximum = Settings.MaxPoints[stageId];
             }
         }
         public static int GetSpawnIndex() //For each Stage
         {
             if (!PSX.levels[Level.Id].pac.filename.Contains("STAGE"))
-            {
                 return -1;
-            }
             return Convert.ToInt32(PSX.levels[Level.Id].pac.filename.Replace("STAGE0", "")[0].ToString(), 16);
         }
         private void SetIntValues(int offset) //does not include water level
@@ -124,7 +122,7 @@ namespace TeheMan8_Editor.Forms
                 return;
 
             offset *= 4;
-            offset += (int)PSX.CpuToOffset(Const.WaterLevelAddress);
+            offset += PSX.CpuToOffset(Const.WaterLevelAddress);
 
             if (MidCheck())
                 offset += 2;
@@ -138,15 +136,11 @@ namespace TeheMan8_Editor.Forms
                 return;
 
             //Checkpoints
-            for (int i = 0; i < Const.MaxPoints[stageId] + 1; i++)
             {
-                byte[] data = new byte[24];
-                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
-                uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (i * 4)));
-                Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
-                await Redux.Write(dataAddress, data);
+                byte[] data = new byte[0x78C];
+                Array.Copy(PSX.exe, PSX.CpuToOffset(0x80137b34), data, 0, data.Length);
+                await Redux.Write(0x80137b34, data);
             }
-
 
             //Water Level
             int offset = stageId *= 4;
@@ -163,37 +157,12 @@ namespace TeheMan8_Editor.Forms
 
             //Mid Checkpoint
             await Redux.Write((uint)(Const.MidCheckPointAddress + stageId), PSX.exe[PSX.CpuToOffset((uint)(Const.MidCheckPointAddress + stageId))]);
-            byte[] camData = new byte[0x7E * 8];
-
-            //Camera Settings
-            Array.Copy(PSX.exe, PSX.CpuToOffset(Const.BorderDataAddress), camData, 0, camData.Length);
-            await Redux.Write(Const.BorderDataAddress, camData);
-
-
-            //Horizontal Settings
-            Array.Resize(ref camData, 0x72 * 2);
-            Array.Copy(PSX.exe, PSX.CpuToOffset(Const.HoriDataAddress), camData, 0, camData.Length);
-            await Redux.Write( PSX.CpuToOffset(Const.HoriDataAddress), camData);
-
-            //Door Settings
-            Array.Resize(ref camData, 0x32 * 2);
-            Array.Copy(PSX.exe, PSX.CpuToOffset(Const.DoorDataAddress), camData, 0, camData.Length);
-            await Redux.Write(PSX.CpuToOffset(Const.DoorDataAddress), camData);
-
-            //Vertical Settings
-            Array.Resize(ref camData, 0x18 * 2);
-            Array.Copy(PSX.exe, PSX.CpuToOffset(Const.VertDataAddress), camData, 0, camData.Length);
-            await Redux.Write(PSX.CpuToOffset(Const.VertDataAddress), camData);
 
             //Background
-            stageId = GetSpawnIndex();
-            for (int i = 0; i < Const.MaxBGEffects[stageId] + 1; i++)
             {
-                byte[] data = new byte[12];
-                uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.EffectsBGAddress + (stageId * 4))));
-                uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (i * 4)));
-                Array.Copy(PSX.exe, PSX.CpuToOffset(dataAddress), data, 0, data.Length);
-                await Redux.Write(dataAddress, data);
+                byte[] data = new byte[0x4F8];
+                Array.Copy(PSX.exe, PSX.CpuToOffset(0x8013c658), data, 0, data.Length);
+                await Redux.Write(0x8013c658, data);
             }
         }
         public static bool MidCheck()
@@ -210,7 +179,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + ((int)e.NewValue * 4)));
 
             SetIntValues((int)PSX.CpuToOffset(dataAddress));
@@ -223,7 +192,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             NumInt updown = (NumInt)sender;
@@ -236,11 +205,12 @@ namespace TeheMan8_Editor.Forms
             switch (t) //Size of data to modify
             {
                 case 1:
-                    byte b = PSX.exe[(int)PSX.CpuToOffset((uint)(dataAddress + i))];
+                    byte b = PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i))];
                     if (b == (byte)(int)e.NewValue)
                         return;
-                    PSX.exe[(int)PSX.CpuToOffset((uint)(dataAddress + i))] = (byte)(int)e.NewValue;
+                    PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i))] = (byte)(int)e.NewValue;
                     PSX.edit = true;
+                    Settings.EditedPoints[stageId] = true;
                     break;
                 default:
                     ushort val = BitConverter.ToUInt16(PSX.exe, (int)PSX.CpuToOffset((uint)(dataAddress + i)));
@@ -249,6 +219,7 @@ namespace TeheMan8_Editor.Forms
                     PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i))] = (byte)(((int)e.NewValue) & 0xFF);
                     PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i + 1))] = (byte)(((int)e.NewValue >> 8) & 0xFF);
                     PSX.edit = true;
+                    Settings.EditedPoints[stageId] = true;
                     break;
             }
         }
@@ -260,7 +231,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             var c = (CheckBox)sender;
@@ -273,6 +244,7 @@ namespace TeheMan8_Editor.Forms
 
             PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i))] = 1;
             PSX.edit = true;
+            Settings.EditedPoints[stageId] = true;
         }
 
         private void SettingBox_Unchecked(object sender, System.Windows.RoutedEventArgs e)
@@ -283,7 +255,7 @@ namespace TeheMan8_Editor.Forms
             int stageId = GetSpawnIndex();
             if (stageId == -1)
                 return;
-            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointers + (stageId * 4))));
+            uint address = BitConverter.ToUInt32(PSX.exe, (int)PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + (stageId * 4))));
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.spawnE.spawnInt.Value * 4)));
 
             var c = (CheckBox)sender;
@@ -296,6 +268,7 @@ namespace TeheMan8_Editor.Forms
 
             PSX.exe[PSX.CpuToOffset((uint)(dataAddress + i))] = 0;
             PSX.edit = true;
+            Settings.EditedPoints[stageId] = true;
         }
         private void midInt_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
         {
@@ -329,6 +302,106 @@ namespace TeheMan8_Editor.Forms
             PSX.exe[offset] = (byte)(((int)e.NewValue) & 0xFF);
             PSX.exe[offset + 1] = (byte)(((int)e.NewValue >> 8) & 0xFF);
             PSX.edit = true;
+        }
+        private async void GOTO_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (GetSpawnIndex() == -1) return;
+
+            if (MainWindow.settings.useNops)
+            {
+                try
+                {
+                    ListWindow.checkpoingGo = true;
+                    MainWindow.loadWindow = new ListWindow(false);
+                    MainWindow.loadWindow.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "ERROR");
+                }
+            }
+            else
+            {
+                try
+                {
+                    await Redux.Pause();
+                    await WriteCheckPoints();
+                    await Redux.Write(Const.LivesAddress, (byte)3);
+                    await Redux.Write(Const.CheckPointAddress, (byte)(int)spawnInt.Value);
+                    await Redux.Write(Const.MegaAliveAddress, (byte)0);
+                    await Redux.Resume();
+                }catch(System.Net.Http.HttpRequestException ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "REDUX ERROR");
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "ERROR");
+                }
+            }
+        }
+        private void GearBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (Settings.ExtractedPoints) //Show window for configuring each point amount
+            {
+                ListWindow win = new ListWindow(6);
+                win.ShowDialog();
+            }
+            else //Extract
+            {
+                System.Windows.MessageBox.Show("In order to edit the amount of checkpoints per stage you need to extract the data from the un-edited PSX.EXE");
+                using (var fd = new System.Windows.Forms.OpenFileDialog())
+                {
+                    fd.Filter = "PSX-EXE |*53";
+                    fd.Title = "Select MegaMan 8 PSX-EXE";
+
+                    if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        byte[] exe = System.IO.File.ReadAllBytes(fd.FileName);
+
+                        ICSharpCode.SharpZipLib.Checksum.Crc32 crc32 = new ICSharpCode.SharpZipLib.Checksum.Crc32();
+                        crc32.Update(exe);
+
+                        if (crc32.Value != Const.Crc)
+                        {
+                            System.Windows.MessageBox.Show("Modified EXE , CRC is: " + Convert.ToString(crc32.Value, 16) + " it should be: " + Convert.ToString(Const.Crc, 16));
+                            return;
+                        }
+                        else
+                        {
+                            //Valid EXE (Extract Checkpoints)
+                            byte[] data = new byte[24];
+                            int pastIndex = -1;
+
+                            System.IO.Directory.CreateDirectory(PSX.filePath + "/CHECKPOINT");
+                            foreach (var l in PSX.levels)
+                            {
+                                int index = l.GetIndex();
+                                if (index == pastIndex || index == -1)
+                                    continue;
+                                else
+                                    pastIndex = index;
+
+                                System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                                System.IO.BinaryWriter bw = new System.IO.BinaryWriter(ms);
+
+                                for (int i = 0; i < Settings.MaxPoints[index] + 1; i++)
+                                {
+                                    uint addr = BitConverter.ToUInt32(exe, PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + index * 4)));
+                                    uint read = BitConverter.ToUInt32(exe, PSX.CpuToOffset((uint)(addr + i * 4)));
+
+                                    Array.Copy(exe, PSX.CpuToOffset(read), data, 0, 24);
+                                    bw.Write(data);
+                                }
+                                System.IO.File.WriteAllBytes(PSX.filePath + "/CHECKPOINT/" + l.pac.filename + ".BIN", ms.ToArray());
+                            }
+
+                            //Done
+                            System.Windows.MessageBox.Show("Checkpoints extracted!\nClose the Editor and re-open to be able to edit checkpoint amounts");
+                        }
+                    }
+                }
+            }
         }
         #endregion Events
     }

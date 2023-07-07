@@ -105,7 +105,7 @@ namespace TeheMan8_Editor.Forms
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.bgE.settingsInt.Value * 4)));
 
             dataAddress += Convert.ToUInt32(((NumInt)sender).Uid);
-            dataAddress = PSX.CpuToOffset(dataAddress);
+            dataAddress = (uint)PSX.CpuToOffset(dataAddress);
             byte val = PSX.exe[dataAddress];
             if (val == (byte)(int)e.NewValue)
                 return;
@@ -124,7 +124,7 @@ namespace TeheMan8_Editor.Forms
             uint dataAddress = BitConverter.ToUInt32(PSX.exe, (int)(PSX.CpuToOffset(address) + (MainWindow.window.bgE.settingsInt.Value * 4)));
 
             dataAddress += Convert.ToUInt32(((NumInt)sender).Uid);
-            dataAddress = PSX.CpuToOffset(dataAddress);
+            dataAddress = (uint)PSX.CpuToOffset(dataAddress);
             ushort val = BitConverter.ToUInt16(PSX.exe, (int)dataAddress);
             if (val == (int)e.NewValue)
                 return;

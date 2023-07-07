@@ -24,7 +24,6 @@ namespace TeheMan8_Editor
 
         #region Fields
         public static byte[] pixels = new byte[0x80000];
-        private static byte[] tilebuffer = new byte[0x2000];
         public static int Id = 0;
         public static int BG = 0;
         public static WriteableBitmap[] bmp = new WriteableBitmap[16];
@@ -44,27 +43,26 @@ namespace TeheMan8_Editor
             PSX.levels.Clear();
             for (int i = 0; i < 0xE; i++)
             {
-                if (!File.Exists(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC"))
-                    continue;
-                int o = PSX.levels.Count;
-                PSX.levels.Add(new Level());
-                PSX.levels[o].pac = new PAC(File.ReadAllBytes(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC"));
-                PSX.levels[o].pac.filename = "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC";
-                PSX.levels[o].pac.path = path;
-                PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC");
+                if (File.Exists(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC"))
+                {
+                    int o = PSX.levels.Count;
+                    PSX.levels.Add(new Level());
+                    PSX.levels[o].pac = new PAC(File.ReadAllBytes(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC"));
+                    PSX.levels[o].pac.filename = "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC";
+                    PSX.levels[o].pac.path = path;
+                    PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC");
+                }
+                if (File.Exists(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC"))
+                {
+                    int o = PSX.levels.Count;
+                    PSX.levels.Add(new Level());
+                    PSX.levels[o].pac = new PAC(File.ReadAllBytes(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC"));
+                    PSX.levels[o].pac.filename = "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC";
+                    PSX.levels[o].pac.path = path;
+                    PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC");
+                }
             }
-            //Mid Levels
-            for (int i = 0; i < 0xD; i++)
-            {
-                if (!File.Exists(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC"))
-                    continue;
-                int o = PSX.levels.Count;
-                PSX.levels.Add(new Level());
-                PSX.levels[o].pac = new PAC(File.ReadAllBytes(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC"));
-                PSX.levels[o].pac.filename = "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC";
-                PSX.levels[o].pac.path = path;
-                PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + "B.PAC");
-            }
+
             //Sub Levels
             string[] subLevels = { "ENDING.PAC", "GETDEMO.PAC", "LABO.PAC", "SELECT.PAC", "WILY.PAC" };
             for (int i = 0; i < subLevels.Length; i++)
@@ -77,7 +75,6 @@ namespace TeheMan8_Editor
                 PSX.levels[o].pac.filename = subLevels[i];
                 PSX.levels[o].pac.path = path;
                 PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + subLevels[i]);
-                PSX.levels[o].ExtractLevelData();
             }
             //DEMO Levels...
             for (int i = 0; i < 5; i++)
@@ -92,57 +89,58 @@ namespace TeheMan8_Editor
                 PSX.levels[o].time = File.GetLastWriteTime(path + "/STDATA/" + "PDEMO" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC");
             }
             foreach (var l in PSX.levels)
-            {
                 l.ExtractLevelData();
-            }
         }
-        public static void Draw16xTile(int id,int x,int y,int stride,byte[] buffer)
+        public static unsafe void Draw16xTile(int id, int x, int y, int stride, IntPtr dest)
         {
             id &= 0xFFF;
-            if (id == 0) //0 = Empty Tile
+            byte* buffer = (byte*)dest;
+
+            if (id == 0) // 0 = Empty Tile
             {
                 for (int Y = 0; Y < 16; Y++)
                 {
                     for (int X = 0; X < 16; X++)
                     {
-                        buffer[((x + X) * 3) + (y + Y) * stride] = 0;
-                        buffer[((x + X) * 3) + (y + Y) * stride + 1] = 0;
-                        buffer[((x + X) * 3) + (y + Y) * stride + 2] = 0;
+                        int index = ((x + X) * 3) + (y + Y) * stride;
+                        buffer[index] = 0;
+                        buffer[index + 1] = 0;
+                        buffer[index + 2] = 0;
                     }
                 }
                 return;
             }
+
             //Get Tile Info
             int cordX = BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) & 0xF;
             int cordY = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 4) & 0xF;
             int page = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 8) & 0x7;
             int clut = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 16) & 0x3F;
 
-            FormatConvertedBitmap f = new FormatConvertedBitmap();
-            f.BeginInit();
-            var b = new WriteableBitmap(16, 16, 96, 96, PixelFormats.Indexed4, palette[clut + 0x40]);
+            IntPtr bmpBackBuffer = bmp[page + 8].BackBuffer;
+            int bmpStride = bmp[page].BackBufferStride;
 
-            bmp[page + 8].CopyPixels(new Int32Rect(cordX * 16, cordY * 16 , 16, 16), tilebuffer, 128, 0);
-            b.WritePixels(new Int32Rect(0, 0, 16, 16), tilebuffer, 128, 0);
-            f.Source = b;
-            f.DestinationFormat = PixelFormats.Rgb24;
-            f.EndInit();
-            f.CopyPixels(new Int32Rect(0, 0, 16, 16), buffer, stride, (x * 3) + (y * stride));
-        }
-        public static void DrawScreen(int s,int stride,byte[] buffer)
-        {
-            int total = PSX.levels[Id].screenData.Length / 0x200;
-            if (s > total - 1)
-                s = 0;
-            for (int y = 0; y < 16; y++)
+            for (int row = 0; row < 16; row++)
             {
-                for (int x = 0; x < 16; x++)
+                int destIndex = (x * 3) + (y + row) * stride;
+                int sourceIndex = (cordX * 8) + ((cordY * 16 + row) * bmpStride);
+
+                for (int col = 0; col < 16; col++)
                 {
-                    Draw16xTile(BitConverter.ToUInt16(PSX.levels[Id].screenData, (x * 2) + (y * 0x20) + (0x200 * s)), x * 16, y * 16, stride, buffer);
+                    byte pixel = *(byte*)(bmpBackBuffer + sourceIndex + (col / 2));
+
+                    if ((col & 1) == 1)
+                        pixel &= 0xF;
+                    else
+                        pixel >>= 4;
+
+                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].R;
+                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].G;
+                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].B;
                 }
             }
         }
-        public static void DrawScreen(int s, int drawX, int drawY,int stride, byte[] buffer)
+        public static void DrawScreen(int s, int stride, IntPtr ptr)
         {
             int total = PSX.levels[Id].screenData.Length / 0x200;
             if (s > total - 1)
@@ -151,7 +149,20 @@ namespace TeheMan8_Editor
             {
                 for (int x = 0; x < 16; x++)
                 {
-                    Draw16xTile(BitConverter.ToUInt16(PSX.levels[Id].screenData,( x * 2) + (y * 0x20) + (0x200 * s)), (x * 16) + drawX, (y * 16) + drawY, stride, buffer);
+                    Draw16xTile(BitConverter.ToUInt16(PSX.levels[Id].screenData, (x * 2) + (y * 0x20) + (0x200 * s)), x * 16, y * 16, stride, ptr);
+                }
+            }
+        }
+        public static void DrawScreen(int s, int drawX, int drawY, int stride, IntPtr ptr)
+        {
+            int total = PSX.levels[Id].screenData.Length / 0x200;
+            if (s > total - 1)
+                s = 0;
+            for (int y = 0; y < 16; y++)
+            {
+                for (int x = 0; x < 16; x++)
+                {
+                    Draw16xTile(BitConverter.ToUInt16(PSX.levels[Id].screenData, (x * 2) + (y * 0x20) + (0x200 * s)), (x * 16) + drawX, (y * 16) + drawY, stride, ptr);
                 }
             }
         }
@@ -197,6 +208,24 @@ namespace TeheMan8_Editor
                 bmp[i].WritePixels(new Int32Rect(0, 0, 256, 256), pixels, 128, i * 0x8000);
 
         }
+        public byte[] GetSpawnData()
+        {
+            int index = this.GetIndex();
+            byte[] data = new byte[24];
+
+            MemoryStream ms = new MemoryStream();
+            BinaryWriter bw = new BinaryWriter(ms);
+
+            for (int i = 0; i < Settings.MaxPoints[index] + 1; i++)
+            {
+                uint addr = BitConverter.ToUInt32(PSX.exe, PSX.CpuToOffset((uint)(Const.CheckPointPointersAddress + index * 4)));
+                uint read = BitConverter.ToUInt32(PSX.exe, PSX.CpuToOffset((uint)(addr + i * 4)));
+
+                Array.Copy(PSX.exe, PSX.CpuToOffset(read), data, 0, 24);
+                bw.Write(data);
+            }
+            return ms.ToArray();
+        }
         private void LoadEnemyData(byte[] data)
         {
             this.enemies.Clear();
@@ -240,6 +269,12 @@ namespace TeheMan8_Editor
             bw.Write((byte)0);
             bw.Write((ushort)0);
             bw.Write((byte)0xFF);
+        }
+        public int GetIndex()
+        {
+            if (!this.pac.filename.Contains("STAGE"))
+                return -1;
+            return Convert.ToInt32(this.pac.filename.Replace("STAGE0", "")[0].ToString(), 16);
         }
         public static void AssignPallete()
         {

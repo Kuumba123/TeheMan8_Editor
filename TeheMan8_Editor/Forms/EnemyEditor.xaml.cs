@@ -293,6 +293,7 @@ namespace TeheMan8_Editor.Forms
                 return;
             ((Enemy)((EnemyLabel)control.Tag).Tag).id = (byte)(int)e.NewValue;
             ((EnemyLabel)control.Tag).text.Content = Convert.ToString(((Enemy)((EnemyLabel)control.Tag).Tag).id, 16).ToUpper();
+            UpdateEnemyName(((Enemy)((EnemyLabel)control.Tag).Tag).type, ((Enemy)((EnemyLabel)control.Tag).Tag).id);
         }
 
         private void xInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -324,6 +325,7 @@ namespace TeheMan8_Editor.Forms
                 return;
             ((Enemy)((EnemyLabel)control.Tag).Tag).type = (byte)((int)e.NewValue & 0xFF);
             ((EnemyLabel)control.Tag).AssignTypeBorder(((Enemy)((EnemyLabel)control.Tag).Tag).type);
+            UpdateEnemyName(((Enemy)((EnemyLabel)control.Tag).Tag).type, ((Enemy)((EnemyLabel)control.Tag).Tag).id);
         }
         private void Help_Click(object sender, RoutedEventArgs e)
         {

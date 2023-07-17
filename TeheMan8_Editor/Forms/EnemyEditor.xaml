@@ -8,7 +8,7 @@
              xmlns:forms="clr-namespace:TeheMan8_Editor.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="Black">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
@@ -30,7 +30,7 @@
         
         <!--Enemy Type-->
         <StackPanel Orientation="Horizontal" Grid.Column="1">
-            <Label Foreground="White" FontFamily="Consolas" FontSize="18">Enemy Type</Label>
+            <Label Foreground="White" FontFamily="Consolas" FontSize="18">Type</Label>
             <Button>1</Button>
             <Button>2</Button>
             <Button>3</Button>

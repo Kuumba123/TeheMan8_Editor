@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,13 +13,17 @@ namespace TeheMan8_Editor.Forms
     /// </summary>
     public partial class LayoutEditor : UserControl
     {
-        #region Fields
+        #region Properties
         WriteableBitmap layoutBMP = new WriteableBitmap(768, 768, 96, 96, PixelFormats.Rgb24, null);
         WriteableBitmap selectBMP = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Rgb24, null);
         public int viewerX = 0;
         public int viewerY = 0;
         public int selectedScreen = 2;
         public Button pastLayer;
+        #endregion
+
+        #region Fields
+        internal static List<List<Undo>> undos = new List<List<Undo>>();
         #endregion Fields
 
         #region Constructors
@@ -31,6 +36,22 @@ namespace TeheMan8_Editor.Forms
         #region Methods
         public void DrawLayout()
         {
+            if(Level.BG == 2)
+            {
+                if(PSX.levels[Level.Id].layout3 == null)
+                {
+                    Level.BG = 1;
+                    UpdateBtn();
+                }
+            }
+            if(Level.BG == 1)
+            {
+                if (PSX.levels[Level.Id].layout2 == null)
+                {
+                    Level.BG = 0;
+                    UpdateBtn();
+                }
+            }
             IntPtr ptr = layoutBMP.BackBuffer;
             layoutBMP.Lock();
             if (Level.BG == 0)
@@ -172,6 +193,12 @@ namespace TeheMan8_Editor.Forms
                         MainWindow.layoutWindow.EditScreen(cX + (MainWindow.window.layoutE.viewerX >> 8), cY + (MainWindow.window.layoutE.viewerY >> 8));
                     return;
                 }
+
+                //Save Undo & Edit
+                if (undos[Level.Id].Count == Const.MaxUndo)
+                    undos[Level.Id].RemoveAt(0);
+                undos[Level.Id].Add(Undo.CreateLayoutUndo(cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)));
+
                 if (Level.BG == 0)
                     PSX.levels[Level.Id].layout[cX + (MainWindow.window.layoutE.viewerX >> 8) + ((cY + (MainWindow.window.layoutE.viewerY >> 8)) * 32)] = (byte)selectedScreen;
                 else if (Level.BG == 1)

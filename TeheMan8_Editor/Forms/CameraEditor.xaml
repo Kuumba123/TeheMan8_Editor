@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000">
-    <Grid>
+    <Grid Background="Black">
         <WrapPanel Orientation="Horizontal">
             <!--Door Editing-->
             <StackPanel>

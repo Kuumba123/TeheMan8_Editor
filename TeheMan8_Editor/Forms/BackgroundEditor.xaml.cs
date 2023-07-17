@@ -8,9 +8,6 @@ namespace TeheMan8_Editor.Forms
     /// </summary>
     public partial class BackgroundEditor : UserControl
     {
-        #region Feilds
-        #endregion Feilds
-
         #region Constructors
         public BackgroundEditor()
         {

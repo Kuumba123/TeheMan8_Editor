@@ -9,12 +9,6 @@ namespace TeheMan8_Editor.Forms
     /// </summary>
     public partial class SpawnWindow : UserControl
     {
-        #region Fields
-        static byte[] pixesl = new byte[0x30000];
-        static int viewerX = 0;
-        static int viewerY = 0;
-        #endregion Fields
-
         #region Constructors
         public SpawnWindow()
         {
@@ -23,10 +17,6 @@ namespace TeheMan8_Editor.Forms
         #endregion Constructors
 
         #region Methods
-        public void DrawScreen() //...
-        {
-
-        }
         public void SetSpawnSettings()
         {
             if (!PSX.levels[Level.Id].pac.filename.Contains("STAGE"))

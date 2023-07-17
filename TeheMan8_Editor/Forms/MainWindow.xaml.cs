@@ -89,7 +89,7 @@ namespace TeheMan8_Editor
                     PSX.filePath = args[1];
 
                     Settings.DefineCheckpoints();
-
+                    Undo.CreateUndoList();
                     Level.Id = 0;
                     Level.AssignPallete();
                     PSX.levels[Level.Id].LoadTextures();
@@ -167,12 +167,48 @@ namespace TeheMan8_Editor
                 PSX.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
                 PSX.filePath = fd.SelectedPath;
                 Settings.DefineCheckpoints();
+                Undo.CreateUndoList();
                 Level.Id = 0;
                 Level.AssignPallete();
                 PSX.levels[Level.Id].LoadTextures();
                 //Draw Everything
                 Update();
                 hub.Visibility = Visibility.Visible;
+            }
+        }
+        private void ProcessUndo()
+        {
+            if (hub.SelectedItem != null)
+            {
+                switch (((TabItem)hub.SelectedItem).Name)
+                {
+                    case "layoutTab":
+                        if (LayoutEditor.undos[Level.Id].Count != 0)
+                        {
+                            int o = LayoutEditor.undos[Level.Id].Count - 1;
+                            LayoutEditor.undos[Level.Id][o].ApplyLayoutUndo();
+                            LayoutEditor.undos[Level.Id].RemoveAt(o);
+                        }
+                        break;
+                    case "screenTab":
+                        if (ScreenEditor.undos[Level.Id].Count != 0)
+                        {
+                            int o = ScreenEditor.undos[Level.Id].Count - 1;
+                            ScreenEditor.undos[Level.Id][o].ApplyScreenUndo();
+                            ScreenEditor.undos[Level.Id].RemoveAt(o);
+                        }
+                        break;
+                    case "x16Tab":
+                        if (Tile16Editor.undos[Level.Id].Count != 0)
+                        {
+                            int o = Tile16Editor.undos[Level.Id].Count - 1;
+                            Tile16Editor.undos[Level.Id][o].ApplyTilesUndo();
+                            Tile16Editor.undos[Level.Id].RemoveAt(o);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         public void MainKeyCheck(string key)
@@ -220,10 +256,11 @@ namespace TeheMan8_Editor
         {
             if (key == "Delete")
             {
-                var result = MessageBox.Show("Are you sure you want to delete all of Layer " + (Level.BG + 1) + "?", "", MessageBoxButton.YesNo);
+                var result = MessageBox.Show("Are you sure you want to delete all of Layer " + (Level.BG + 1) + "?\nThis cant be un-done", "", MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
                 {
+                    LayoutEditor.undos[Level.Id].Clear();
                     for (int i = 0; i < 0x400; i++)
                     {
                         if (Level.BG == 0)
@@ -233,6 +270,7 @@ namespace TeheMan8_Editor
                         else
                             PSX.levels[Level.Id].layout3[i] = 0;
                     }
+                    PSX.levels[Level.Id].edit = true;
                     window.layoutE.DrawLayout();
                     if (ListWindow.screenViewOpen)
                         layoutWindow.DrawScreens();
@@ -329,6 +367,9 @@ namespace TeheMan8_Editor
             //Clear Screen
             if(key == "Delete")
             {
+                if (ScreenEditor.undos.Count == Const.MaxUndo)
+                    ScreenEditor.undos.RemoveAt(0);
+                ScreenEditor.undos[Level.Id].Add(Undo.CreateGroupScreenEditUndo((byte)window.screenE.screenId, 0, 0, 16, 16));
                 Array.Clear(PSX.levels[Level.Id].screenData, window.screenE.screenId * 0x200, 0x200);
                 PSX.levels[Level.Id].edit = true;
                 window.layoutE.DrawLayout();
@@ -343,23 +384,23 @@ namespace TeheMan8_Editor
         {
             if (key == "Up")
             {
-                ClutWindow.clut = (ClutWindow.clut - 1) & 0x3F;
+                ClutEditor.clut = (ClutEditor.clut - 1) & 0x3F;
                 window.clutE.DrawTextures();
                 window.clutE.UpdateClutTxt();
             }
             else if (key == "Down")
             {
-                ClutWindow.clut = (ClutWindow.clut + 1) & 0x3F;
+                ClutEditor.clut = (ClutEditor.clut + 1) & 0x3F;
                 window.clutE.DrawTextures();
                 window.clutE.UpdateClutTxt();
             }
             else if (key == "Left")
             {
-                window.clutE.UpdateTpageButton((ClutWindow.page - 1) & 7);
+                window.clutE.UpdateTpageButton((ClutEditor.page - 1) & 7);
             }
             else if (key == "Right")
             {
-                window.clutE.UpdateTpageButton((ClutWindow.page + 1) & 7);
+                window.clutE.UpdateTpageButton((ClutEditor.page + 1) & 7);
             }
             else if (key == "D1")
             {
@@ -424,6 +465,7 @@ namespace TeheMan8_Editor
             {
                 if (current)
                 {
+                    PSX.levels[Level.Id].ApplyLevelsToPAC();
                     if (File.Exists(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
                     {
                         if (!PSX.levels[Level.Id].edit && PSX.levels[Level.Id].time == File.GetLastWriteTime(PSX.levels[Level.Id].pac.path + "/STDATA/" + PSX.levels[Level.Id].pac.filename))
@@ -780,6 +822,9 @@ namespace TeheMan8_Editor
                 {
                     ReLoad(true);
                     return;
+                }else if(key == "Z" && PSX.levels.Count != 0)
+                {
+                    ProcessUndo();
                 }
                 else if (key == "Left" && PSX.levels.Count != 0 && this.hub.Items.Count > 1)
                 {
@@ -906,6 +951,11 @@ namespace TeheMan8_Editor
         {
             HelpWindow h = new HelpWindow(0);
             h.ShowDialog();
+        }
+        private void undoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PSX.levels.Count != 0)
+                ProcessUndo();
         }
         private void reloadBtn_Click(object sender, RoutedEventArgs e)
         {

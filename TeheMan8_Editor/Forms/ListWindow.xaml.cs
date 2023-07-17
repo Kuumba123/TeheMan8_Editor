@@ -837,6 +837,11 @@ namespace TeheMan8_Editor.Forms
             {
                 try
                 {
+                    //Edit & Save Undo
+                    if (LayoutEditor.undos.Count == Const.MaxUndo)
+                        LayoutEditor.undos.RemoveAt(0);
+                    LayoutEditor.undos[Level.Id].Add(Undo.CreateLayoutUndo(layoutOffset));
+
                     if (Level.BG == 0)
                         PSX.levels[Level.Id].layout[layoutOffset] = (byte)integer.Value;
                     else if (Level.BG == 1)
@@ -1207,7 +1212,7 @@ namespace TeheMan8_Editor.Forms
 
             Button importSet = new Button()
             {
-                Content = $"Replace at Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} from Txt"
+                Content = $"Replace at Clut {Convert.ToString(ClutEditor.clut, 16).ToUpper()} from Txt"
             };
             importSet.Click += (s, e) =>
             {
@@ -1240,7 +1245,7 @@ namespace TeheMan8_Editor.Forms
                             {
                                 int color = Level.To15Rgb(c.B, c.G, c.R);
 
-                                BitConverter.GetBytes((ushort)color).CopyTo(PSX.levels[Level.Id].pal, (i + (ClutWindow.clut + ClutWindow.bgF * 64) * 16) * 2);
+                                BitConverter.GetBytes((ushort)color).CopyTo(PSX.levels[Level.Id].pal, (i + (ClutEditor.clut + ClutEditor.bgF * 64) * 16) * 2);
                                 PSX.levels[Level.Id].edit = true;
                                 i++;
                             }
@@ -1252,7 +1257,7 @@ namespace TeheMan8_Editor.Forms
                             //Updating the rest of GUI
                             MainWindow.window.clutE.DrawTextures();
                             MainWindow.window.clutE.DrawClut();
-                            if (ClutWindow.bgF == 0)
+                            if (ClutEditor.bgF == 0)
                                 return;
                             //Enemy Tab
                             MainWindow.window.enemyE.Draw();
@@ -1278,7 +1283,7 @@ namespace TeheMan8_Editor.Forms
 
             Button importPAL = new Button()
             {
-                Content = $"Replace at Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} from PAL"
+                Content = $"Replace at Clut {Convert.ToString(ClutEditor.clut, 16).ToUpper()} from PAL"
             };
             importPAL.Click += (s, e) =>
             {
@@ -1306,7 +1311,7 @@ namespace TeheMan8_Editor.Forms
                                 while (colors.Count < 16) colors.Add(Color.FromRgb(0, 0, 0));
                             }
 
-                            i = (ClutWindow.clut + (ClutWindow.bgF * 64)) * 16 * 2;
+                            i = (ClutEditor.clut + (ClutEditor.bgF * 64)) * 16 * 2;
 
                             foreach (var c in colors)
                             {
@@ -1324,7 +1329,7 @@ namespace TeheMan8_Editor.Forms
                             //Updating the rest of GUI
                             MainWindow.window.clutE.DrawTextures();
                             MainWindow.window.clutE.DrawClut();
-                            if (ClutWindow.bgF == 0)
+                            if (ClutEditor.bgF == 0)
                                 return;
                             //Enemy Tab
                             MainWindow.window.enemyE.Draw();
@@ -1350,14 +1355,14 @@ namespace TeheMan8_Editor.Forms
 
             Button exportSet = new Button()
             {
-                Content = $"Export Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} as Txt"
+                Content = $"Export Clut {Convert.ToString(ClutEditor.clut, 16).ToUpper()} as Txt"
             };
             exportSet.Click += (s, e) =>
             {
                 using (var sfd = new System.Windows.Forms.SaveFileDialog())
                 {
-                    sfd.FileName = $"clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()}.txt";
-                    sfd.Title = $"Select Clut {Convert.ToString(ClutWindow.clut, 16).ToUpper()} save location";
+                    sfd.FileName = $"clut {Convert.ToString(ClutEditor.clut, 16).ToUpper()}.txt";
+                    sfd.Title = $"Select Clut {Convert.ToString(ClutEditor.clut, 16).ToUpper()} save location";
 
                     if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
@@ -1367,7 +1372,7 @@ namespace TeheMan8_Editor.Forms
                         {
                             int color;
 
-                            color = Level.To32Rgb(BitConverter.ToUInt16(PSX.levels[Level.Id].pal, ((ClutWindow.clut + (ClutWindow.bgF * 64)) * 16 + i) * 2));
+                            color = Level.To32Rgb(BitConverter.ToUInt16(PSX.levels[Level.Id].pal, ((ClutEditor.clut + (ClutEditor.bgF * 64)) * 16 + i) * 2));
 
                             string r = Convert.ToString(color >> 16, 16).ToUpper().PadLeft(2, '0');
                             string g = Convert.ToString((color >> 8) & 0xFF, 16).ToUpper().PadLeft(2, '0');

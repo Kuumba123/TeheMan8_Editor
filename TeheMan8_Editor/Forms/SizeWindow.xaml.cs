@@ -28,6 +28,7 @@ namespace TeheMan8_Editor.Forms
             //Setup Ints
             screenInt.Value = PSX.levels[Level.Id].screenData.Length / 0x200;
             tileInt.Value = PSX.levels[Level.Id].tileInfo.Length / 4;
+            enemyCountLbl.Content = "Total Enemies: " + PSX.levels[Level.Id].enemies.Count.ToString();
             enable = true;
         }
         #endregion Constructors
@@ -47,7 +48,7 @@ namespace TeheMan8_Editor.Forms
                 MainWindow.window.layoutE.AssignLimits();
                 MainWindow.window.screenE.AssignLimits();
                 MainWindow.window.x16E.AssignLimits();
-
+                Undo.ClearLevelUndos();
                 PSX.levels[Level.Id].edit = true;
             }
         }

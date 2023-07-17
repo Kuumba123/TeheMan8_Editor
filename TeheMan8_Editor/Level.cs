@@ -30,12 +30,6 @@ namespace TeheMan8_Editor
         public static BitmapPalette[] palette = new BitmapPalette[0x80];
         #endregion Fields
 
-        #region Constructors
-        public Level()
-        {
-        }
-        #endregion Constructors
-
         #region Methods
         public static void LoadLevels(string path)
         {
@@ -178,12 +172,12 @@ namespace TeheMan8_Editor
         }
         public void ApplyLevelsToPAC()
         {
-            this.pac.SaveTrimedEntry(0, this.layout);
-            this.pac.SaveTrimedEntry(1, this.layout2);
-            this.pac.SaveTrimedEntry(2, this.layout3);
-            this.pac.SaveTrimedEntry(3, this.screenData);
-            this.pac.SaveTrimedEntry(4, this.tileInfo);
-            this.pac.SaveTrimedEntry(9, this.pal);
+            this.pac.SaveEntry(0, this.layout);
+            this.pac.SaveEntry(1, this.layout2);
+            this.pac.SaveEntry(2, this.layout3);
+            this.pac.SaveEntry(3, this.screenData);
+            this.pac.SaveEntry(4, this.tileInfo);
+            this.pac.SaveEntry(9, this.pal);
             if (this.pac.ContainsEntry(0xA)) //Enemy Data
             {
                 byte[] enemyData = new byte[0x800];

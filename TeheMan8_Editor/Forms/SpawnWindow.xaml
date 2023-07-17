@@ -27,7 +27,7 @@
             <Setter Property="FormatString" Value="X"/>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="Black">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>

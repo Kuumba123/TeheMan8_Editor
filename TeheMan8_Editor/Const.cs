@@ -7,15 +7,17 @@ namespace TeheMan8_Editor
     static class Const
     {
         public static readonly string reproURL = "https://api.github.com/repos/Kuumba123/TeheMan8_Editor/releases/latest";
-        public const string Version = "1.2";
+        public const string Version = "1.2.1";
         public static readonly string[] pastVersions =
         {
+            "1.2.1",
             "1.2",
             "1.1.2",
             "1.1.1",
             "1.1",
             "1.0"
         };
+        public const int MaxUndo = 512;
         public const long Crc = 0x014E663C;
         public const uint CheckPointPointersAddress = 0x80138288;
         public const uint MidCheckPointAddress = 0x80137af4;

@@ -8,9 +8,9 @@ using System.Windows.Shapes;
 namespace TeheMan8_Editor.Forms
 {
     /// <summary>
-    /// Interaction logic for ClutWindow.xaml
+    /// Interaction logic for ClutEditor.xaml
     /// </summary>
-    public partial class ClutWindow : UserControl
+    public partial class ClutEditor : UserControl
     {
         #region Fields
         private static bool added = false;
@@ -21,7 +21,7 @@ namespace TeheMan8_Editor.Forms
         #endregion Fields
 
         #region Constructors
-        public ClutWindow()
+        public ClutEditor()
         {
             InitializeComponent();
             if (PSX.levels.Count == 0)

@@ -19,9 +19,31 @@ namespace TeheMan8_Editor.Forms
     {
         #region Fields
         public static bool checkpoingGo = false;
-        public static bool screenViewOpen = false;
-        public static bool extraOpen = false;
+        public static bool screenViewOpen;
+        //Screen Viewer
+        public static double screenLeft = double.NaN;
+        public static double screenTop = double.NaN;
+        public static double screenWidth = -1;
+        public static double screenHeight;
+        public static int screenState;
+        //Screen Flags Window
+        public static bool extraOpen;
+        public static double extraLeft = double.NaN;
+        public static double extraTop = double.NaN;
+        //Files Viewer
         public static bool fileViewOpen;
+        public static double fileLeft = double.NaN;
+        public static double fileTop = double.NaN;
+        public static double fileWidth = -1;
+        public static double fileHeight;
+        public static int fileState;
+        //Clut Tools
+        public static double clutLeft;
+        public static double clutTop;
+        //TileSet Tools
+        public static double tileLeft = double.NaN;
+        public static double tileTop = double.NaN;
+
         public static string tab = "";
         public static int layoutOffset = 0;
         public static bool enemyOpen = false;
@@ -530,7 +552,7 @@ namespace TeheMan8_Editor.Forms
 
 
                         case 10: //Screen Data (Backup)
-                            if (MainWindow.settings.noScreenReload)
+                            if (false)
                             {
                                 mode += 2;
                                 break;
@@ -584,7 +606,7 @@ namespace TeheMan8_Editor.Forms
 
 
                         case 16: //Backup Clut
-                            if (MainWindow.settings.noClutReload)
+                            if (false)
                             {
                                 mode += 2;
                                 break;
@@ -873,6 +895,11 @@ namespace TeheMan8_Editor.Forms
             this.Height = 646;
             this.Title = "Screen: " + Convert.ToString(MainWindow.window.screenE.screenId, 16).ToUpper() + " Tile Flags";
             this.ResizeMode = ResizeMode.CanMinimize;
+            if (!double.IsNaN(extraLeft))
+            {
+                this.Left = extraLeft;
+                this.Top = extraTop;
+            }
 
             //Add Top Bar Controls
             DockPanel dock = new DockPanel();
@@ -1208,6 +1235,11 @@ namespace TeheMan8_Editor.Forms
             this.Height = 200;
             this.ResizeMode = ResizeMode.NoResize;
             this.scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            if (!double.IsNaN(clutLeft))
+            {
+                this.Left = clutLeft;
+                this.Top = clutTop;
+            }
 
 
             Button importSet = new Button()
@@ -1745,11 +1777,18 @@ namespace TeheMan8_Editor.Forms
             {
                 case 0: //Layout Viewer
                     screenViewOpen = false;
+                    screenLeft = this.Left;
+                    screenTop = this.Top;
+                    screenWidth = this.Width;
+                    screenHeight = this.Height;
+                    screenState = (int)this.WindowState;
                     break;
                 case -1:
                     break;
                 case -2:
                     extraOpen = false;
+                    extraLeft = this.Left;
+                    extraTop = this.Top;
                     break;
 
                 case -3: //Enemy Tools
@@ -1782,6 +1821,15 @@ namespace TeheMan8_Editor.Forms
                     break;
                 case -4:
                     fileViewOpen = false;
+                    fileLeft = this.Left;
+                    fileTop = this.Top;
+                    fileWidth = this.Width;
+                    fileHeight = this.Height;
+                    fileState = (int)this.WindowState;
+                    break;
+                case -5:
+                    clutLeft = this.Left;
+                    clutTop = this.Top;
                     break;
                 default:
                     break;

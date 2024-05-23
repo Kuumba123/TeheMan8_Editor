@@ -13,10 +13,21 @@ namespace TeheMan8_Editor.Forms
     /// </summary>
     public partial class ToolsWindow : Window
     {
+        #region Fields
+        public static bool textureToolsOpen;
+        public static bool soundToolsOpen;
+        public static bool isoToolsOpen;
+        public static bool otherToolsOpen;
+        #endregion Fields
+
         #region Constructors
         public ToolsWindow()
         {
             InitializeComponent();
+            textureExpand.IsExpanded = textureToolsOpen;
+            soundExpand.IsExpanded = soundToolsOpen;
+            isoExpand.IsExpanded = isoToolsOpen;
+            otherExpand.IsExpanded = otherToolsOpen;
         }
         #endregion Constructors
 
@@ -472,8 +483,6 @@ namespace TeheMan8_Editor.Forms
                 }
             }
         }
-
-
         private void fixBtn_Click(object sender, RoutedEventArgs e)
         {
             using (var fd = new OpenFileDialog())
@@ -573,6 +582,13 @@ namespace TeheMan8_Editor.Forms
                     listWindow.ShowDialog();
                 }
             }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            textureToolsOpen = textureExpand.IsExpanded;
+            soundToolsOpen = soundExpand.IsExpanded;
+            isoToolsOpen = isoExpand.IsExpanded;
+            otherToolsOpen = otherExpand.IsExpanded;
         }
         #endregion Events
     }

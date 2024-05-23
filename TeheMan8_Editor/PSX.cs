@@ -404,9 +404,13 @@ namespace TeheMan8_Editor
         {
             return (int)(cpu - BitConverter.ToInt32(exe, 0x18) + 0x800);
         }
-        public static uint CpuToOffset(uint cpu, uint text)
+        public static int CpuToOffset(uint cpu, uint text)
         {
-            return cpu - text + 0x800;
+            return (int)(cpu - text + 0x800);
+        }
+        public static uint OffsetToCpu(int offset)
+        {
+            return (uint)(offset + BitConverter.ToUInt32(exe, 0x18) - 0x800);
         }
         private static long GetSectorOffset(uint lba)
         {

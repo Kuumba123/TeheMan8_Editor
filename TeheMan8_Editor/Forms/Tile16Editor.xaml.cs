@@ -15,6 +15,8 @@ namespace TeheMan8_Editor.Forms
     {
         #region Fields
         internal static List<List<Undo>> undos = new List<List<Undo>>();
+        public static double manualClutLeft = double.NaN;
+        public static double manualClutTop = double.NaN;
         #endregion Fields
 
         #region Properties

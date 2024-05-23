@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="Tools Window" Height="400" Width="450" ResizeMode="NoResize">
+        Title="Tools Window" Height="400" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
@@ -33,7 +33,7 @@
     <Grid x:Name="grid" Background="#111111">
         <ScrollViewer>
             <StackPanel>
-                <Expander IsExpanded="True">
+                <Expander x:Name="textureExpand">
                     <Expander.Header>
                         <Label>Texture Tools</Label>
                     </Expander.Header>
@@ -56,7 +56,7 @@
                         </Grid>
                     </StackPanel>
                 </Expander>
-                <Expander IsExpanded="True">
+                <Expander x:Name="soundExpand">
                     <Expander.Header>
                         <Label>Sound Tools</Label>
                     </Expander.Header>
@@ -81,7 +81,7 @@
                     </StackPanel>
                 </Expander>
 
-                <Expander>
+                <Expander x:Name="isoExpand">
                     <Expander.Header>
                         <Label>ISO 9660 Tools</Label>
                     </Expander.Header>
@@ -100,7 +100,7 @@
                         <!--<Button x:Name="tracksBtn" Grid.Column="1" Grid.Row="1" Click="tracksBtn_Click">Combine Tracks</Button>-->
                     </Grid>
                 </Expander>
-                <Expander>
+                <Expander x:Name="otherExpand">
                     <Expander.Header>
                         <Label>Other</Label>
                     </Expander.Header>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="" Height="320" Width="350" ResizeMode="NoResize">
+        Title="" Height="320" Width="350" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

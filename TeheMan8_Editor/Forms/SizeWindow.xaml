@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="" Height="300" Width="300" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="" Height="300" Width="300" ResizeMode="NoResize" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="White"/>

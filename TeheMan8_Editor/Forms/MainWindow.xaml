@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:TeheMan8_Editor"
         xmlns:forms="clr-namespace:TeheMan8_Editor.Forms" xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="TeheMan 8 Editor" Width="1205" Height="930" MinHeight="520" MinWidth="700" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown" Loaded="Window_Loaded" MouseDown="Window_MouseDown">
+        Title="TeheMan 8 Editor" Width="1250" Height="930" MinWidth="500" MinHeight="520" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown" Loaded="Window_Loaded" MouseDown="Window_MouseDown" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>

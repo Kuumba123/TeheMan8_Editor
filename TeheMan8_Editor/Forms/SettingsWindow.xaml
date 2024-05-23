@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeheMan8_Editor.Forms"
         mc:Ignorable="d"
-        Title="TeheMan 8 Editor Settings" Height="350" Width="350" Closing="Window_Closing" ResizeMode="NoResize">
+        Title="TeheMan 8 Editor Settings" Height="420" Width="350" Closing="Window_Closing" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="White"/>
@@ -44,13 +44,20 @@
                     <Label>COM-PORT</Label>
                 </StackPanel>
                 <CheckBox x:Name="useNopsCheck" Checked="useNopsCheck_Change" Unchecked="useNopsCheck_Change">Use NOPS for Reload</CheckBox>
-                <CheckBox x:Name="screenCheck" Checked="screenBackupCheck_Change" Unchecked="screenBackupCheck_Change">DONT reload backup Screen Data</CheckBox>
-                <CheckBox x:Name="clutCheck" Checked="clutCheck_Change" Unchecked="clutCheck_Change">DONT reload backup Clut Data</CheckBox>
                 <StackPanel Background="#191919">
                     <Label HorizontalAlignment="Center">Options</Label>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <local:NumInt FontSize="22" x:Name="displayInt" ValueChanged="displayInt_ValueChanged" FormatString="" ParsingNumberStyle="Integer" ShowButtonSpinner="False" Minimum="0" Maximum="9000" Height="30" Width="55"></local:NumInt>
+                    <Label>Display Referance Width</Label>
+                </StackPanel>
                 <CheckBox x:Name="dontUpdateCheck" Checked="dontUpdateCheck_Change" Unchecked="dontUpdateCheck_Change">Dont check for Updates</CheckBox>
                 <CheckBox x:Name="saveReloadCheck" Checked="saveOnReloadCheck_Change" Unchecked="saveOnReloadCheck_Change">Save Current Level On Reload</CheckBox>
+                <CheckBox x:Name="layoutCheck" Checked="layoutCheck_Check_Change" Unchecked="layoutCheck_Check_Change">Dont Save Window Layout</CheckBox>
+                <CheckBox x:Name="screenCheck" Checked="screenCheck_Check_Change" Unchecked="screenCheck_Check_Change">Auto Launch Screen Layout Viewer</CheckBox>
+                <CheckBox x:Name="extraCheck" Checked="extraCheck_Check_Change" Unchecked="extraCheck_Check_Change">Auto Launch Screen Flags Viewer</CheckBox>
+                <CheckBox x:Name="filesCheck" Checked="filesCheck_Checked">Auto Launch Files Viewer</CheckBox>
+                <CheckBox x:Name="openCheck" Checked="openCheck_Check_Change" Unchecked="openCheck_Check_Change">Dont Reset Level Id When Opening</CheckBox>
             </StackPanel>
         </Grid>
     </ScrollViewer>

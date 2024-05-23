@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TeheMan8_Editor.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace TeheMan8_Editor
 {
@@ -59,6 +61,53 @@ namespace TeheMan8_Editor
                         Application.Current.Shutdown();
                     }
                 }
+                DefineSizing();
+
+                if (File.Exists("Layout.json"))
+                {
+                    Layout layout = JsonConvert.DeserializeObject<Layout>(File.ReadAllText("Layout.json"));
+                    LoadLayout(layout.mainWindowLayout, window);
+
+                    foreach (var child in layout.windowLayouts)
+                    {
+                        MainWindow win = new MainWindow();
+                        LoadLayout(child, win);
+                        win.Show();
+                    }
+                    ListWindow.extraLeft = layout.extraLeft;
+                    ListWindow.extraTop = layout.extraTop;
+
+                    ListWindow.screenWidth = layout.screenWidth;
+                    ListWindow.screenHeight = layout.screenHeight;
+                    ListWindow.screenLeft = layout.screenLeft;
+                    ListWindow.screenTop = layout.screenTop;
+                    ListWindow.screenState = layout.screenState;
+
+                    ListWindow.fileWidth = layout.fileWidth;
+                    ListWindow.fileHeight = layout.fileHeight;
+                    ListWindow.fileLeft = layout.fileLeft;
+                    ListWindow.fileTop = layout.fileTop;
+                    ListWindow.fileState = layout.fileState;
+
+                    ListWindow.clutTop = layout.clutTop;
+                    ListWindow.clutLeft = layout.clutLeft;
+
+                    ColorDialog.pickerTop = layout.pickerTop;
+                    ColorDialog.pickerLeft = layout.pickerLeft;
+
+                    Tile16Editor.manualClutLeft = layout.manualClutLeft;
+                    Tile16Editor.manualClutTop = layout.manualClutTop;
+
+                    ListWindow.tileLeft = layout.tileLeft;
+                    ListWindow.tileTop = layout.tileTop;
+
+                    ToolsWindow.isoToolsOpen = layout.isoToolsOpen;
+                    ToolsWindow.textureToolsOpen = layout.textureToolsOpen;
+                    ToolsWindow.soundToolsOpen = layout.soundToolsOpen;
+                    ToolsWindow.otherToolsOpen = layout.otherToolsOpen;
+                }
+                LockWindows();
+
                 //Get Arguments
                 string[] args = Environment.GetCommandLineArgs();
 
@@ -95,7 +144,7 @@ namespace TeheMan8_Editor
                     PSX.levels[Level.Id].LoadTextures();
                     //Draw Everything
                     Update();
-                    hub.Visibility = Visibility.Visible;
+                    UnlockWindows();
                 }
             }
             else
@@ -153,6 +202,7 @@ namespace TeheMan8_Editor
                 if (!File.Exists(fd.SelectedPath + "/SLUS_004.53"))
                 {
                     MessageBox.Show("The PSX.EXE (SLUS_004.53) was not found");
+                    LockWindows();
                     return;
                 }
                 //PSX.EXE was Found
@@ -161,6 +211,7 @@ namespace TeheMan8_Editor
                 if (PSX.levels.Count == 0) //Check for any PAC Level Files
                 {
                     MessageBox.Show("No PAC level files were found.");
+                    LockWindows();
                     return;
                 }
                 PSX.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
@@ -173,7 +224,7 @@ namespace TeheMan8_Editor
                 PSX.levels[Level.Id].LoadTextures();
                 //Draw Everything
                 Update();
-                hub.Visibility = Visibility.Visible;
+                UnlockWindows();
             }
         }
         private void ProcessUndo()
@@ -442,7 +493,7 @@ namespace TeheMan8_Editor
             }
             else if (key == "D")
             {
-                if (window.enemyE.viewerX != 0x1E00)
+                if (window.enemyE.viewerX != 0x1D00)
                 {
                     window.enemyE.viewerX += 0x100;
                     window.enemyE.ReDraw();
@@ -456,6 +507,53 @@ namespace TeheMan8_Editor
                     window.enemyE.viewerX -= 0x100;
                     window.enemyE.ReDraw();
                     UpdateEnemyViewerCam();
+                }
+            }
+            else if (key == "D1")
+            {
+                if (Level.BG != 0)
+                {
+                    Level.BG = 0;
+                    window.layoutE.DrawLayout();
+                    window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
+                    if (ListWindow.screenViewOpen)
+                    {
+                        layoutWindow.DrawScreens();
+                        layoutWindow.Title = "All Screens in Layer " + (Level.BG + 1);
+                    }
+
+                }
+            }
+            else if (key == "D2")
+            {
+                if (Level.BG != 1)
+                {
+                    Level.BG = 1;
+                    window.layoutE.DrawLayout();
+                    window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
+                    if (ListWindow.screenViewOpen)
+                    {
+                        layoutWindow.DrawScreens();
+                        layoutWindow.Title = "All Screens in Layer " + (Level.BG + 1);
+                    }
+                }
+            }
+            else if (key == "D3")
+            {
+                if (Level.BG != 2)
+                {
+                    Level.BG = 2;
+                    window.layoutE.DrawLayout();
+                    window.layoutE.UpdateBtn();
+                    window.enemyE.Draw();
+                    if (ListWindow.screenViewOpen)
+                    {
+                        layoutWindow.DrawScreens();
+                        layoutWindow.Title = "All Screens in Layer " + (Level.BG + 1);
+
+                    }
                 }
             }
         }
@@ -599,17 +697,17 @@ namespace TeheMan8_Editor
                         //Horizontal Settings
                         Array.Resize(ref camData, 0x72 * 2);
                         Array.Copy(PSX.exe, PSX.CpuToOffset(Const.HoriDataAddress), camData, 0, camData.Length);
-                        await Redux.Write(PSX.CpuToOffset(Const.HoriDataAddress), camData);
+                        await Redux.Write((uint)PSX.CpuToOffset(Const.HoriDataAddress), camData);
 
                         //Door Settings
                         Array.Resize(ref camData, 0x32 * 2);
                         Array.Copy(PSX.exe, PSX.CpuToOffset(Const.DoorDataAddress), camData, 0, camData.Length);
-                        await Redux.Write(PSX.CpuToOffset(Const.DoorDataAddress), camData);
+                        await Redux.Write((uint)PSX.CpuToOffset(Const.DoorDataAddress), camData);
 
                         //Vertical Settings
                         Array.Resize(ref camData, 0x18 * 2);
                         Array.Copy(PSX.exe, PSX.CpuToOffset(Const.VertDataAddress), camData, 0, camData.Length);
-                        await Redux.Write(PSX.CpuToOffset(Const.VertDataAddress), camData);
+                        await Redux.Write((uint)PSX.CpuToOffset(Const.VertDataAddress), camData);
                     }
 
                     //Textures
@@ -654,7 +752,7 @@ namespace TeheMan8_Editor
         }
         private int GetHubIndex()
         {
-            System.Collections.Generic.IEnumerable<Dragablz.DragablzItem> tabs = this.hub.GetOrderedHeaders();
+            IEnumerable<Dragablz.DragablzItem> tabs = this.hub.GetOrderedHeaders();
 
             int index = 0;
             foreach (var t in tabs)
@@ -679,6 +777,276 @@ namespace TeheMan8_Editor
             }
             return -1;
         }
+        private void SaveLayout() //TODO: evenchually  figure out way to save docking layouts
+        {
+            Layout layout = new Layout();
+
+            if (ListWindow.extraOpen)
+            {
+                ListWindow.extraLeft = extraWindow.Left;
+                ListWindow.extraTop = extraWindow.Top;
+            }
+            layout.extraLeft = ListWindow.extraLeft;
+            layout.extraTop = ListWindow.extraTop;
+
+            if (ListWindow.screenViewOpen)
+            {
+                ListWindow.screenLeft = layoutWindow.Left;
+                ListWindow.screenTop = layoutWindow.Top;
+                ListWindow.screenWidth = layoutWindow.Width;
+                ListWindow.screenHeight = layoutWindow.Height;
+                ListWindow.screenState = (int)layoutWindow.WindowState;
+            }
+            layout.screenLeft = ListWindow.screenLeft;
+            layout.screenTop = ListWindow.screenTop;
+            layout.screenWidth = ListWindow.screenWidth;
+            layout.screenHeight = ListWindow.screenHeight;
+            layout.screenState = ListWindow.screenState;
+
+            if (ListWindow.fileViewOpen)
+            {
+                ListWindow.fileLeft = fileWindow.Left;
+                ListWindow.fileTop = fileWindow.Top;
+                ListWindow.fileWidth = fileWindow.Width;
+                ListWindow.fileHeight = fileWindow.Height;
+                ListWindow.fileState = (int)fileWindow.WindowState;
+            }
+            layout.fileLeft = ListWindow.fileLeft;
+            layout.fileTop = ListWindow.fileTop;
+            layout.fileWidth = ListWindow.fileWidth;
+            layout.fileHeight = ListWindow.fileHeight;
+            layout.fileState = ListWindow.fileState;
+
+            layout.clutLeft = ListWindow.clutLeft;
+            layout.clutTop = ListWindow.clutTop;
+
+            layout.pickerLeft = ColorDialog.pickerLeft;
+            layout.pickerTop = ColorDialog.pickerTop;
+
+            layout.manualClutLeft = Tile16Editor.manualClutLeft;
+            layout.manualClutTop = Tile16Editor.manualClutTop;
+
+            layout.tileLeft = ListWindow.tileLeft;
+            layout.tileTop = ListWindow.tileTop;
+
+            layout.textureToolsOpen = ToolsWindow.textureToolsOpen;
+            layout.soundToolsOpen = ToolsWindow.soundToolsOpen;
+            layout.isoToolsOpen = ToolsWindow.isoToolsOpen;
+            layout.otherToolsOpen = ToolsWindow.otherToolsOpen;
+
+            foreach (Window childWind in Application.Current.Windows)
+            {
+                if (childWind.GetType() != typeof(MainWindow)) continue;
+                MainWindow window = childWind as MainWindow;
+                if (window.Width < 1) continue;
+
+                WindowLayout windowLayout = new WindowLayout();
+                windowLayout.top = window.Top;
+                windowLayout.left = window.Left;
+                windowLayout.width = window.Width;
+                windowLayout.height = window.Height;
+                windowLayout.max = window.max;
+                windowLayout.windowState = (int)window.WindowState;
+                if (window.dock.Content.GetType() == typeof(Dragablz.Dockablz.Branch))
+                {
+                    windowLayout.type = typeof(BranchLayout);
+                    List<Dragablz.Dockablz.Branch> branches = new List<Dragablz.Dockablz.Branch>();
+                    List<Dragablz.Dockablz.Branch> innerBranches = new List<Dragablz.Dockablz.Branch>();
+                    branches.Add(window.dock.Content as Dragablz.Dockablz.Branch);
+                    List<string> tabs = new List<string>();
+                    BranchLayout startBranch = windowLayout.child as BranchLayout;
+                    BranchLayout nextBranch = windowLayout.child as BranchLayout;
+                BranchLoop:
+                    foreach (var b in branches)
+                    {
+                        if (b.FirstItem.GetType() == typeof(Dragablz.Dockablz.Branch))
+                        {
+                            innerBranches.Add(new Dragablz.Dockablz.Branch()
+                            {
+                                Orientation = ((Dragablz.Dockablz.Branch)b.FirstItem).Orientation,
+                                FirstItem = ((Dragablz.Dockablz.Branch)b.FirstItem).FirstItem,
+                                FirstItemLength = ((Dragablz.Dockablz.Branch)b.FirstItem).FirstItemLength,
+                                SecondItem = b.SecondItem,
+                                SecondItemLength = b.SecondItemLength
+                            });
+                        }
+                        else
+                        {
+                            foreach (var t in ((Dragablz.TabablzControl)branches[0].FirstItem).Items)
+                            {
+                                if (t.GetType() != typeof(TabItem)) continue;
+                                tabs.Add(((TabItem)t).Name);
+                            }
+                        }
+                        if (b.SecondItem.GetType() == typeof(BranchLayout))
+                        {
+                            innerBranches.Add(new Dragablz.Dockablz.Branch()
+                            {
+                                Orientation = ((Dragablz.Dockablz.Branch)b.SecondItem).Orientation,
+                                FirstItem = ((Dragablz.Dockablz.Branch)b.SecondItem).FirstItem,
+                                FirstItemLength = ((Dragablz.Dockablz.Branch)b.SecondItem).FirstItemLength,
+                                SecondItem = ((Dragablz.Dockablz.Branch)b.SecondItem).SecondItem,
+                                SecondItemLength = ((Dragablz.Dockablz.Branch)b.SecondItem).SecondItemLength
+                            });
+                        }
+                        else
+                        {
+                            foreach (var t in ((Dragablz.TabablzControl)branches[0].SecondItem).Items)
+                            {
+                                if (t.GetType() != typeof(TabItem)) continue;
+                                tabs.Add(((TabItem)t).Name);
+                            }
+                        }
+                    }
+                    branches.Clear();
+                    if (innerBranches.Count != 0)
+                    {
+                        branches = new List<Dragablz.Dockablz.Branch>(innerBranches);
+                        innerBranches.Clear();
+                        goto BranchLoop;
+                    }
+                    windowLayout.child = tabs;
+                }
+                else
+                {
+                    windowLayout.type = typeof(Dragablz.TabablzControl);
+                    List<string> tabs = new List<string>();
+                    foreach (var t in window.hub.GetOrderedHeaders())
+                    {
+                        if (t.GetType() != typeof(Dragablz.DragablzItem)) continue;
+                        tabs.Add(((TabItem)t.Content).Name);
+                    }
+                    windowLayout.child = tabs;
+                }
+
+                if (window == MainWindow.window)
+                    layout.mainWindowLayout = windowLayout;
+                else
+                    layout.windowLayouts.Add(windowLayout);
+            }
+            //Done
+            string json = JsonConvert.SerializeObject(layout, Formatting.Indented);
+            File.WriteAllText("Layout.json", json);
+        }
+        private void LoadLayout(WindowLayout winlayout, MainWindow win)
+        {
+            win.WindowStartupLocation = WindowStartupLocation.Manual;
+            win.Left = winlayout.left;
+            win.Top = winlayout.top;
+            win.Width = winlayout.width;
+            win.Height = winlayout.height;
+            if (winlayout.max)
+                win.max = true;
+            else
+                win.Uid = winlayout.windowState.ToString();
+
+            if (win != window)
+            {
+                win.hub.Items.Clear();
+                object child = winlayout.child;
+                Type type = winlayout.type;
+                if (type != typeof(Dragablz.TabablzControl))
+                {
+
+                }
+                else
+                {
+                    Newtonsoft.Json.Linq.JArray jArray = child as Newtonsoft.Json.Linq.JArray;
+                    foreach (var j in jArray)
+                    {
+                        string t = j.ToString();
+
+                        if (t == "layoutTab")
+                        {
+                            window.hub.RemoveFromSource(window.layoutTab);
+                            win.hub.AddToSource(window.layoutTab);
+                        }
+                        else if (t == "screenTab")
+                        {
+                            window.hub.RemoveFromSource(window.screenTab);
+                            win.hub.AddToSource(window.screenTab);
+                        }
+                        else if (t == "x16Tab")
+                        {
+                            window.hub.RemoveFromSource(window.x16Tab);
+                            win.hub.AddToSource(window.x16Tab);
+                        }
+                        else if (t == "clutTab")
+                        {
+                            window.hub.RemoveFromSource(window.clutTab);
+                            win.hub.AddToSource(window.clutTab);
+                        }
+                        else if (t == "enemyTab")
+                        {
+                            window.hub.RemoveFromSource(window.enemyTab);
+                            win.hub.AddToSource(window.enemyTab);
+                        }
+                        else if (t == "spawnTab")
+                        {
+                            window.hub.RemoveFromSource(window.spawnTab);
+                            win.hub.AddToSource(window.spawnTab);
+                        }
+                        else if (t == "bgTab")
+                        {
+                            window.hub.RemoveFromSource(window.bgTab);
+                            win.hub.AddToSource(window.bgTab);
+                        }
+                        else if (t == "camTab")
+                        {
+                            window.hub.RemoveFromSource(window.camTab);
+                            win.hub.AddToSource(window.camTab);
+                        }
+                        else if (t == "animeTab")
+                        {
+                            //window.hub.RemoveFromSource(window.animeTab);
+                            //win.hub.AddToSource(window.animeTab);
+                        }
+                    }
+                }
+            }
+        }
+        private void LockWindows()
+        {
+            foreach (var childWind in Application.Current.Windows)
+            {
+                if (childWind.GetType() != typeof(MainWindow)) continue;
+                MainWindow window = childWind as MainWindow;
+                if (window.Width < 1) continue;
+                window.hub.Visibility = Visibility.Hidden;
+            }
+            if (ListWindow.screenViewOpen)
+                layoutWindow.Close();
+            if (ListWindow.extraOpen)
+                extraWindow.Close();
+            if (ListWindow.fileViewOpen)
+                fileWindow.Close();
+        }
+        private void UnlockWindows()
+        {
+            foreach (var childWind in Application.Current.Windows)
+            {
+                if (childWind.GetType() != typeof(MainWindow)) continue;
+                MainWindow window = childWind as MainWindow;
+                if (window.Width < 1) continue;
+                window.hub.Visibility = Visibility.Visible;
+            }
+            if (settings.autoScreen && !ListWindow.screenViewOpen)
+            {
+                layoutWindow = new ListWindow(0);
+                layoutWindow.Show();
+            }
+            if (settings.autoExtra && !ListWindow.extraOpen)
+            {
+                extraWindow = new ListWindow(2);
+                extraWindow.Show();
+            }
+            if (settings.autoFiles && !ListWindow.fileViewOpen)
+            {
+                fileWindow = new ListWindow(4);
+                fileWindow.Show();
+            }
+            window.Focus();
+        }
         private void CloseChildWindows()
         {
             var childWindows = Application.Current.Windows.Cast<Window>().Where(w => w != Application.Current.MainWindow).ToList();
@@ -686,11 +1054,30 @@ namespace TeheMan8_Editor
             foreach (var window in childWindows)
                 window.Close();
         }
+        public void DefineSizing()
+        {
+            int W;
+            if (settings.referanceWidth < 200)
+                W = (int)(40 * SystemParameters.PrimaryScreenWidth / 100);
+            else
+                W = 40 * settings.referanceWidth / 100;
+            window.layoutE.selectImage.MaxWidth = W;
+            window.screenE.tileImage.MaxWidth = W;
+            window.x16E.textureImage.MaxWidth = W;
+        }
         #endregion Methods
 
         #region Events
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (this.max) //Layout Stuff
+            {
+                this.WindowStyle = WindowStyle.None;
+                this.WindowState = WindowState.Maximized;
+            }
+            else if (this.Uid != "")
+                this.WindowState = (WindowState)Convert.ToInt32(this.Uid);
+
             //Check for Update
             if (settings.dontUpdate) return;
             using (HttpClient client = new HttpClient())
@@ -752,9 +1139,7 @@ namespace TeheMan8_Editor
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (Dragablz.TabablzControl.GetIsClosingAsPartOfDragOperation(this) && this == window)
-            {
                 e.Cancel = true;
-            }
             else if (this == window)
             {
                 foreach (var l in PSX.levels)
@@ -781,6 +1166,8 @@ namespace TeheMan8_Editor
                     }
                 }
             End:
+                if (!settings.dontSaveLayout)
+                    SaveLayout();
                 CloseChildWindows();
             }
         }

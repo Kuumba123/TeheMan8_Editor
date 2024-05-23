@@ -7,9 +7,10 @@ namespace TeheMan8_Editor
     static class Const
     {
         public static readonly string reproURL = "https://api.github.com/repos/Kuumba123/TeheMan8_Editor/releases/latest";
-        public const string Version = "1.2.1";
+        public const string Version = "1.2.2";
         public static readonly string[] pastVersions =
         {
+            "1.2.2",
             "1.2.1",
             "1.2",
             "1.1.2",

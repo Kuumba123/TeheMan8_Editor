@@ -28,8 +28,15 @@ namespace TeheMan8_Editor.Forms
             useNopsCheck.IsChecked = MainWindow.settings.useNops;
 
             //Options
+            displayInt.Value = MainWindow.settings.referanceWidth;
+            displayInt.Value = MainWindow.settings.referanceWidth;
             dontUpdateCheck.IsChecked = MainWindow.settings.dontUpdate;
             saveReloadCheck.IsChecked = MainWindow.settings.saveOnReload;
+            layoutCheck.IsChecked = MainWindow.settings.dontSaveLayout;
+            screenCheck.IsChecked = MainWindow.settings.autoScreen;
+            extraCheck.IsChecked = MainWindow.settings.autoExtra;
+            filesCheck.IsChecked = MainWindow.settings.autoFiles;
+            openCheck.IsChecked = MainWindow.settings.dontResetId;
             enable = true;
         }
         #endregion Constructors
@@ -56,18 +63,10 @@ namespace TeheMan8_Editor.Forms
             MainWindow.settings.useNops = (bool)useNopsCheck.IsChecked;
             edited = true;
         }
-        private void screenBackupCheck_Change(object sender, RoutedEventArgs e)
+        private void displayInt_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (!enable)
-                return;
-            MainWindow.settings.noScreenReload = (bool)screenCheck.IsChecked;
-            edited = true;
-        }
-        private void clutCheck_Change(object sender, RoutedEventArgs e)
-        {
-            if (!enable)
-                return;
-            MainWindow.settings.noClutReload = (bool)clutCheck.IsChecked;
+            if (!enable || e.NewValue == null || e.OldValue == null) return;
+            MainWindow.settings.referanceWidth = (int)e.NewValue;
             edited = true;
         }
         private void dontUpdateCheck_Change(object sender, RoutedEventArgs e)
@@ -84,19 +83,58 @@ namespace TeheMan8_Editor.Forms
             MainWindow.settings.saveOnReload = (bool)saveReloadCheck.IsChecked;
             edited = true;
         }
+        private void layoutCheck_Check_Change(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.dontSaveLayout = (bool)layoutCheck.IsChecked;
+            edited = true;
+        }
+        private void screenCheck_Check_Change(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.autoScreen = (bool)screenCheck.IsChecked;
+            edited = true;
+        }
+
+        private void extraCheck_Check_Change(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.autoExtra = (bool)extraCheck.IsChecked;
+            edited = true;
+        }
+
+        private void filesCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.autoFiles = (bool)filesCheck.IsChecked;
+            edited = true;
+        }
+
+        private void openCheck_Check_Change(object sender, RoutedEventArgs e)
+        {
+            if (!enable)
+                return;
+            MainWindow.settings.dontResetId = (bool)openCheck.IsChecked;
+            edited = true;
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (edited)
             {
                 try
                 {
-                    var json = JsonConvert.SerializeObject(MainWindow.settings, Formatting.Indented);
+                    string json = JsonConvert.SerializeObject(MainWindow.settings, Formatting.Indented);
                     File.WriteAllText("Settings.json", json);
                 }catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     Application.Current.Shutdown();
                 }
+                MainWindow.window.DefineSizing();
             }
         }
         #endregion Events

@@ -160,6 +160,7 @@
     <Compile Include="Forms\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Layout.cs" />
     <Compile Include="Forms\LayoutEditor.xaml.cs">
       <DependentUpon>LayoutEditor.xaml</DependentUpon>
     </Compile>

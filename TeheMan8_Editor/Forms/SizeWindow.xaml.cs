@@ -36,15 +36,44 @@ namespace TeheMan8_Editor.Forms
         #region Events
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (edit)
+            if (edit && screenInt.Value != null && tileInt.Value != null)
             {
                 int i = PSX.levels[Level.Id].pac.GetIndexOfType(3);
-                Array.Resize(ref PSX.levels[Level.Id].pac.entries[i].data, (int)screenInt.Value * 0x200);
-                Array.Resize(ref PSX.levels[Level.Id].screenData, (int)screenInt.Value * 0x200);
-                i = PSX.levels[Level.Id].pac.GetIndexOfType(4);
-                Array.Resize(ref PSX.levels[Level.Id].pac.entries[i].data, (int)tileInt.Value * 4);
-                Array.Resize(ref PSX.levels[Level.Id].tileInfo, (int)tileInt.Value * 4);
+                int screenCount = (int)screenInt.Value;
+                int tileCount = (int)tileInt.Value;
 
+                Array.Resize(ref PSX.levels[Level.Id].pac.entries[i].data, screenCount * 0x200);
+                Array.Resize(ref PSX.levels[Level.Id].screenData, screenCount * 0x200);
+                i = PSX.levels[Level.Id].pac.GetIndexOfType(4);
+                Array.Resize(ref PSX.levels[Level.Id].pac.entries[i].data, tileCount * 4);
+                Array.Resize(ref PSX.levels[Level.Id].tileInfo, tileCount * 4);
+
+                screenCount--;
+                for (int l = 0; l < 0x400; l++)
+                {
+                    if (PSX.levels[Level.Id].layout[l] > screenCount)
+                        PSX.levels[Level.Id].layout[l] = 0;
+                    if (PSX.levels[Level.Id].layout2[l] > screenCount)
+                        PSX.levels[Level.Id].layout2[l] = 0;
+                    if (PSX.levels[Level.Id].layout3[l] > screenCount)
+                        PSX.levels[Level.Id].layout3[l] = 0;
+                }
+
+                for (int s = 0; s < PSX.levels[Level.Id].screenData.Length / 0x200; s++)
+                {
+                    for (int t = 0; t < 0x100; t++)
+                    {
+                        int index = s * 0x200 + t * 2;
+                        ushort id = (ushort)(BitConverter.ToUInt16(PSX.levels[Level.Id].screenData, index) & 0x3FFF);
+
+                        if (id > (tileCount - 1))
+                        {
+                            PSX.levels[Level.Id].screenData[index] = 0;
+                            PSX.levels[Level.Id].screenData[index + 1] = 0;
+                        }
+                    }
+                }
+                MainWindow.window.layoutE.DrawLayout();
                 MainWindow.window.layoutE.AssignLimits();
                 MainWindow.window.screenE.AssignLimits();
                 MainWindow.window.x16E.AssignLimits();

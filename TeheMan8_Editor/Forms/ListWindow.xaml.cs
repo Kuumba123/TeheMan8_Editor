@@ -769,6 +769,20 @@ namespace TeheMan8_Editor.Forms
             this.MaxHeight = 934;
             this.Title = "All Screens in Layer " + (Level.BG + 1);
             this.scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            if (screenWidth != -1)
+            {
+                this.Left = screenLeft;
+                this.Top = screenTop;
+                this.Width = screenWidth;
+                this.Height = screenHeight;
+                if (this.WindowState != (WindowState)screenState)
+                {
+                    this.Loaded += (s, e) =>
+                    {
+                        this.WindowState = (WindowState)screenState;
+                    };
+                }
+            }
             this.AddGrids(32, 32);
             //Add Buttons to Grid
             for (int y = 0; y < 32; y++)
@@ -1212,6 +1226,20 @@ namespace TeheMan8_Editor.Forms
             this.MaxWidth = 290;
             this.MinWidth = 290;
             fileViewOpen = true;
+            if (fileWidth != -1)
+            {
+                this.Left = fileLeft;
+                this.Top = fileTop;
+                this.Width = fileWidth;
+                this.Height = fileHeight;
+                if (this.WindowState != (WindowState)fileState)
+                {
+                    this.Loaded += (s, e) =>
+                    {
+                        this.WindowState = (WindowState)fileState;
+                    };
+                }
+            }
             int i = 0;
             foreach (var l in PSX.levels)
             {

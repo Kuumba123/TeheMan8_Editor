@@ -56,7 +56,7 @@
             </Grid>
         </Grid>
         <StackPanel Grid.Column="1">
-            <WrapPanel Orientation="Horizontal">
+            <WrapPanel Orientation="Horizontal" x:Name="tPagePannel">
                 <Label Foreground="White" FontSize="18" FontFamily="Consolas">T-Page</Label>
                 <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">0</Button>
                 <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">1</Button>
@@ -66,6 +66,10 @@
                 <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">5</Button>
                 <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">6</Button>
                 <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">7</Button>
+                <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">8</Button>
+                <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">9</Button>
+                <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">A</Button>
+                <Button Style="{StaticResource TileButton}" Click="TpageButton_Click">B</Button>
                 <Button Style="{StaticResource TileButton}" x:Name="palBtn" Click="palBtn_Click" Padding="4,4,7,4" Width="76">CLUT: 00</Button>
             </WrapPanel>
             <Border Grid.RowSpan="16" Grid.ColumnSpan="16" BorderBrush="White" BorderThickness="2" HorizontalAlignment="Left" Margin="0">

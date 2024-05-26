@@ -119,7 +119,7 @@ namespace TeheMan8_Editor.Forms
             enable = false;
             MainWindow.window.screenE.tileInt.Value = selectedTile;
             MainWindow.window.screenE.cordInt.Value = PSX.levels[Level.Id].tileInfo[selectedTile * 4];
-            MainWindow.window.screenE.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
+            MainWindow.window.screenE.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]);
             MainWindow.window.screenE.clutInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2];
             MainWindow.window.screenE.colInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 3];
             enable = true;

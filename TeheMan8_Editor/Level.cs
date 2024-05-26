@@ -26,15 +26,43 @@ namespace TeheMan8_Editor
         public static byte[] pixels = new byte[0x80000];
         public static int Id = 0;
         public static int BG = 0;
-        public static WriteableBitmap[] bmp = new WriteableBitmap[16];
+        public static bool textureSupport; //8bpp Textures
+        public static WriteableBitmap[] bmp = new WriteableBitmap[16 + 4];
         public static BitmapPalette[] palette = new BitmapPalette[0x80];
         #endregion Fields
 
         #region Methods
         public static void LoadLevels(string path)
         {
-            //Main Levels
             PSX.levels.Clear();
+
+            /*8bpp Texture Support*/
+            Visibility visibility;
+            int max;
+            string Texture8bpp = "TEXTURE_8BPP";
+            if (System.Text.Encoding.ASCII.GetString(PSX.exe, PSX.CpuToOffset(0x800F9ED4), Texture8bpp.Length) == Texture8bpp)
+            {
+                visibility = Visibility.Visible;
+                max = 0xB;
+                textureSupport = true;
+            }
+            else
+            {
+                visibility = Visibility.Collapsed;
+                max = 7;
+                textureSupport = false;
+            }
+            MainWindow.window.screenE.pageInt.Maximum = max;
+            MainWindow.window.x16E.pageInt.Maximum = max;
+            Forms.ClutEditor.maxPage = max;
+
+            for (int i = 0; i < 4; i++)
+            {
+                ((System.Windows.Controls.Button)MainWindow.window.x16E.tPagePannel.Children[9 + i]).Visibility = visibility;
+                ((System.Windows.Controls.Button)MainWindow.window.clutE.pagePannel.Children[9 + i]).Visibility = visibility;
+            }
+
+            //Main Levels
             for (int i = 0; i < 0xE; i++)
             {
                 if (File.Exists(path + "/STDATA/" + "STAGE" + Convert.ToString(i, 16).ToUpper().PadLeft(2, '0') + ".PAC"))
@@ -89,8 +117,9 @@ namespace TeheMan8_Editor
         {
             id &= 0xFFF;
             byte* buffer = (byte*)dest;
+            int page = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 8) & 0xFF;
 
-            if (id == 0) // 0 = Empty Tile
+            if (page > 0xB || id == 0) // 0 = Empty Tile
             {
                 for (int Y = 0; Y < 16; Y++)
                 {
@@ -108,29 +137,60 @@ namespace TeheMan8_Editor
             //Get Tile Info
             int cordX = BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) & 0xF;
             int cordY = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 4) & 0xF;
-            int page = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 8) & 0x7;
             int clut = (BitConverter.ToInt32(PSX.levels[Id].tileInfo, id * 4) >> 16) & 0x3F;
 
-            IntPtr bmpBackBuffer = bmp[page + 8].BackBuffer;
-            int bmpStride = bmp[page].BackBufferStride;
+            IntPtr bmpBackBuffer;
+            int bmpStride;
 
-            for (int row = 0; row < 16; row++)
+            if (page < 8) //4bpp
             {
-                int destIndex = (x * 3) + (y + row) * stride;
-                int sourceIndex = (cordX * 8) + ((cordY * 16 + row) * bmpStride);
+                bmpBackBuffer = bmp[page + 8].BackBuffer;
+                bmpStride = bmp[page].BackBufferStride;
 
-                for (int col = 0; col < 16; col++)
+                for (int row = 0; row < 16; row++)
                 {
-                    byte pixel = *(byte*)(bmpBackBuffer + sourceIndex + (col / 2));
+                    int destIndex = (x * 3) + (y + row) * stride;
+                    int sourceIndex = (cordX * 8) + ((cordY * 16 + row) * bmpStride);
 
-                    if ((col & 1) == 1)
+                    for (int col = 0; col < 16; col++)
+                    {
+                        byte pixel = *(byte*)(bmpBackBuffer + sourceIndex + (col / 2));
+
+                        if ((col & 1) == 1)
+                            pixel &= 0xF;
+                        else
+                            pixel >>= 4;
+
+                        buffer[destIndex++] = palette[clut + 64].Colors[pixel].R;
+                        buffer[destIndex++] = palette[clut + 64].Colors[pixel].G;
+                        buffer[destIndex++] = palette[clut + 64].Colors[pixel].B;
+                    }
+                }
+            }
+            else //8bpp
+            {
+                bmpBackBuffer = bmp[(page & 3) + 16].BackBuffer;
+                bmpStride = 256;
+
+                for (int row = 0; row < 16; row++)
+                {
+                    int destIndex = (x * 3) + (y + row) * stride;
+                    int sourceIndex = (cordX * 16) + ((cordY * 16 + row) * bmpStride);
+
+                    for (int col = 0; col < 16; col++)
+                    {
+                        byte pixel;
+
+                        pixel = *(byte*)(bmpBackBuffer + sourceIndex + col);
+                        int indexClut = clut + (pixel >> 4);
                         pixel &= 0xF;
-                    else
-                        pixel >>= 4;
+                        if ((indexClut * 16 + pixel) > 8191) continue;
 
-                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].R;
-                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].G;
-                    buffer[destIndex++] = palette[clut + 64].Colors[pixel].B;
+                        buffer[destIndex] = palette[indexClut + 64].Colors[pixel].R;
+                        buffer[destIndex + 1] = palette[indexClut + 64].Colors[pixel].G;
+                        buffer[destIndex + 2] = palette[indexClut + 64].Colors[pixel].B;
+                        destIndex += 3;
+                    }
                 }
             }
         }
@@ -185,11 +245,33 @@ namespace TeheMan8_Editor
                 this.pac.SaveEntry(0xA, enemyData);
             }
         }
-        public void LoadTextures()
+        public unsafe void LoadTextures()
         {
             //BG Textures
             Array.Clear(pixels, 0, pixels.Length);
             this.pac.LoadEntry(0x0103, pixels);
+
+            //8bpp
+            for (int i = 0; i < 4; i++)
+            {
+                bmp[16 + i].Lock();
+                byte* buffer = (byte*)bmp[16 + i].BackBuffer;
+                for (int r = 0; r < 256; r++)
+                {
+                    for (int c = 0; c < 256; c++)
+                    {
+                        if (c < 128)
+                            buffer[r * 256 + c] = pixels[i * 0x10000 + r * 128 + c];
+                        else
+                            buffer[r * 256 + c] = pixels[i * 0x10000 + 0x8000 + r * 128 + c - 128];
+                    }
+                }
+
+                bmp[16 + i].AddDirtyRect(new Int32Rect(0, 0, 256, 256));
+                bmp[16 + i].Unlock();
+            }
+
+            //4bpp
             ConvertBmp(pixels);
             for (int i = 0; i < 8; i++)
                 bmp[i + 8].WritePixels(new Int32Rect(0, 0, 256, 256), pixels, 128, i * 0x8000);
@@ -290,8 +372,16 @@ namespace TeheMan8_Editor
 
             for (int a = 0; a < bmp.Length; a++)
             {
-                if (bmp[a] == null)
-                    bmp[a] = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Indexed4, palette[a]);
+                if (a < 16)
+                {
+                    if (bmp[a] == null)
+                        bmp[a] = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Indexed4, Const.GreyScalePallete);
+                }
+                else
+                {
+                    if (bmp[a] == null)
+                        bmp[a] = new WriteableBitmap(256, 256, 96, 96, PixelFormats.Indexed8, Const.GreyScalePallete);
+                }
             }
         }
         public static void AssignPallete(int clut)

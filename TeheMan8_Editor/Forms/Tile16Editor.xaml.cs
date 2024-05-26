@@ -79,16 +79,34 @@ namespace TeheMan8_Editor.Forms
         {
             palBtn.Content = "CLUT: " + Convert.ToString(clut, 16).ToUpper().PadLeft(2, '0'); //Update Txt
             IntPtr pixelDataPtr = Level.bmp[page + 8].BackBuffer;
+            BitmapPalette pal;
+            int stride = 128;
+            PixelFormat format = PixelFormats.Indexed4;
+            if (page < 8)
+                pal = Level.palette[clut + 64];
+            else
+            {
+                List<Color> colors = new List<Color>();
+
+                for (int i = 0; i < 256; i++)
+                {
+                    if (((((i >> 4) + clut) * 16) + (i & 0xF)) > 8191) break;
+                    colors.Add(Level.palette[clut + 64 + (i >> 4)].Colors[i & 0xF]);
+                }
+                pal = new BitmapPalette(colors);
+                format = PixelFormats.Indexed8;
+                stride = 256;
+            }
 
             MainWindow.window.x16E.textureImage.Source = BitmapSource.Create(256,
-                256,
-                96,
-                96,
-                PixelFormats.Indexed4,
-                Level.palette[clut + 64],
-                pixelDataPtr,
-                256 * 128,
-                128);
+            256,
+            96,
+            96,
+            format,
+            pal,
+            pixelDataPtr,
+            256 * stride,
+            stride);
         }
         public void DrawTile()
         {
@@ -106,7 +124,7 @@ namespace TeheMan8_Editor.Forms
             //Various Tile Info
             MainWindow.window.x16E.tileInt.Value = selectedTile;
             MainWindow.window.x16E.cordInt.Value = PSX.levels[Level.Id].tileInfo[selectedTile * 4];
-            MainWindow.window.x16E.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
+            MainWindow.window.x16E.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]);
             MainWindow.window.x16E.clutInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 2];
             MainWindow.window.x16E.colInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 3];
             enable = true;
@@ -132,7 +150,7 @@ namespace TeheMan8_Editor.Forms
         private void TpageButton_Click(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
-            int i = Convert.ToInt32(b.Content.ToString().Trim(), 16);
+            int i = Convert.ToInt32(b.Content.ToString(), 16);
             if (page == i)
                 return;
             page = i;
@@ -151,7 +169,7 @@ namespace TeheMan8_Editor.Forms
         private void TileButton_Click(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
-            int i = Convert.ToInt32(b.Content.ToString().Trim(), 16);
+            int i = Convert.ToInt32(b.Content.ToString(), 16);
             if (tileCol == i)
                 return;
             tileCol = i;
@@ -314,7 +332,7 @@ namespace TeheMan8_Editor.Forms
 
                 //Update
                 MainWindow.window.x16E.cordInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 0];
-                MainWindow.window.x16E.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
+                MainWindow.window.x16E.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]);
                 MainWindow.window.layoutE.DrawLayout();
                 MainWindow.window.layoutE.DrawScreen();
                 MainWindow.window.screenE.DrawScreen();
@@ -324,7 +342,7 @@ namespace TeheMan8_Editor.Forms
                 if (MainWindow.window.screenE.selectedTile == selectedTile)
                 {
                     MainWindow.window.screenE.cordInt.Value = PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 0];
-                    MainWindow.window.screenE.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]) & 7;
+                    MainWindow.window.screenE.pageInt.Value = (PSX.levels[Level.Id].tileInfo[(selectedTile * 4) + 1]);
                     MainWindow.window.screenE.DrawTile();
                 }
                 if (MainWindow.window.screenE.tileCol == (selectedTile >> 8))

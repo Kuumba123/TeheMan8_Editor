@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,6 +15,7 @@ namespace TeheMan8_Editor.Forms
     {
         #region Fields
         private static bool added = false;
+        public static int maxPage;
         public static int page = 0;
         public static int clut = 0;
         public static int bgF = 1;
@@ -33,23 +35,45 @@ namespace TeheMan8_Editor.Forms
         #region Methods
         public void DrawTextures()
         {
-            IntPtr pixelDataPtr = Level.bmp[page + (bgF * 8)].BackBuffer;
+            if (page > 7 && bgF == 0)
+                page = 7;
 
-            int pixelWidth = Level.bmp[page + (bgF * 8)].PixelWidth;
-            int pixelHeight = Level.bmp[page + (bgF * 8)].PixelHeight;
+            if (bgF == 1)
+                clut %= 0x40;
+            else
+            {
+                if (clut > 0x3F)
+                    clut = 0x3F;
+            }
+            IntPtr pixelDataPtr = Level.bmp[page + bgF * 8].BackBuffer;
+            BitmapPalette pal;
             int stride = 128;
+            PixelFormat format = PixelFormats.Indexed4;
+            if (page < 8)
+                pal = Level.palette[clut + bgF * 64];
+            else
+            {
+                List<Color> colors = new List<Color>();
 
+                for (int i = 0; i < 256; i++)
+                {
+                    if (((((i >> 4) + clut) * 16) + (i & 0xF)) > 8191) break;
+                    colors.Add(Level.palette[clut + 64 + (i >> 4)].Colors[i & 0xF]);
+                }
+                pal = new BitmapPalette(colors);
+                format = PixelFormats.Indexed8;
+                stride = 256;
+            }
 
-            MainWindow.window.clutE.textureImage.Source = BitmapSource.Create(pixelWidth,
-                pixelHeight,
-                Level.bmp[page + (bgF * 8)].DpiX,
-                Level.bmp[page + (bgF * 8)].DpiY,
-                Level.bmp[page + (bgF * 8)].Format,
-                Level.palette[clut + (bgF * 0x40)],
-                pixelDataPtr,
-                Level.bmp[page + (bgF * 8)].PixelHeight * stride,
-                stride
-            );
+            MainWindow.window.clutE.textureImage.Source = BitmapSource.Create(256,
+            256,
+            96,
+            96,
+            format,
+            pal,
+            pixelDataPtr,
+            256 * stride,
+            stride);
         }
         public void DrawClut()
         {
@@ -192,7 +216,7 @@ namespace TeheMan8_Editor.Forms
         }
         private void Tpage_Click(object sender, RoutedEventArgs e)
         {
-            if (Convert.ToInt32(((Button)sender).Content.ToString()) == page)
+            if (Convert.ToInt32(((Button)sender).Content.ToString(), 16) == page)
                 return;
             if(pastPage != null)
             {
@@ -203,7 +227,7 @@ namespace TeheMan8_Editor.Forms
             ((Button)sender).Foreground = Brushes.Black;
             ((Button)sender).Background = Brushes.LightBlue;
             MainWindow.window.clutE.cursor.Fill = Brushes.Transparent;
-            page = Convert.ToInt32(((Button)sender).Content.ToString());
+            page = Convert.ToInt32(((Button)sender).Content.ToString(), 16);
             DrawTextures();
         }
 

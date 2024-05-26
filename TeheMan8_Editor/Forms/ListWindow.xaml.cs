@@ -182,6 +182,117 @@ namespace TeheMan8_Editor.Forms
             InitializeComponent();
             this.Width = 804;
             this.Height = 812;
+            int count = 0;
+            List<Color> grayscalePalette = new List<Color>();
+
+            for (int i = 0; i < 256; i++)
+                grayscalePalette.Add(Color.FromRgb((byte)i, (byte)i, (byte)i));
+            BitmapPalette grayscale8bpp = new BitmapPalette(grayscalePalette);
+            //Create Context Menu
+            ContextMenu contextMenu = new ContextMenu();
+
+            //Specfic Items
+            MenuItem item1 = new MenuItem() { Header = "Swap Bit-Depth" };
+            item1.Click += (send, arg) =>
+            {
+                Image clickedImage = contextMenu.PlacementTarget as Image;
+                int slot = Convert.ToInt32(clickedImage.Uid);
+                PAC filePAC = (PAC)clickedImage.Tag;
+
+                int width;
+                PixelFormat destFormat;
+                BitmapPalette pal;
+                byte[] existingData = new byte[filePAC.entries[slot].data.Length];
+                filePAC.entries[slot].data.CopyTo(existingData, 0);
+
+                if (clickedImage.Source.Width == 256)
+                {
+                    width = 128;
+                    destFormat = PixelFormats.Indexed8;
+                    pal = grayscale8bpp;
+                }
+                else
+                {
+                    width = 256;
+                    destFormat = PixelFormats.Indexed4;
+                    pal = Const.GreyScalePallete;
+                }
+
+                int height = filePAC.entries[slot].data.Length / 128;
+
+                if (width == 256)
+                    Level.ConvertBmp(existingData);
+
+                clickedImage.Source = BitmapSource.Create(width,
+                height,
+                96,
+                96,
+                destFormat,
+                pal,
+                existingData,
+                128);
+            };
+            MenuItem item2 = new MenuItem() { Header = "Show Info" };
+            item2.Click += (send, arg) =>
+            {
+                Image clickedImage = contextMenu.PlacementTarget as Image;
+                string x;
+                string y;
+                int cordId = Convert.ToInt32(((clickedImage).Name).Replace("_", "")) & 0xFF;
+                int height = (int)(clickedImage).Source.Height;
+                if (cordId > 4)
+                {
+                    x = "?";
+                    y = "?";
+                }
+                else
+                {
+                    x = (Const.CordTabe[cordId] & 0xFFFF).ToString();
+                    y = (Const.CordTabe[cordId] >> 16).ToString();
+                }
+                //Display Info
+                MessageBox.Show("X: " + x + " Y: " + y + $"\nWidth: {clickedImage.Source.Width} Height: " + height, "Texture Info");
+            };
+            MenuItem item3 = new MenuItem() { Header = "Extract" };
+            item3.Click += (send, arg) =>
+            {
+                using (var sfd = new System.Windows.Forms.SaveFileDialog())
+                {
+                    sfd.Title = "Select Texture Save Location";
+                    if (type == 0)
+                        sfd.Filter = "BMP File|*.bmp";
+                    else
+                        sfd.Filter = "BIN File|*.bin";
+
+                    if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        Image im = contextMenu.PlacementTarget as Image;
+                        int id = Convert.ToInt32(im.Uid);
+                        PAC filePAC = (PAC)im.Tag;
+
+                        if (type == 0)
+                        {
+                            ImageSource imageSource = im.Source;
+
+                            BitmapEncoder bmpEncoder = new BmpBitmapEncoder();
+                            bmpEncoder.Frames.Add(BitmapFrame.Create((BitmapSource)imageSource));
+
+                            var s = File.Create(sfd.FileName);
+                            bmpEncoder.Save(s);
+                            s.Close();
+                        }
+                        else
+                            File.WriteAllBytes(sfd.FileName, filePAC.entries[id].data);
+
+                        MessageBox.Show("Texture Data Extracted!");
+                    }
+                }
+            };
+
+            contextMenu.Items.Add(item1);
+            contextMenu.Items.Add(item2);
+            contextMenu.Items.Add(item3);
+
             for (int i = 0; i < pac.entries.Count; i++)
             {
                 if (pac.entries[i].type >> 8 != 1)
@@ -202,10 +313,19 @@ namespace TeheMan8_Editor.Forms
                     using(var fd = new System.Windows.Forms.OpenFileDialog())
                     {
                         byte[] data;
+                        Image im = (Image)s;
                         if (type == 0)
                         {
-                            fd.Filter = "4bpp BMP |*.BMP";
-                            fd.Title = "Open an 4bpp Bitmap";
+                            if (im.Source.Width == 256)
+                            {
+                                fd.Filter = "4bpp BMP |*.BMP";
+                                fd.Title = "Open an 4bpp Bitmap";
+                            }
+                            else
+                            {
+                                fd.Filter = "8bpp BMP |*.BMP";
+                                fd.Title = "Open an 8bpp Bitmap";
+                            }
                         }
                         else
                         {
@@ -220,24 +340,38 @@ namespace TeheMan8_Editor.Forms
                                 WriteableBitmap tex = new WriteableBitmap(new BitmapImage(uri));
                                 Uri.EscapeUriString(fd.FileName);
 
-                                if (tex.PixelWidth != 256)
+                                if (tex.PixelWidth != im.Source.Width)
                                 {
-                                    MessageBox.Show("Texture must\nHave a width of 256 pixels.", "ERROR");
+                                    MessageBox.Show($"Texture must\nHave a width of {im.Source.Width} pixels.", "ERROR");
                                     return;
                                 }
-                                if (tex.Format != PixelFormats.Indexed4)
+
+                                if (im.Source.Width == 256)
                                 {
-                                    MessageBox.Show("Texture must be in 4bpp.", "ERROR");
-                                    return;
+                                    if (tex.Format != PixelFormats.Indexed4)
+                                    {
+                                        MessageBox.Show("Texture must be in 4bpp.", "ERROR");
+                                        return;
+                                    }
                                 }
+                                else
+                                {
+                                    if (tex.Format != PixelFormats.Indexed8)
+                                    {
+                                        MessageBox.Show("Texture must be in 8bpp.", "ERROR");
+                                        return;
+                                    }
+                                }
+
                                 data = new byte[256 * tex.PixelHeight / 2];
                                 tex.CopyPixels(data, 128, 0);
-                                Level.ConvertBmp(data);
+
+                                if (im.Source.Width == 256)
+                                    Level.ConvertBmp(data);
 
                                 //Get PAC Info
-                                var im = (Image)s;
-                                var id = Convert.ToInt32(im.Uid);
-                                var filePAC = (PAC)im.Tag;
+                                int id = Convert.ToInt32(im.Uid);
+                                PAC filePAC = (PAC)im.Tag;
                                 Array.Resize(ref pac.entries[id].data, data.Length);
                                 Array.Copy(data, pac.entries[id].data, data.Length);
                                 File.WriteAllBytes(pac.path, pac.GetEntriesData());
@@ -248,7 +382,6 @@ namespace TeheMan8_Editor.Forms
                                 data = File.ReadAllBytes(fd.FileName);
 
                                 //Get PAC Info
-                                var im = (Image)s;
                                 var id = Convert.ToInt32(im.Uid);
                                 var filePAC = (PAC)im.Tag;
                                 Array.Resize(ref pac.entries[id].data, data.Length);
@@ -265,22 +398,8 @@ namespace TeheMan8_Editor.Forms
                 };
                 System.Windows.Input.MouseButtonEventHandler p2 = (s, e) =>
                 {
-                    string x;
-                    string y;
-                    int cordId = Convert.ToInt32((((Image)s).Name).Replace("_","")) & 0xFF;
-                    int height = (int)((Image)s).Source.Height;
-                    if (cordId > 4)
-                    {
-                        x = "?";
-                        y = "?";
-                    }
-                    else
-                    {
-                        x = (Const.CordTabe[cordId] & 0xFFFF).ToString();
-                        y = (Const.CordTabe[cordId] >> 16).ToString();
-                    }
-                    //Display Info
-                    MessageBox.Show("X: " + x + " Y: " + y + "\nWidth: 256 Height: " + height, "Texture Info");
+                    contextMenu.PlacementTarget = s as Image;
+                    contextMenu.IsOpen = true;
                 };
                 image.MouseLeftButtonDown += p1;
                 image.MouseRightButtonDown += p2;
@@ -987,6 +1106,63 @@ namespace TeheMan8_Editor.Forms
             dock.Children.Add(bt1);
             dock.Children.Add(bt2);
             dock.Children.Add(bt3);
+
+            Button texBtn = new Button()
+            {
+                Content = "8bpp Texture",
+                Width = 105,
+                Style = Application.Current.FindResource("TileButton") as Style
+            };
+            texBtn.Click += (s, e) =>
+            {
+                if (Level.textureSupport)
+                {
+                    MessageBox.Show("You already have the 8bpp Texture patch applied to the game.\nIf you want to use 8bpp textures just set the " +
+                        "tile's T-page property to 8-B");
+                    return;
+                }
+                else
+                {
+                    var result = MessageBox.Show("Would you like to apply the 8bpp Texture patch? " +
+                        "Normally MegaMan 8 only supports 4bpp Textures for the Background Layers 1-3. " +
+                        "This patch will allow you to use 8bpp Textures similarly to how MegaMan X5/X6 Support 8bpp Textures.\n" +
+                        "Would you like to apply the patch?", "8bpp Texture Patch", MessageBoxButton.YesNo);
+                    if (result != MessageBoxResult.Yes) return;
+
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+                    Stream resourceStream = assembly.GetManifestResourceStream("TeheMan8_Editor.Resources.Patches.Texture_8bpp.backgroundc.bin");
+                    MemoryStream ms = new MemoryStream();
+
+                    resourceStream.CopyTo(ms);
+                    ms.ToArray().CopyTo(PSX.exe, PSX.CpuToOffset(0x800f96c0));
+
+                    System.Text.Encoding.ASCII.GetBytes("TEXTURE_8BPP").CopyTo(PSX.exe, PSX.CpuToOffset(0x800F9ED4));
+
+                    //Update GUI
+                    MainWindow.window.screenE.pageInt.Maximum = 0xB;
+                    MainWindow.window.x16E.pageInt.Maximum = 0xB;
+                    ClutEditor.maxPage = 0xB;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        ((Button)MainWindow.window.x16E.tPagePannel.Children[9 + i]).Visibility = Visibility.Visible;
+                        ((Button)MainWindow.window.clutE.pagePannel.Children[9 + i]).Visibility = Visibility.Visible;
+                    }
+                    PSX.edit = true;
+                    Level.textureSupport = true;
+
+                    //Done
+                    MessageBox.Show("8bpp Texture patch has been applied! Now hit the save and now when you want to use 8bpp Textures " +
+                        $"set the tile's T-page property to 8-B. " +
+                        "Also keep in mind that if the T-page property is set to 8-B the Clut property should be a multiple of " +
+                        "10hex and should be no greater than 30hex (cause of the Clut layout in VRAM). " +
+                        "Lastly if you want to change amount of colors in a level " +
+                        " set the the clut set count in the size window.\n" +
+                        $" You can also view the patch source at {Const.texture8bppURL}");
+                }
+            };
+            dock.Children.Add(texBtn);
+
             dock.Children.Add(rect);
             this.pannel.Children.Insert(0, dock);
 

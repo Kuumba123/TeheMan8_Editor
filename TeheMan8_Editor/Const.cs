@@ -18,6 +18,7 @@ namespace TeheMan8_Editor
             "1.1",
             "1.0"
         };
+        public static readonly string texture8bppURL = "https://github.com/Kuumba123/MegaMan8_Texture8bpp";
         public const int MaxUndo = 512;
         public const long Crc = 0x014E663C;
         public const uint CheckPointPointersAddress = 0x80138288;

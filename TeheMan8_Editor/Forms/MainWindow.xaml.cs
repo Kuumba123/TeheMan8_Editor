@@ -125,6 +125,8 @@ namespace TeheMan8_Editor
                         return;
                     }
                     //PSX.EXE was Found
+                    PSX.exe = File.ReadAllBytes(args[1] + "/SLUS_004.53");
+                    PSX.time = File.GetLastWriteTime(args[1] + "/SLUS_004.53");
                     Level.LoadLevels(args[1]);
 
                     if (PSX.levels.Count == 0) //Check for any PAC Level Files
@@ -132,8 +134,6 @@ namespace TeheMan8_Editor
                         MessageBox.Show("No PAC level files were found.");
                         return;
                     }
-                    PSX.exe = File.ReadAllBytes(args[1] + "/SLUS_004.53");
-                    PSX.time = File.GetLastWriteTime(args[1] + "/SLUS_004.53");
                     PSX.edit = false;
                     PSX.filePath = args[1];
 
@@ -206,6 +206,8 @@ namespace TeheMan8_Editor
                     return;
                 }
                 //PSX.EXE was Found
+                PSX.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
+                PSX.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
                 Level.LoadLevels(fd.SelectedPath);
 
                 if (PSX.levels.Count == 0) //Check for any PAC Level Files
@@ -214,9 +216,8 @@ namespace TeheMan8_Editor
                     LockWindows();
                     return;
                 }
-                PSX.exe = File.ReadAllBytes(fd.SelectedPath + "/SLUS_004.53");
-                PSX.time = File.GetLastWriteTime(fd.SelectedPath + "/SLUS_004.53");
                 PSX.filePath = fd.SelectedPath;
+                PSX.edit = false;
                 Settings.DefineCheckpoints();
                 Undo.CreateUndoList();
                 Level.Id = 0;

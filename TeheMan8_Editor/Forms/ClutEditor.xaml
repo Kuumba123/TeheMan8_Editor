@@ -169,6 +169,10 @@
             <Button Style="{StaticResource TileButton}" Click="Tpage_Click">5</Button>
             <Button Style="{StaticResource TileButton}" Click="Tpage_Click">6</Button>
             <Button Style="{StaticResource TileButton}" Click="Tpage_Click">7</Button>
+            <Button Style="{StaticResource TileButton}" Click="Tpage_Click">8</Button>
+            <Button Style="{StaticResource TileButton}" Click="Tpage_Click">9</Button>
+            <Button Style="{StaticResource TileButton}" Click="Tpage_Click">A</Button>
+            <Button Style="{StaticResource TileButton}" Click="Tpage_Click">B</Button>
             <Button Style="{StaticResource TileButton}" x:Name="palBtn" Click="palBtn_Click" Padding="4,4,7,4" Width="76">CLUT: 00</Button>
             <Button Style="{StaticResource TileButton}" Click="GearBtn_Click">⚙️</Button>
         </StackPanel>

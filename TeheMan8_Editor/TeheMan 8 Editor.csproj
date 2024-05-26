@@ -265,6 +265,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <EmbeddedResource Include="Resources\Patches\Texture_8bpp\backgroundc.bin" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config\App.config" />

@@ -182,7 +182,7 @@ namespace TeheMan8_Editor.Forms
                         return;
                     }
                     var lw = new ListWindow(pac,0);
-                    lw.Title = fd.SafeFileName + " Textures";
+                    lw.Title = fd.SafeFileName + " Textures [Right Click for extra Options]";
                     lw.ShowDialog(); ;
                 }
             }

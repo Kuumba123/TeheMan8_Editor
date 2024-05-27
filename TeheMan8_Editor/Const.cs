@@ -248,7 +248,8 @@ namespace TeheMan8_Editor
         "LBA_STAGE0C_PAC",
         "LBA_STAGE0D_PAC",
         "LBA_WILY_PAC",
-        "LBA_W_DEVIL_PAC"};
+        "LBA_W_DEVIL_PAC",
+        "LBA_END1_DA"};
 
         public static Dictionary<byte, (string name, string info)> mainObjInfo = new Dictionary<byte, (string name, string info)>()
         {

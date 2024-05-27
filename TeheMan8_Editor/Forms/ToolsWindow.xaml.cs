@@ -525,7 +525,8 @@ namespace TeheMan8_Editor.Forms
                                             sector = Convert.ToInt32(words[2], 16);
                                         else
                                             sector = Convert.ToInt32(words[2]);
-                                        bw.Write(sector);
+                                        if(sector > 0)
+                                            bw.Write(sector);
                                     }
                                 }
                                 //Save PSX.EXE

@@ -273,6 +273,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <EmbeddedResource Include="Resources\Patches\Texture_8bpp\backgroundc.bin" />
+    <None Include="Resources\Lua\MM8_Tools.lua" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config\App.config" />

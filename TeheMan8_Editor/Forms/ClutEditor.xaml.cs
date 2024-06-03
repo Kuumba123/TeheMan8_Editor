@@ -237,6 +237,7 @@ namespace TeheMan8_Editor.Forms
         }
         private void GearBtn_Click(object sender, RoutedEventArgs e)
         {
+            ListWindow.isAnime = false;
             ListWindow l = new ListWindow(5);
             l.ShowDialog();
         }

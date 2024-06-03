@@ -85,6 +85,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\AnimeEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\BackgroundEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,6 +140,9 @@
     <Compile Include="Const.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="Forms\AnimeEditor.xaml.cs">
+      <DependentUpon>AnimeEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BackgroundEditor.xaml.cs">
       <DependentUpon>BackgroundEditor.xaml</DependentUpon>
     </Compile>

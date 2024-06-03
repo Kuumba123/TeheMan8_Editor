@@ -7,9 +7,10 @@ namespace TeheMan8_Editor
     static class Const
     {
         public static readonly string reproURL = "https://api.github.com/repos/Kuumba123/TeheMan8_Editor/releases/latest";
-        public const string Version = "1.2.2";
+        public const string Version = "1.3";
         public static readonly string[] pastVersions =
         {
+            "1.3",
             "1.2.2",
             "1.2.1",
             "1.2",
@@ -37,6 +38,9 @@ namespace TeheMan8_Editor
         public static readonly byte[] MaxPoints = new byte[] { 2, 5, 5, 6, 5, 5, 6, 5, 5, 1, 2, 2, 3, 1 };
         public static readonly byte[] MaxBGEffects = new byte[] { 1, 7, 7, 5, 7, 7, 5, 7, 3, 0, 1, 4, 4, 4 };
         public static readonly int[] CordTabe = new int[] { 0x140, 0x1000140, 0x200, 0x1000200, 0x1000180 };
+        public static readonly byte[] MaxClutAnimes = { 0xFF , 0 , 1 , 3 , 1 , 3 , 2 , 3 , 1 , 0 , 0 , 0 , 0 , 2};
+        public const uint ClutInfoPointersAddress = 0x8013dfe8;
+        public const uint NullClutAddress = 0x8013dd54;
         public static readonly uint[] c_edc_lut = new uint[]{
     0x00000000, 0x90910101, 0x91210201, 0x01b00300, 0x92410401, 0x02d00500, 0x03600600, 0x93f10701,
     0x94810801, 0x04100900, 0x05a00a00, 0x95310b01, 0x06c00c00, 0x96510d01, 0x97e10e01, 0x07700f00,

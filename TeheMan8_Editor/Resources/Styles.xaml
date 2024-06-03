@@ -51,6 +51,9 @@
     <Style TargetType="Image">
         <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"/>
     </Style>
+    <Style TargetType="Label">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
     <!--....-->
     <Style TargetType="Button" x:Key="TileButton">
         <Setter Property="Background" Value="Black"/>

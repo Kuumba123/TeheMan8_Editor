@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TeheMan8_Editor.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace TeheMan8_Editor
 {
@@ -169,6 +168,7 @@ namespace TeheMan8_Editor
             window.clutE.UpdateClutTxt();
             window.spawnE.SetSpawnSettings();
             window.bgE.SetBackgroundSettings();
+            window.animeE.AssignLimits();
             if (ListWindow.screenViewOpen)
                 layoutWindow.DrawScreens();
             if (ListWindow.extraOpen)
@@ -558,6 +558,25 @@ namespace TeheMan8_Editor
                 }
             }
         }
+        private void AnimeKeyCheck(string key, bool notFocus)
+        {
+            if (!notFocus)  //check if NumInt is focused
+                return;
+            if (PSX.levels[Level.Id].clutAnime == null) return;
+
+            if (key == "Up")
+            {
+                AnimeEditor.clut--;
+                if (AnimeEditor.clut < 0)
+                    AnimeEditor.clut = (PSX.levels[Level.Id].clutAnime.Length / 32) - 1;
+                window.animeE.UpdateClutTxt();
+            }
+            else if (key == "Down")
+            {
+                AnimeEditor.clut = (AnimeEditor.clut + 1) % (PSX.levels[Level.Id].clutAnime.Length / 32);
+                window.animeE.UpdateClutTxt();
+            }
+        }
         internal bool SaveFiles(bool current = false /*option for saving current file*/)
         {
             try
@@ -680,6 +699,9 @@ namespace TeheMan8_Editor
                         await Redux.Write(0x8015a064, PSX.levels[Level.Id].pal);
                         await Redux.Write(0x80158f64, PSX.levels[Level.Id].pal);
                     }
+                    if (PSX.levels[Level.Id].clutAnime != null)
+                        await Redux.Write(0x801ae840, PSX.levels[Level.Id].clutAnime);
+
                     //Enemy Data
                     byte[] enemyData = new byte[0x800];
                     PSX.levels[Level.Id].DumpEnemyData(enemyData);
@@ -1214,6 +1236,19 @@ namespace TeheMan8_Editor
                 {
                     ProcessUndo();
                 }
+                else if (key == "C" && PSX.levels.Count != 0 && Keyboard.FocusedElement.GetType() != typeof(Xceed.Wpf.Toolkit.WatermarkTextBox) && hub.SelectedItem != null)
+                {
+                    if (((TabItem)hub.SelectedItem).Name == "animeTab")
+                        window.animeE.CopySet();
+                    //else
+                    //    ToggleCollision();
+                    return;
+                }
+                else if (key == "V" && PSX.levels.Count != 0 && Keyboard.FocusedElement.GetType() != typeof(Xceed.Wpf.Toolkit.WatermarkTextBox) && hub.SelectedItem != null)
+                {
+                    if (((TabItem)hub.SelectedItem).Name == "animeTab")
+                        window.animeE.PasteSet();
+                }
                 else if (key == "Left" && PSX.levels.Count != 0 && this.hub.Items.Count > 1)
                 {
                     int hubIndex = GetHubIndex();
@@ -1266,8 +1301,9 @@ namespace TeheMan8_Editor
                         ClutKeyCheck(key);
                         break;
                     }
-                default:
+                case "animeTab":
                     {
+                        AnimeKeyCheck(key, nonNumInt);
                         break;
                     }
             }

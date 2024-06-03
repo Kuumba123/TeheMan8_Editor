@@ -105,8 +105,7 @@ namespace TeheMan8_Editor.Forms
             MainWindow.settings.autoExtra = (bool)extraCheck.IsChecked;
             edited = true;
         }
-
-        private void filesCheck_Checked(object sender, RoutedEventArgs e)
+        private void filesCheck_Checked_Change(object sender, RoutedEventArgs e)
         {
             if (!enable)
                 return;

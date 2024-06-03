@@ -56,7 +56,7 @@
                 <CheckBox x:Name="layoutCheck" Checked="layoutCheck_Check_Change" Unchecked="layoutCheck_Check_Change">Dont Save Window Layout</CheckBox>
                 <CheckBox x:Name="screenCheck" Checked="screenCheck_Check_Change" Unchecked="screenCheck_Check_Change">Auto Launch Screen Layout Viewer</CheckBox>
                 <CheckBox x:Name="extraCheck" Checked="extraCheck_Check_Change" Unchecked="extraCheck_Check_Change">Auto Launch Screen Flags Viewer</CheckBox>
-                <CheckBox x:Name="filesCheck" Checked="filesCheck_Checked">Auto Launch Files Viewer</CheckBox>
+                <CheckBox x:Name="filesCheck" Checked="filesCheck_Checked_Change" Unchecked="filesCheck_Checked_Change">Auto Launch Files Viewer</CheckBox>
                 <CheckBox x:Name="openCheck" Checked="openCheck_Check_Change" Unchecked="openCheck_Check_Change">Dont Reset Level Id When Opening</CheckBox>
             </StackPanel>
         </Grid>

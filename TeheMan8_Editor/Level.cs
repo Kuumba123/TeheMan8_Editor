@@ -17,6 +17,7 @@ namespace TeheMan8_Editor
         public byte[] screenData;
         public byte[] tileInfo;
         public byte[] pal;
+        public byte[] clutAnime;
         public List<Enemy> enemies = new List<Enemy>();
         public bool edit = false;
         public DateTime time;
@@ -229,6 +230,7 @@ namespace TeheMan8_Editor
             this.tileInfo = this.pac.LoadEntry(4);
             this.pal = this.pac.LoadEntry(9);
             this.LoadEnemyData(this.pac.LoadEntry(0xA));
+            this.clutAnime = this.pac.LoadEntry(11);
         }
         public void ApplyLevelsToPAC()
         {
@@ -238,6 +240,7 @@ namespace TeheMan8_Editor
             this.pac.SaveEntry(3, this.screenData);
             this.pac.SaveEntry(4, this.tileInfo);
             this.pac.SaveEntry(9, this.pal);
+            this.pac.SaveEntry(11, this.clutAnime);
             if (this.pac.ContainsEntry(0xA)) //Enemy Data
             {
                 byte[] enemyData = new byte[0x800];

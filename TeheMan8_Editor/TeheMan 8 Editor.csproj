@@ -196,7 +196,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Undo.cs" />
     <Compile Include="WriteFile.cs" />
-    <Compile Include="Folder.cs" />
     <Compile Include="Forms\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -326,6 +325,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Twitter Logo 32 by 23.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Repro\textureReplace.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Repro\pacEditor.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Repro\clutEditor.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

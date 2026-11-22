@@ -29,8 +29,21 @@ Note for `MM8_Tools.lua`: the `0x801D184C` pool is 0x40 slots of 0x40 bytes and 
 ## The enemy list and the spawner
 
 The stage's enemy list (PAC entry `0x0A`, the one the editor edits) is loaded to `0x801C2B3C`. The
-spawner (`FUN_80101c54`, called with a window around the camera of -0x30..+0x170 in X and -0x30..+0x120
-in Y) walks it until it hits a record whose type byte is `0xFF`:
+spawner `FUN_80101c54(x0, x1, y0, y1, ...)` walks it until it hits a record whose type byte is `0xFF`
+and spawns the records whose position is strictly inside the box it is given. It is called two ways:
+
+- `FUN_80101bf0`, at stage start (it has two other callers I did not trace): the whole area around the camera,
+  X from camera-0x30 to camera+0x170 and Y from camera-0x30 to camera+0x120.
+- `FUN_80101acc`, every frame, but only when the camera moved: just the strip the camera scrolled into.
+  Moving right that is X from camera+0x150 to camera+0x170, moving left camera-0x30 to camera-0x10
+  (and the same idea in Y: +0x100..+0x120 down, -0x30..-0x10 up), with the other axis over the full
+  height or width.
+
+So an enemy only appears while the camera scrolls its position in from an edge (or at stage start).
+A record added in the middle of the current screen does not spawn until the camera
+leaves and comes back. Checked in Redux.
+
+Record layout:
 
 | Offset | Meaning |
 |---|---|

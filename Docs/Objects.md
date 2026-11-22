@@ -85,7 +85,10 @@ some of these) for their own state, so treat anything not listed as per-enemy.
 | +0x08 | ptr | Enemy-list record this object came from, or 0 |
 | +0x0C, +0x0E | u16, s16 | X: fraction, pixels |
 | +0x10, +0x12 | u16, s16 | Y: fraction, pixels |
-| +0x14 .. +0x23 | | Speed/acceleration words, zeroed by the common init. Exact split not traced. |
+| +0x14 | s32 | X speed, 16.16. `FUN_80104c58` adds it to the 32-bit X at +0x0C every call |
+| +0x18 | s32 | Y speed, 16.16, positive is up (subtracted from the 32-bit Y at +0x10) |
+| +0x1C | s32 | X acceleration, added to the X speed |
+| +0x20 | s32 | Gravity, subtracted from the Y speed |
 | +0x24 | u8 | CLUT for the sprite (see [Sprites.md](Sprites.md)) |
 | +0x25 | u8 | Bit 6 = flip horizontally (facing), bit 7 = flip vertically. Also flips the hitbox. |
 | +0x26 | u8 | Draw list / priority (0xFF is treated as 0x0C) |

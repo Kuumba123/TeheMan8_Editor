@@ -146,7 +146,7 @@ reference accounted for. That was checked statically for all of them; only the P
 | 3C | Sydecka | STAGE08 | 8440 bytes |  |  | yes |
 | 3D |  | STAGE02 | 2828 bytes |  |  | yes |
 | 3E | Surumaker | STAGE06 | 3344 bytes |  |  | yes |
-| 3F |  | STAGE06 | 5184 bytes |  | type3 2C (overlay address) | code yes, child needs manual work |
+| 3F |  | STAGE06 | 5184 bytes |  | type2 26, type3 2C (overlay address) | code yes, child needs manual work |
 | 40 | Clown Man | STAGE02 | 14092 bytes | 0D | type2 28 | yes |
 | 40 | Clown Man | STAGE0D | 16272 bytes | 02 | type2 28 | yes |
 | 41 | Vertical Wall Teck | STAGE07 | 5276 bytes | 0C |  | yes |
@@ -175,7 +175,7 @@ reference accounted for. That was checked statically for all of them; only the P
 | 4D |  | STAGE0D | 6804 bytes | 05 |  | yes |
 | 4E |  | STAGE0C | 22892 bytes |  | type3 3C (overlay address) | code yes, child needs manual work |
 | 4F |  | STAGE09 | 724 bytes |  |  | yes |
-| 50 |  | STAGE09 | 5676 bytes |  | main 55 | yes |
+| 50 |  | STAGE09 | 5676 bytes |  | main 55, main 58 | yes |
 | 51 |  | STAGE0A | 10524 bytes |  | type3 3B (overlay address) | code yes, child needs manual work |
 | 52 |  | STAGE0A | 3560 bytes |  |  | yes |
 | 53 | Wall Teck | STAGE06 | 3612 bytes | 07, 0B, 0C |  | yes |

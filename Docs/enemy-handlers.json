@@ -1,0 +1,1223 @@
+{
+ "STAGE00": {
+  "overlay": "OVL/STAGE00.BIN",
+  "load_index": 1,
+  "load_address": "0x801D8000",
+  "entry": "0x801d81b4",
+  "main_table": "0x801e22e0",
+  "second_table": "0x801e2468",
+  "unused_id_handler": "0x801d8698",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x04": {
+    "handler": "0x801d86d8",
+    "in": "overlay"
+   },
+   "0x06": {
+    "handler": "0x801d93ec",
+    "in": "overlay"
+   },
+   "0x07": {
+    "handler": "0x801dc84c",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE01": {
+  "overlay": "OVL/STAGE01.BIN",
+  "load_index": 2,
+  "load_address": "0x801D8000",
+  "entry": "0x801d802c",
+  "main_table": "0x801e6424",
+  "second_table": "0x801e65ac",
+  "unused_id_handler": "0x801d8510",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x05": {
+    "handler": "0x801d8550",
+    "in": "overlay",
+    "routine_table": "0x801e6694"
+   },
+   "0x09": {
+    "handler": "0x801d9060",
+    "in": "overlay",
+    "routine_table": "0x801e66e8"
+   },
+   "0x0A": {
+    "handler": "0x801d9bc8",
+    "in": "overlay",
+    "routine_table": "0x801e67ec"
+   },
+   "0x0B": {
+    "handler": "0x801db5ac",
+    "in": "overlay"
+   },
+   "0x0C": {
+    "handler": "0x801dbde4",
+    "in": "overlay"
+   },
+   "0x0D": {
+    "handler": "0x801dc984",
+    "in": "overlay",
+    "routine_table": "0x801e69b4"
+   },
+   "0x0E": {
+    "handler": "0x801dd760",
+    "in": "overlay"
+   },
+   "0x14": {
+    "handler": "0x801de2dc",
+    "in": "overlay"
+   },
+   "0x1F": {
+    "handler": "0x801de42c",
+    "in": "overlay",
+    "routine_table": "0x801e6ae0"
+   },
+   "0x22": {
+    "handler": "0x801e1738",
+    "in": "overlay",
+    "routine_table": "0x801e6c10"
+   },
+   "0x2C": {
+    "handler": "0x801e2024",
+    "in": "overlay",
+    "routine_table": "0x801e6c4c"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE02": {
+  "overlay": "OVL/STAGE02.BIN",
+  "load_index": 3,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8054",
+  "main_table": "0x801e8264",
+  "second_table": "0x801e83ec",
+  "unused_id_handler": "0x801d8538",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x08": {
+    "handler": "0x801d8578",
+    "in": "overlay",
+    "routine_table": "0x801e84c0"
+   },
+   "0x0F": {
+    "handler": "0x801d8eb0",
+    "in": "overlay"
+   },
+   "0x18": {
+    "handler": "0x801d9e40",
+    "in": "overlay"
+   },
+   "0x19": {
+    "handler": "0x801db1bc",
+    "in": "overlay"
+   },
+   "0x1D": {
+    "handler": "0x801dbdc0",
+    "in": "overlay"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x2B": {
+    "handler": "0x801dd2e0",
+    "in": "overlay",
+    "routine_table": "0x801e871c"
+   },
+   "0x3D": {
+    "handler": "0x801dda0c",
+    "in": "overlay",
+    "routine_table": "0x801e8750"
+   },
+   "0x40": {
+    "handler": "0x801ddbb0",
+    "in": "overlay",
+    "routine_table": "0x801e87d4"
+   },
+   "0x45": {
+    "handler": "0x801e1130",
+    "in": "overlay"
+   },
+   "0x4B": {
+    "handler": "0x801e2184",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE03": {
+  "overlay": "OVL/STAGE03.BIN",
+  "load_index": 4,
+  "load_address": "0x801D8000",
+  "entry": "0x801d80ac",
+  "main_table": "0x801e9688",
+  "second_table": "0x801e9810",
+  "unused_id_handler": "0x801d8590",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x09": {
+    "handler": "0x801d85d0",
+    "in": "overlay",
+    "routine_table": "0x801e9910"
+   },
+   "0x0D": {
+    "handler": "0x801d9138",
+    "in": "overlay",
+    "routine_table": "0x801e9a20"
+   },
+   "0x0E": {
+    "handler": "0x801d9f14",
+    "in": "overlay"
+   },
+   "0x11": {
+    "handler": "0x801daa90",
+    "in": "overlay",
+    "routine_table": "0x801e9ab8"
+   },
+   "0x12": {
+    "handler": "0x801db864",
+    "in": "overlay",
+    "routine_table": "0x801e9b04"
+   },
+   "0x13": {
+    "handler": "0x801dc174",
+    "in": "overlay"
+   },
+   "0x17": {
+    "handler": "0x801dc7d8",
+    "in": "overlay"
+   },
+   "0x1E": {
+    "handler": "0x801dddfc",
+    "in": "overlay",
+    "routine_table": "0x801e9bf8"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x23": {
+    "handler": "0x801de744",
+    "in": "overlay"
+   },
+   "0x25": {
+    "handler": "0x801dfce0",
+    "in": "overlay"
+   },
+   "0x26": {
+    "handler": "0x801e0a6c",
+    "in": "overlay"
+   },
+   "0x27": {
+    "handler": "0x801e12ec",
+    "in": "overlay",
+    "routine_table": "0x801e9d58"
+   },
+   "0x28": {
+    "handler": "0x801e3ba4",
+    "in": "overlay",
+    "routine_table": "0x801e9e3c"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE04": {
+  "overlay": "OVL/STAGE04.BIN",
+  "load_index": 5,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8004",
+  "main_table": "0x801e6a2c",
+  "second_table": "0x801e6bb4",
+  "unused_id_handler": "0x801d84e8",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x08": {
+    "handler": "0x801d8528",
+    "in": "overlay",
+    "routine_table": "0x801e6c98"
+   },
+   "0x09": {
+    "handler": "0x801d9a00",
+    "in": "overlay",
+    "routine_table": "0x801e6d34"
+   },
+   "0x10": {
+    "handler": "0x801da568",
+    "in": "overlay"
+   },
+   "0x15": {
+    "handler": "0x801db000",
+    "in": "overlay"
+   },
+   "0x16": {
+    "handler": "0x801db460",
+    "in": "overlay",
+    "routine_table": "0x801e6dd0"
+   },
+   "0x1A": {
+    "handler": "0x801db89c",
+    "in": "overlay",
+    "routine_table": "0x801e6dec"
+   },
+   "0x1B": {
+    "handler": "0x801dc008",
+    "in": "overlay"
+   },
+   "0x1C": {
+    "handler": "0x801dc7d8",
+    "in": "overlay"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x22": {
+    "handler": "0x801dd840",
+    "in": "overlay",
+    "routine_table": "0x801e6ec0"
+   },
+   "0x24": {
+    "handler": "0x801de12c",
+    "in": "overlay",
+    "routine_table": "0x801e70a4"
+   },
+   "0x2A": {
+    "handler": "0x801deb8c",
+    "in": "overlay"
+   },
+   "0x31": {
+    "handler": "0x801dbe40",
+    "in": "overlay"
+   },
+   "0x35": {
+    "handler": "0x801e1094",
+    "in": "overlay",
+    "routine_table": "0x801e723c"
+   },
+   "0x36": {
+    "handler": "0x801e3714",
+    "in": "overlay",
+    "routine_table": "0x801e73f8"
+   },
+   "0x38": {
+    "handler": "0x801e482c",
+    "in": "overlay",
+    "routine_table": "0x801e7458"
+   },
+   "0x39": {
+    "handler": "0x801e4aec",
+    "in": "overlay",
+    "routine_table": "0x801e7470"
+   },
+   "0x4B": {
+    "handler": "0x801e5068",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE05": {
+  "overlay": "OVL/STAGE05.BIN",
+  "load_index": 6,
+  "load_address": "0x801D8000",
+  "entry": "0x801d80a8",
+  "main_table": "0x801e9fdc",
+  "second_table": "0x801ea164",
+  "unused_id_handler": "0x801d858c",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x10": {
+    "handler": "0x801d85cc",
+    "in": "overlay"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x29": {
+    "handler": "0x801d9064",
+    "in": "overlay"
+   },
+   "0x2B": {
+    "handler": "0x801dd2e0",
+    "in": "overlay"
+   },
+   "0x2D": {
+    "handler": "0x801d9bbc",
+    "in": "overlay"
+   },
+   "0x2F": {
+    "handler": "0x801da5ac",
+    "in": "overlay"
+   },
+   "0x31": {
+    "handler": "0x801dbe40",
+    "in": "overlay",
+    "routine_table": "0x801ea3f8"
+   },
+   "0x32": {
+    "handler": "0x801dcba4",
+    "in": "overlay",
+    "routine_table": "0x801ea440"
+   },
+   "0x33": {
+    "handler": "0x801dd7e0",
+    "in": "overlay",
+    "routine_table": "0x801ea464"
+   },
+   "0x34": {
+    "handler": "0x801dfd1c",
+    "in": "overlay"
+   },
+   "0x44": {
+    "handler": "0x801e079c",
+    "in": "overlay"
+   },
+   "0x4A": {
+    "handler": "0x801e09f0",
+    "in": "overlay",
+    "routine_table": "0x801ea678"
+   },
+   "0x4C": {
+    "handler": "0x801e0c6c",
+    "in": "overlay",
+    "routine_table": "0x801ea6f8"
+   },
+   "0x4D": {
+    "handler": "0x801e2a44",
+    "in": "overlay",
+    "routine_table": "0x801ea7dc"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE06": {
+  "overlay": "OVL/STAGE06.BIN",
+  "load_index": 7,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8128",
+  "main_table": "0x801e5410",
+  "second_table": "0x801e5598",
+  "unused_id_handler": "0x801d860c",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x07": {
+    "handler": "0x801d864c",
+    "in": "overlay"
+   },
+   "0x13": {
+    "handler": "0x801dac00",
+    "in": "overlay"
+   },
+   "0x1C": {
+    "handler": "0x801d970c",
+    "in": "overlay"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x30": {
+    "handler": "0x801da774",
+    "in": "overlay",
+    "routine_table": "0x801e5768"
+   },
+   "0x39": {
+    "handler": "0x801db264",
+    "in": "overlay",
+    "routine_table": "0x801e579c"
+   },
+   "0x3A": {
+    "handler": "0x801db7e0",
+    "in": "overlay",
+    "routine_table": "0x801e57f8"
+   },
+   "0x3B": {
+    "handler": "0x801ddc80",
+    "in": "overlay",
+    "routine_table": "0x801e5998"
+   },
+   "0x3E": {
+    "handler": "0x801df3bc",
+    "in": "overlay"
+   },
+   "0x3F": {
+    "handler": "0x801dfb9c",
+    "in": "overlay"
+   },
+   "0x42": {
+    "handler": "0x801e16a8",
+    "in": "overlay"
+   },
+   "0x43": {
+    "handler": "0x801e19e0",
+    "in": "overlay"
+   },
+   "0x4B": {
+    "handler": "0x801e242c",
+    "in": "overlay"
+   },
+   "0x53": {
+    "handler": "0x801e3100",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE07": {
+  "overlay": "OVL/STAGE07.BIN",
+  "load_index": 8,
+  "load_address": "0x801D8000",
+  "entry": "0x801d805c",
+  "main_table": "0x801e0588",
+  "second_table": "0x801e0710",
+  "unused_id_handler": "0x801d8540",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x2E": {
+    "handler": "0x801d8580",
+    "in": "overlay",
+    "routine_table": "0x801e082c"
+   },
+   "0x38": {
+    "handler": "0x801d8c34",
+    "in": "overlay",
+    "routine_table": "0x801e084c"
+   },
+   "0x39": {
+    "handler": "0x801d8ef4",
+    "in": "overlay",
+    "routine_table": "0x801e0864"
+   },
+   "0x41": {
+    "handler": "0x801d9470",
+    "in": "overlay"
+   },
+   "0x47": {
+    "handler": "0x801da580",
+    "in": "overlay"
+   },
+   "0x53": {
+    "handler": "0x801daf38",
+    "in": "overlay"
+   },
+   "0x56": {
+    "handler": "0x801db5c8",
+    "in": "overlay",
+    "routine_table": "0x801e0a14"
+   },
+   "0x57": {
+    "handler": "0x801dd1e0",
+    "in": "overlay",
+    "routine_table": "0x801e0aec"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE08": {
+  "overlay": "OVL/STAGE08.BIN",
+  "load_index": 9,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8034",
+  "main_table": "0x801e0cec",
+  "second_table": "0x801e0e74",
+  "unused_id_handler": "0x801d8518",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x13": {
+    "handler": "0x801d8558",
+    "in": "overlay"
+   },
+   "0x2E": {
+    "handler": "0x801d8bbc",
+    "in": "overlay",
+    "routine_table": "0x801e0fa8"
+   },
+   "0x37": {
+    "handler": "0x801d9270",
+    "in": "overlay",
+    "routine_table": "0x801e0fc8"
+   },
+   "0x39": {
+    "handler": "0x801d9468",
+    "in": "overlay",
+    "routine_table": "0x801e0fe0"
+   },
+   "0x3C": {
+    "handler": "0x801d99e4",
+    "in": "overlay"
+   },
+   "0x46": {
+    "handler": "0x801da6fc",
+    "in": "overlay"
+   },
+   "0x48": {
+    "handler": "0x801db9c4",
+    "in": "overlay",
+    "routine_table": "0x801e112c"
+   },
+   "0x49": {
+    "handler": "0x801de4b8",
+    "in": "overlay",
+    "routine_table": "0x801e129c"
+   },
+   "0x54": {
+    "handler": "0x801e02e8",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE09": {
+  "overlay": "OVL/STAGE09.BIN",
+  "load_index": 10,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8018",
+  "main_table": "0x801db784",
+  "second_table": "0x801db90c",
+  "unused_id_handler": "0x801d84fc",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x4B": {
+    "handler": "0x801d853c",
+    "in": "overlay"
+   },
+   "0x4F": {
+    "handler": "0x801d9210",
+    "in": "overlay"
+   },
+   "0x50": {
+    "handler": "0x801d9684",
+    "in": "overlay"
+   },
+   "0x55": {
+    "handler": "0x801db0d0",
+    "in": "overlay",
+    "routine_table": "0x801dbb10"
+   },
+   "0x58": {
+    "handler": "0x801db2b0",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE0A": {
+  "overlay": "OVL/STAGE0A.BIN",
+  "load_index": 11,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8078",
+  "main_table": "0x801e188c",
+  "second_table": "0x801e1a14",
+  "unused_id_handler": "0x801d855c",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x09": {
+    "handler": "0x801d859c",
+    "in": "overlay",
+    "routine_table": "0x801e1b24"
+   },
+   "0x0A": {
+    "handler": "0x801d9104",
+    "in": "overlay",
+    "routine_table": "0x801e1c28"
+   },
+   "0x0D": {
+    "handler": "0x801daae8",
+    "in": "overlay",
+    "routine_table": "0x801e1d6c"
+   },
+   "0x10": {
+    "handler": "0x801db8c4",
+    "in": "overlay"
+   },
+   "0x1B": {
+    "handler": "0x801dc35c",
+    "in": "overlay"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x51": {
+    "handler": "0x801dcb2c",
+    "in": "overlay",
+    "routine_table": "0x801e1e04"
+   },
+   "0x52": {
+    "handler": "0x801dfc70",
+    "in": "overlay"
+   },
+   "0x60": {
+    "handler": "0x801e4158",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE0B": {
+  "overlay": "OVL/STAGE0B.BIN",
+  "load_index": 12,
+  "load_address": "0x801D8000",
+  "entry": "0x801d80d8",
+  "main_table": "0x801e802c",
+  "second_table": "0x801e81b4",
+  "unused_id_handler": "0x801d85bc",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x08": {
+    "handler": "0x801d85fc",
+    "in": "overlay",
+    "routine_table": "0x801e8298"
+   },
+   "0x0E": {
+    "handler": "0x801d8f34",
+    "in": "overlay"
+   },
+   "0x11": {
+    "handler": "0x801db04c",
+    "in": "overlay",
+    "routine_table": "0x801e8394"
+   },
+   "0x17": {
+    "handler": "0x801dbe20",
+    "in": "overlay"
+   },
+   "0x1E": {
+    "handler": "0x801dd444",
+    "in": "overlay",
+    "routine_table": "0x801e847c"
+   },
+   "0x20": {
+    "handler": "0x8012466c",
+    "in": "PSX.EXE"
+   },
+   "0x21": {
+    "handler": "0x80124e10",
+    "in": "PSX.EXE"
+   },
+   "0x22": {
+    "handler": "0x801ddd8c",
+    "in": "overlay",
+    "routine_table": "0x801e84b4"
+   },
+   "0x23": {
+    "handler": "0x801d9ab0",
+    "in": "overlay"
+   },
+   "0x38": {
+    "handler": "0x801de678",
+    "in": "overlay",
+    "routine_table": "0x801e84dc"
+   },
+   "0x39": {
+    "handler": "0x801de938",
+    "in": "overlay",
+    "routine_table": "0x801e84f4"
+   },
+   "0x4B": {
+    "handler": "0x801deeb4",
+    "in": "overlay"
+   },
+   "0x53": {
+    "handler": "0x801dfb88",
+    "in": "overlay"
+   },
+   "0x59": {
+    "handler": "0x801e0218",
+    "in": "overlay"
+   },
+   "0x60": {
+    "handler": "0x801e4158",
+    "in": "overlay"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE0C": {
+  "overlay": "OVL/STAGE0C.BIN",
+  "load_index": 13,
+  "load_address": "0x801D8000",
+  "entry": "0x801d81ac",
+  "main_table": "0x801ea6f4",
+  "second_table": "0x801ea87c",
+  "unused_id_handler": "0x801d8690",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x09": {
+    "handler": "0x801d86d0",
+    "in": "overlay",
+    "routine_table": "0x801ea98c"
+   },
+   "0x13": {
+    "handler": "0x801da2a0",
+    "in": "overlay"
+   },
+   "0x1C": {
+    "handler": "0x801d9238",
+    "in": "overlay"
+   },
+   "0x22": {
+    "handler": "0x801da904",
+    "in": "overlay",
+    "routine_table": "0x801eaa4c"
+   },
+   "0x32": {
+    "handler": "0x801db1f0",
+    "in": "overlay",
+    "routine_table": "0x801eaa80"
+   },
+   "0x39": {
+    "handler": "0x801dbe2c",
+    "in": "overlay",
+    "routine_table": "0x801eaab0"
+   },
+   "0x41": {
+    "handler": "0x801dc3a8",
+    "in": "overlay"
+   },
+   "0x46": {
+    "handler": "0x801dd4b8",
+    "in": "overlay"
+   },
+   "0x4B": {
+    "handler": "0x801de780",
+    "in": "overlay"
+   },
+   "0x4E": {
+    "handler": "0x801df454",
+    "in": "overlay"
+   },
+   "0x53": {
+    "handler": "0x801e5534",
+    "in": "overlay"
+   },
+   "0x5D": {
+    "handler": "0x801e5bc4",
+    "in": "overlay"
+   },
+   "0x5E": {
+    "handler": "0x801e8c9c",
+    "in": "overlay"
+   },
+   "0x5F": {
+    "handler": "0x801e97d8",
+    "in": "overlay",
+    "routine_table": "0x801eb07c"
+   },
+   "0x61": {
+    "handler": "0x80128568",
+    "in": "PSX.EXE"
+   }
+  }
+ },
+ "STAGE0D": {
+  "overlay": "OVL/STAGE0D.BIN",
+  "load_index": 14,
+  "load_address": "0x801D8000",
+  "entry": "0x801d8048",
+  "main_table": "0x801f7e38",
+  "second_table": "0x801f7fc0",
+  "unused_id_handler": "0x801d852c",
+  "enemies": {
+   "0x00": {
+    "handler": "0x80122734",
+    "in": "PSX.EXE",
+    "routine_table": "0x8015093c"
+   },
+   "0x01": {
+    "handler": "0x801228e8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150958"
+   },
+   "0x02": {
+    "handler": "0x80123164",
+    "in": "PSX.EXE"
+   },
+   "0x03": {
+    "handler": "0x80123fa8",
+    "in": "PSX.EXE",
+    "routine_table": "0x80150a08"
+   },
+   "0x1F": {
+    "handler": "0x801d856c",
+    "in": "overlay",
+    "routine_table": "0x801f8140"
+   },
+   "0x27": {
+    "handler": "0x801dca2c",
+    "in": "overlay",
+    "routine_table": "0x801f831c"
+   },
+   "0x28": {
+    "handler": "0x801df2e4",
+    "in": "overlay",
+    "routine_table": "0x801f8400"
+   },
+   "0x2C": {
+    "handler": "0x801db878",
+    "in": "overlay",
+    "routine_table": "0x801f8284"
+   },
+   "0x35": {
+    "handler": "0x801dfcf0",
+    "in": "overlay",
+    "routine_table": "0x801f84b4"
+   },
+   "0x36": {
+    "handler": "0x801e2370",
+    "in": "overlay",
+    "routine_table": "0x801f8670"
+   },
+   "0x3A": {
+    "handler": "0x801e3488",
+    "in": "overlay",
+    "routine_table": "0x801f8714"
+   },
+   "0x3B": {
+    "handler": "0x801e5928",
+    "in": "overlay",
+    "routine_table": "0x801f88b4"
+   },
+   "0x40": {
+    "handler": "0x801e7064",
+    "in": "overlay",
+    "routine_table": "0x801f89a4"
+   },
+   "0x48": {
+    "handler": "0x801ea5e4",
+    "in": "overlay",
+    "routine_table": "0x801f8b14"
+   },
+   "0x49": {
+    "handler": "0x801ed0d8",
+    "in": "overlay",
+    "routine_table": "0x801f8c84"
+   },
+   "0x4C": {
+    "handler": "0x801eef08",
+    "in": "overlay",
+    "routine_table": "0x801f8d9c"
+   },
+   "0x4D": {
+    "handler": "0x801f0ce0",
+    "in": "overlay",
+    "routine_table": "0x801f8e80"
+   },
+   "0x56": {
+    "handler": "0x801f1580",
+    "in": "overlay",
+    "routine_table": "0x801f8f34"
+   },
+   "0x57": {
+    "handler": "0x801f3198",
+    "in": "overlay",
+    "routine_table": "0x801f900c"
+   },
+   "0x58": {
+    "handler": "0x801f4370",
+    "in": "overlay"
+   },
+   "0x5A": {
+    "handler": "0x80125a64",
+    "in": "PSX.EXE"
+   },
+   "0x5B": {
+    "handler": "0x801f4844",
+    "in": "overlay"
+   },
+   "0x5C": {
+    "handler": "0x801f4e00",
+    "in": "overlay"
+   }
+  }
+ }
+}

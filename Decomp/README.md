@@ -1,7 +1,9 @@
 # Decompiled enemy code
 
 One `.c` file per enemy handler: `STAGExx/ID.c` for code that lives in that stage's overlay, `EXE/ID.c`
-for the few handlers in PSX.EXE (for those only the main handler function is included).
+for the few handlers in PSX.EXE (for those only the main handler function is included). Items, type 3
+objects and effects are in the same folders as `T2_ID.c`, `T3_ID.c` and `T4_ID.c` (see the end of this
+file).
 Each overlay file holds the handler and every overlay function it reaches (its state functions and
 helpers), in address order.
 
@@ -198,3 +200,18 @@ reference accounted for. That was checked statically for all of them; only the P
 | 5F |  | STAGE0C | 2708 bytes |  |  | yes |
 | 60 |  | STAGE0A | - |  |  | no: no overlay functions |
 | 60 |  | STAGE0B | 4884 bytes |  |  | yes |
+
+## Items, type 3 objects and effects
+
+`T2_ID.c` is an item (type 2, the editor's blue boxes), `T3_ID.c` a type 3 object and `T4_ID.c` an effect
+(type 4, pink), made the same way as the enemy files. For type 3 and effects a stage folder only has the
+ones that stage owns: their PSX.EXE table entry is a fixed overlay address, and other overlays sometimes
+have an unrelated function starting at that same address. The owner is the stage that spawns the ID (from
+code or its enemy list); [../Docs/Items.md](../Docs/Items.md) lists them.
+
+The struct is the 0x60-byte enemy one. Item slots are 0x50 bytes and effect slots 0x18. The effect code
+only touches fields below `+0x18`, and it uses `+0x14..+0x17` as its own scratch bytes, so `speed_x` in a
+`T4` file is not a speed.
+
+Which stages each one can be moved into, its banks and child objects are in
+[../Docs/object-handlers.json](../Docs/object-handlers.json).

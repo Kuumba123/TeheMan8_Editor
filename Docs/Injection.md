@@ -113,9 +113,57 @@ rebuild can do the same job.
 
 - **Child objects.** If the enemy creates other main-pool objects (projectiles, parts), those IDs need
   code in the target stage too. Some enemies create type 3 or type 4 objects whose PSX.EXE table entry is
-  a fixed address inside one particular overlay; those only work in that stage and need more than this
-  tool does. Both are listed per enemy in [../Decomp/README.md](../Decomp/README.md).
+  a fixed address inside one particular overlay; move those too, as below, when that address is free in
+  the target. Both are listed per enemy in [../Decomp/README.md](../Decomp/README.md).
 - **Sound effects.** Sounds are played by number. One that is not in the target stage's sound data
   probably plays something else or nothing; not checked.
 - **Several versions.** 7 IDs have different code in different stages; take the version you want.
 - **IDs whose code is in PSX.EXE** (00-03 and a few others) need only the graphics part.
+
+## Items, type 3 objects and effects
+
+The same four steps apply, with these differences.
+
+- **Items (type 2)** dispatch through the overlay's second table (`second_table` and `second_count` in
+  `closures.json`). It has 0x34 entries, but only 0x30 in STAGE02 and STAGE03, so items 30-33 have no slot
+  there. Append the code and point the slot at it, as for an enemy.
+- **Type 3 objects and effects (type 4)** dispatch through tables in PSX.EXE (`0x8015029C`, `0x8015039C`)
+  with one entry per ID for every stage. For a stage-specific object that entry is a fixed address inside
+  the overlay that owns it, so changing the entry would break the owner. Instead the copy is placed so its
+  handler lands exactly on that address: lay out code and data as for an enemy, pick the start so the
+  handler falls on the table address, and pad the target overlay up to it. That only works when the
+  address is past the end of the target overlay (and the copy still ends before `0x801F923C`); the tool
+  stops with an error otherwise. Two of these going into one stage must not overlap, and the lower one has
+  to go in first.
+- **Graphics.** Items and effects do not use the enemy property table. Their code sets the bank as a
+  constant and reads its tile base and CLUT byte straight from entries 7 and 8 (`0x80170348 + bank * 2`,
+  `0x80159F64 + bank`). `closures.json` lists those banks per object (`banks`) and the tool copies each one
+  like an enemy bank.
+- **Enemy-list record.** The type byte picks the pool: 2 for an item, 3 for a type 3 object, 4 for an
+  effect.
+- **Which stage owns a fixed address.** Several overlays can happen to have a function starting at the
+  same address. The owner is the stage whose code spawns that ID or whose enemy list has it, and that is
+  the one listed in [Items.md](Items.md). Type 3 ID 11 has candidates in STAGE01 and STAGE06 and nothing
+  spawns it in either, so its owner is not settled.
+- **What stays tied to the original stage.** Objects that call PSX.EXE `0x80102EF4` edit the stage map from
+  a list picked by stage number, so in another stage they apply that stage's entry instead (the falling
+  platform below leaves an intro-stage tile behind where it stood). Objects that read the stage number at
+  `0x801C336E` choose an animation or behaviour from it. Both are noted per object in
+  [object-handlers.json](object-handlers.json) (`stage_dependent`), along with the banks, the child objects
+  and which stages each object can be moved into.
+
+Tested in PCSX-Redux on a patched disc image, both moved from STAGE01 into the intro stage:
+
+```
+mm8_inject.py <files> Tools/closures.json 01 00 item:03 out1 --spawn 1000,441
+mm8_inject.py <files + out1> Tools/closures.json 01 00 effect:09 out2 --spawn 1200,441,1
+disc_patch.py <track 1> <new track 1> out2 Tools/closures.json
+```
+
+The falling platform (item 03) spawned with its own graphics, shook when Mega Man stood on it and fell
+(state 1, 2, 3; y 441 to 616). Effect 09 with var 1 spawned in the effect pool and, once Mega Man came
+within 0x18 of it, wrote 0x80 to `0x801B2995` and freed itself: its handler ran at `0x801E5290`, past the
+intro stage's own code, which ends at `0x801E39A0` after the platform. The overlay in RAM matched the
+patched file.
+
+![Falling platform in the intro stage](images/platform-moved.png)

@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-"""Copy one enemy from one Mega Man 8 stage into another, working on the extracted disc files.
+"""Copy one enemy, item, type-3 object or effect from one Mega Man 8 stage into another, working on the
+extracted disc files.
 
-    mm8_inject.py <files dir> <closures.json> <source stage> <target stage> <id> <out dir> [--spawn X,Y[,VAR]]
+    mm8_inject.py <files dir> <closures.json> <source stage> <target stage> [<kind>:]<id> <out dir> [--spawn X,Y[,VAR]]
 
-<files dir> holds SLUS_004.53, OVL/ and STDATA/ as on the disc. Stages are 00..0D. <id> is the main-pool
-enemy ID in hex. Writes OVL/STAGEtt.BIN, STDATA/STAGEtt.PAC (and STAGEttB.PAC when it exists) and
-SLUS_004.53 into <out dir>:
+<files dir> holds SLUS_004.53, OVL/ and STDATA/ as on the disc. Stages are 00..0D. <kind> is enemy (the
+default, main pool), item (type 2), type3 or effect (type 4); <id> is the object ID in hex. Writes
+OVL/STAGEtt.BIN, STDATA/STAGEtt.PAC (and STAGEttB.PAC when it exists) and SLUS_004.53 into <out dir>:
 
-- the enemy's code and its overlay's data blocks are appended to the target overlay, relocated to their new
-  address, and the target's handler table slot for <id> points at the copy;
-- the enemy's sprite bank (from the property table in PSX.EXE) gets the source stage's frames appended to
-  PAC entry 5, its entry 6/7/8 slots filled, its tiles copied into free tiles of entry 0x102 (remapped) and
-  its palettes into free palette slots of entry 9;
+- the object's code and its overlay's data blocks are added to the target overlay, relocated to their new
+  address. Enemies and items are appended and the target's own handler table (main or second) points at
+  the copy. Type-3 objects and effects dispatch through PSX.EXE tables that hold one FIXED overlay address
+  per ID for every stage, so their copy is placed so the handler lands exactly at that address; the
+  overlay is padded up to it. That only works when the address is past the end of the target overlay;
+  otherwise it stops with an error;
+- every sprite bank the object uses (the property table bank for an enemy, plus any bank its code names)
+  gets the source stage's frames appended to PAC entry 5, its entry 6/7/8 slots filled, its tiles copied
+  into free tiles of entry 0x102 (remapped) and its palettes into free palette slots of entry 9;
 - the overlay and PAC sizes in PSX.EXE's file table are updated. The LBAs are not: putting the bigger files
-  on the disc and fixing the LBAs is the disc rebuild's job;
-- with --spawn, a record for the enemy is added to the target's enemy list (PAC entry 0x0A).
+  on the disc and fixing the LBAs is the disc rebuild's job (disc_patch.py);
+- with --spawn, a record for the object is added to the target's enemy list (PAC entry 0x0A) with the
+  record type that selects its pool (1 enemy, 2 item, 3 type 3, 4 effect).
 
 Stops with an error rather than guessing when something does not fit or cannot be relocated.
 """
@@ -121,7 +127,8 @@ def relocate(src, funcs, blocks, new_base):
 def bank_span(e5, e6, b):
     nb = len(e6) // 4
     offs = [struct.unpack_from('<I', e6, k * 4)[0] for k in range(nb)] + [len(e5)]
-    return offs[b], min(o for o in offs if o > offs[b])
+    if b >= nb: raise InjectError('bank %X is past the stage\'s bank table (%X banks)' % (b, nb))
+    return offs[b], min([o for o in offs if o > offs[b]] or [offs[b]])
 
 def used_tiles(e5, e6, e7):
     nb = len(e7) // 2; used = set()
@@ -188,46 +195,85 @@ def copy_bank(sp, dp, bank, log):
                (bank, len(frames), off, len(remap), slot[0], slot[1], ncl))
 
 # ---------------------------------------------------------------- main
+KINDS = {'enemy': ('enemies', 1), 'item': ('items', 2), 'type3': ('type3', 3), 'effect': ('effects', 4)}
+EXE_TABLE = {'type3': (0x8015029C, 0x40), 'effect': (0x8015039C, 0x34)}
+
 def main():
     a = sys.argv[1:]
     spawn = None
     if '--spawn' in a:
         i = a.index('--spawn'); spawn = [int(x, 0) for x in a[i + 1].split(',')]; del a[i:i + 2]
-    files, clpath, s, t, eid, out = a[0], a[1], a[2].upper(), a[3].upper(), int(a[4], 16), a[5]
+    files, clpath, s, t, what, out = a[0], a[1], a[2].upper(), a[3].upper(), a[4], a[5]
+    kind, _, idtxt = what.rpartition(':')
+    kind = kind or 'enemy'
+    if kind not in KINDS: raise InjectError('unknown kind %r (enemy, item, type3, effect)' % kind)
+    group, rtype = KINDS[kind]; eid = int(idtxt, 16)
     cl = json.load(open(clpath))
     exe = bytearray(open(os.path.join(files, 'SLUS_004.53'), 'rb').read())
     def exe_off(addr): return addr - EXE_TEXT + 0x800
     src = open(os.path.join(files, 'OVL', 'STAGE%s.BIN' % s), 'rb').read()
     dst = bytearray(open(os.path.join(files, 'OVL', 'STAGE%s.BIN' % t), 'rb').read())
     log = []
-    ent = cl['STAGE' + s]['enemies'].get('%02X' % eid)
     tgt = cl['STAGE' + t]
-    if ent is None: raise InjectError('ID %02X has no overlay code in STAGE%s' % (eid, s))
-    if tgt['enemies'].get('%02X' % eid): log.append('note: STAGE%s already has its own code for ID %02X; replacing the slot' % (t, eid))
+    if kind in EXE_TABLE:
+        tab, n = EXE_TABLE[kind]
+        if eid >= n: raise InjectError('%s IDs go up to %02X' % (kind, n - 1))
+        h = struct.unpack_from('<I', exe, exe_off(tab + eid * 4))[0]
+        if h < OB:
+            raise InjectError('%s %02X is PSX.EXE code at %08X: it already works in every stage, nothing to move' % (kind, eid, h))
+    ent = cl['STAGE' + s][group].get('%02X' % eid)
+    if ent is None: raise InjectError('%s %02X has no overlay code in STAGE%s' % (kind, eid, s))
+    if tgt[group].get('%02X' % eid):
+        if kind in EXE_TABLE: raise InjectError('STAGE%s already has the code for %s %02X' % (t, kind, eid))
+        log.append('note: STAGE%s already has its own code for %s %02X; replacing the slot' % (t, kind, eid))
     funcs = [[int(f[0], 16), int(f[1], 16), int(f[2], 16)] for f in ent['funcs']]
     blocks = [[int(x, 16), int(y, 16)] for x, y in cl['STAGE' + s]['data_blocks']]
-    new_base = (OB + len(dst) + 15) & ~15
+    handler = int(ent['handler'], 16)
+    end = OB + len(dst)
+    if kind in EXE_TABLE:
+        # PSX.EXE's table holds the handler's fixed address for every stage: put the copy exactly there.
+        _, r0 = relocate(src, funcs, blocks, 0x80300000)
+        new_base = handler - (r0(handler) - 0x80300000)
+        if new_base < end:
+            raise InjectError('%s %02X must sit at %08X, but its copy would start at %08X, inside STAGE%s (ends %08X)'
+                              % (kind, eid, handler, new_base, t, end))
+    else:
+        new_base = (end + 15) & ~15
     image, reloc = relocate(src, funcs, blocks, new_base)
     if new_base + len(image) > OVL_LIMIT: raise InjectError('target overlay would end at %08X, past %08X' % (new_base + len(image), OVL_LIMIT))
-    dst += b'\0' * (new_base - OB - len(dst)) + image
-    slot = int(tgt['main_table'], 16) - OB + eid * 4
-    struct.pack_into('<I', dst, slot, reloc(int(ent['handler'], 16)))
-    log.append('code+data: %d bytes at %08X, handler %08X' % (len(image), new_base, reloc(int(ent['handler'], 16))))
-    bank = exe[exe_off(PROPS + eid * 4)]
+    dst += b'\0' * (new_base - end) + image
+    if kind == 'enemy':
+        slot = int(tgt['main_table'], 16) - OB + eid * 4
+    elif kind == 'item':
+        if eid >= tgt['second_count']: raise InjectError('STAGE%s\'s item table has only %X entries' % (t, tgt['second_count']))
+        slot = int(tgt['second_table'], 16) - OB + eid * 4
+    else:
+        slot = None
+        if reloc(handler) != handler: raise InjectError('internal: pinned handler moved')
+    if slot is not None: struct.pack_into('<I', dst, slot, reloc(handler))
+    log.append('code+data: %d bytes at %08X (%d padding), handler %08X' % (len(image), new_base, new_base - end, reloc(handler)))
+    banks = list(ent.get('banks', []))
+    if kind == 'enemy':
+        pb = exe[exe_off(PROPS + eid * 4)]
+        banks = [pb] + [b for b in banks if b != pb]
     sp = pac_read(os.path.join(files, 'STDATA', 'STAGE%s.PAC' % s))
     pacs = ['STAGE%s.PAC' % t] + (['STAGE%sB.PAC' % t] if os.path.exists(os.path.join(files, 'STDATA', 'STAGE%sB.PAC' % t)) else [])
     os.makedirs(os.path.join(out, 'OVL'), exist_ok=True); os.makedirs(os.path.join(out, 'STDATA'), exist_ok=True)
     names = cl['disc_files']
     for pn in pacs:
         dp = pac_read(os.path.join(files, 'STDATA', pn))
-        copy_bank(sp, dp, bank, log)
+        for i, b in enumerate(banks):
+            try: copy_bank(sp, dp, b, log)
+            except InjectError as e:
+                if kind == 'enemy' and i == 0: raise
+                log.append('%s: bank %X not copied: %s' % (pn, b, e))
         if spawn:
             lst = pac_get(dp, 0x0A); i = 0
             while lst[i * 8 + 3] != 0xFF: i += 1
             if (i + 2) * 8 > len(lst): raise InjectError('enemy list is full')
             var = spawn[2] if len(spawn) > 2 else 0
-            lst[i * 8:i * 8 + 16] = struct.pack('<BBBBhh', 0, eid, var, 1, spawn[0], spawn[1]) + struct.pack('<BBBBhh', 0, 0, 0, 0xFF, 0, 0)
-            log.append('%s: spawn record %d at %d,%d' % (pn, i, spawn[0], spawn[1]))
+            lst[i * 8:i * 8 + 16] = struct.pack('<BBBBhh', 0, eid, var, rtype, spawn[0], spawn[1]) + struct.pack('<BBBBhh', 0, 0, 0, 0xFF, 0, 0)
+            log.append('%s: spawn record %d (type %d) at %d,%d' % (pn, i, rtype, spawn[0], spawn[1]))
         pac_write(os.path.join(out, 'STDATA', pn), dp)
         k = names.index('LBA_%s_PAC' % pn[:-4])
         struct.pack_into('<I', exe, exe_off(FILE_TABLE + k * 12 + 4), os.path.getsize(os.path.join(out, 'STDATA', pn)))

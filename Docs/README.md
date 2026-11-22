@@ -9,6 +9,8 @@ Notes on where Mega Man 8 (NTSC-U, SLUS-004.53) keeps its enemy code and data, w
 - [EnemyTable.md](EnemyTable.md): the per-ID property table in PSX.EXE (sprite bank, HP, contact
   damage, damage table) and the weapon damage tables.
 - [Items.md](Items.md): the item (type 2), type 3 and effect (type 4) handler tables.
+- [Injection.md](Injection.md): putting an enemy into a stage whose overlay does not have its code, with
+  the tools in [../Tools](../Tools) and the decompiled enemy code in [../Decomp](../Decomp).
 - [Sprites.md](Sprites.md): which PAC entries hold the sprite data, the frame and animation formats, and
   how to draw an enemy from an ID.
 - [enemy-handlers.json](enemy-handlers.json): for every stage overlay, the handler address of each ID

@@ -60,9 +60,9 @@ reference accounted for. That was checked statically for all of them; only the P
 | 0A | Chungus | STAGE0A | 8504 bytes |  |  | yes |
 | 0B | Ice Cube Launcher | STAGE01 | 4868 bytes |  |  | yes |
 | 0C | Ice Cube | STAGE01 | 5740 bytes |  | type2 00 | yes |
-| 0D |  | STAGE01 | 5972 bytes | 03, 0A |  | yes |
-| 0D |  | STAGE03 | 5508 bytes | 01, 0A |  | yes |
-| 0D |  | STAGE0A | 5084 bytes | 01, 03 |  | yes |
+| 0D |  | STAGE01 | 6312 bytes | 03, 0A |  | yes |
+| 0D |  | STAGE03 | 5848 bytes | 01, 0A |  | yes |
+| 0D |  | STAGE0A | 5424 bytes | 01, 03 |  | yes |
 | 0E | Ice Dropper Hogale | STAGE01 | 5544 bytes | 03, 0B |  | yes |
 | 0E | Ice Dropper Hogale | STAGE03 | 5080 bytes | 01, 0B |  | yes |
 | 0E | Ice Dropper Hogale | STAGE0B | 4532 bytes | 01, 03 |  | yes |
@@ -86,15 +86,15 @@ reference accounted for. That was checked statically for all of them; only the P
 | 19 | Kaizock | STAGE02 | 5492 bytes |  |  | yes |
 | 1A |  | STAGE04 | 4200 bytes |  |  | yes |
 | 1B | Fire Metal Spawner | STAGE04 | 8156 bytes |  | main ? | code yes, child needs manual work |
-| 1B | Fire Metal Spawner | STAGE0A | 12276 bytes |  | main ?, type3 3B (overlay address) | code yes, child needs manual work |
+| 1B | Fire Metal Spawner | STAGE0A | 12444 bytes |  | main ?, type3 3B (overlay address) | code yes, child needs manual work |
 | 1C | Count Bomb | STAGE04 | 6500 bytes | 06, 0C |  | yes |
 | 1C | Count Bomb | STAGE06 | 6132 bytes | 04, 0C |  | yes |
 | 1C | Count Bomb | STAGE0C | 6548 bytes | 04, 06 |  | yes |
 | 1D |  | STAGE02 | 7824 bytes |  |  | yes |
 | 1E | Hannya Attacker | STAGE03 | 4196 bytes | 0B |  | yes |
 | 1E | Hannya Attacker | STAGE0B | 3648 bytes | 03 |  | yes |
-| 1F | Frost Man | STAGE01 | 14260 bytes | 0D | main 2C | yes |
-| 1F | Frost Man | STAGE0D | 16092 bytes | 01 | main 2C | yes |
+| 1F | Frost Man | STAGE01 | 14732 bytes | 0D | main 2C | yes |
+| 1F | Frost Man | STAGE0D | 16564 bytes | 01 | main 2C | yes |
 | 22 | Bats | STAGE01 | 3228 bytes | 04, 0B, 0C |  | yes |
 | 22 | Bats | STAGE04 | 2764 bytes | 01, 0B, 0C |  | yes |
 | 22 | Bats | STAGE0B | 2216 bytes | 01, 04, 0C |  | yes |
@@ -104,10 +104,10 @@ reference accounted for. That was checked statically for all of them; only the P
 | 24 |  | STAGE04 | 4948 bytes |  |  | yes |
 | 25 |  | STAGE03 | 5768 bytes |  | type3 1D (overlay address) | code yes, child needs manual work |
 | 26 |  | STAGE03 | 2944 bytes |  |  | yes |
-| 27 | Tengu Man | STAGE03 | 12188 bytes | 0D |  | yes |
-| 27 | Tengu Man | STAGE0D | 14484 bytes | 03 |  | yes |
-| 28 |  | STAGE03 | 4664 bytes | 0D |  | yes |
-| 28 |  | STAGE0D | 6960 bytes | 03 |  | yes |
+| 27 | Tengu Man | STAGE03 | 12228 bytes | 0D |  | yes |
+| 27 | Tengu Man | STAGE0D | 14524 bytes | 03 |  | yes |
+| 28 |  | STAGE03 | 4872 bytes | 0D |  | yes |
+| 28 |  | STAGE0D | 7168 bytes | 03 |  | yes |
 | 29 | Lever | STAGE05 | 5060 bytes |  | type3 1F (overlay address) | code yes, child needs manual work |
 | 2A | Ururuun | STAGE04 | 8728 bytes |  | type2 33 | yes |
 | 2B |  | STAGE02 | 3324 bytes |  |  | yes |
@@ -155,8 +155,8 @@ reference accounted for. That was checked statically for all of them; only the P
 | 43 | Shell'n | STAGE06 | 4568 bytes |  |  | yes |
 | 44 |  | STAGE05 | 3800 bytes |  |  | yes |
 | 45 | Sisi Roll | STAGE02 | 4780 bytes |  |  | yes |
-| 46 | Gorilla | STAGE08 | 1164 bytes | 0C |  | yes |
-| 46 | Gorilla | STAGE0C | 2356 bytes | 08 |  | yes |
+| 46 | Gorilla | STAGE08 | 5964 bytes | 0C |  | yes |
+| 46 | Gorilla | STAGE0C | 7156 bytes | 08 |  | yes |
 | 47 | Crunchran | STAGE07 | 1604 bytes |  |  | yes |
 | 48 | Search Man | STAGE08 | 8620 bytes | 0D | main 49 | yes |
 | 48 | Search Man | STAGE0D | 12060 bytes | 08 | main 49 | yes |
@@ -176,7 +176,7 @@ reference accounted for. That was checked statically for all of them; only the P
 | 4E |  | STAGE0C | 22892 bytes |  | type3 3C (overlay address) | code yes, child needs manual work |
 | 4F |  | STAGE09 | 724 bytes |  |  | yes |
 | 50 |  | STAGE09 | 5676 bytes |  | main 55 | yes |
-| 51 |  | STAGE0A | 10356 bytes |  | type3 3B (overlay address) | code yes, child needs manual work |
+| 51 |  | STAGE0A | 10524 bytes |  | type3 3B (overlay address) | code yes, child needs manual work |
 | 52 |  | STAGE0A | 3560 bytes |  |  | yes |
 | 53 | Wall Teck | STAGE06 | 3612 bytes | 07, 0B, 0C |  | yes |
 | 53 | Wall Teck | STAGE07 | 2964 bytes | 06, 0B, 0C |  | yes |

@@ -56,6 +56,7 @@ void FUN_801d85fc(undefined1 *param_1)
   }
   FUN_80103794(uVar3,uVar4,uVar5);
   param_1[0x49] = 3;
+                    /* Possible PsyQ macro: setPolyGT4() */
   *(undefined1 **)(param_1 + 0x4c) = &DAT_80060000;
   *(undefined **)(param_1 + 0x3c) = &DAT_801f8090;
   *(undefined **)(param_1 + 0x38) = &DAT_801f80d4;

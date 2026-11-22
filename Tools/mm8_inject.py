@@ -63,6 +63,10 @@ def relocate(src, funcs, blocks, new_base):
         b = (b + 3) & ~3
         if code and a <= code[-1][1] + 0x10: code[-1][1] = max(code[-1][1], b)
         else: code.append([a, b])
+    for a, b in code:                                     # the copy must not run off its end
+        w = struct.unpack_from('<I', src, b - 8 - OB)[0]
+        if not (w == 0x03E00008 or w >> 26 == 2 or (w >> 26 == 0 and w & 0x3F == 8) or w >> 16 == 0x1000):
+            raise InjectError('code copied from %08X..%08X falls through past its end' % (a, b))
     layout, cur = [], new_base
     for a, b in code + [list(x) for x in blocks]:
         layout.append((a, b, cur)); cur += (b - a + 3) & ~3

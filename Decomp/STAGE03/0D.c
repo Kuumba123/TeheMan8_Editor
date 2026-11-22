@@ -426,6 +426,7 @@ void FUN_801d9bc4(int param_1)
       goto LAB_801d9cf8;
     }
     *(undefined1 *)(param_1 + 0x5f) = 1;
+                    /* Possible PsyQ macro: setPolyF4() */
     uVar1 = 1;
     goto LAB_801d9d04;
   case 1:

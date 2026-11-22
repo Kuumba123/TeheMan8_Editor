@@ -1,0 +1,3969 @@
+{
+ "pools": {
+  "item": {
+   "pool": "0x801B1EEC",
+   "slots": 32,
+   "slot_size": 80,
+   "table": "overlay second table"
+  },
+  "type3": {
+   "pool": "0x801CF848",
+   "slots": 128,
+   "slot_size": 64,
+   "table": "0x8015029C in PSX.EXE"
+  },
+  "effect": {
+   "pool": "0x801CF540",
+   "slots": 32,
+   "slot_size": 24,
+   "table": "0x8015039C in PSX.EXE"
+  }
+ },
+ "objects": {
+  "item": {
+   "0x00": {
+    "code": "PSX.EXE",
+    "handler": "0x801288E8",
+    "move": "works in every stage, nothing to move",
+    "name": "Item"
+   },
+   "0x01": {
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801DD90C",
+      "banks": [
+       "0A"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9C6C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x02": {
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801DDD0C",
+      "banks": [
+       "07"
+      ],
+      "children": [
+       "effect 07",
+       "type3 0E"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA678, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x03": {
+    "code": [
+     "STAGE01",
+     "STAGE0A"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E31D8",
+      "banks": [
+       "1E"
+      ],
+      "children": [
+       "item 03"
+      ],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)",
+       "reads the stage number (0x801C336E)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA230, past 801F923C"
+      }
+     },
+     "STAGE0A": {
+      "handler": "0x801E0304",
+      "banks": [
+       "1E"
+      ],
+      "children": [
+       "item 03"
+      ],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)",
+       "reads the stage number (0x801C336E)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9EB8, past 801F923C"
+      }
+     }
+    },
+    "name": "Falling Platform"
+   },
+   "0x04": {
+    "code": [
+     "STAGE01",
+     "STAGE0A"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E36FC",
+      "banks": [
+       "20"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9F08, past 801F923C"
+      }
+     },
+     "STAGE0A": {
+      "handler": "0x801E0828",
+      "banks": [
+       "20"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9B90, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x05": {
+    "code": [
+     "STAGE01",
+     "STAGE0A"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E38F8",
+      "banks": [
+       "1D"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9F30, past 801F923C"
+      }
+     },
+     "STAGE0A": {
+      "handler": "0x801E0A24",
+      "banks": [
+       "1D"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9BB8, past 801F923C"
+      }
+     }
+    },
+    "name": "Snow Board"
+   },
+   "0x06": {
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801DEB18",
+      "banks": [
+       "07",
+       "09",
+       "12",
+       "19",
+       "68"
+      ],
+      "children": [
+       "item 23"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA880, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x07": {
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E43B4",
+      "banks": [
+       "23"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA2A0, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x08": {
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E4948",
+      "banks": [
+       "23"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA3AC, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x09": {
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E45B0",
+      "banks": [
+       "26"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA978, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x0A": {
+    "code": [
+     "STAGE04"
+    ],
+    "per_stage": {
+     "STAGE04": {
+      "handler": "0x801E5D3C",
+      "banks": [
+       "2F"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9D04, past 801F923C"
+      }
+     }
+    },
+    "name": "Swinging Hammer"
+   },
+   "0x0B": {
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E2E58",
+      "banks": [
+       "2E"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA0EC, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x0C": {
+    "code": [
+     "STAGE03",
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E53EC",
+      "banks": [
+       "2C"
+      ],
+      "children": [
+       "main 03"
+      ],
+      "stage_dependent": [
+       "reads the stage number (0x801C336E)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FAC9C, past 801F923C"
+      }
+     },
+     "STAGE0B": {
+      "handler": "0x801E4E7C",
+      "banks": [
+       "2C"
+      ],
+      "children": [
+       "main 03"
+      ],
+      "stage_dependent": [
+       "reads the stage number (0x801C336E)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FAA78, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x0D": {
+    "code": [
+     "STAGE04"
+    ],
+    "per_stage": {
+     "STAGE04": {
+      "handler": "0x801E5F04",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9B78, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x0E": {
+    "code": [
+     "STAGE03",
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E6B48",
+      "banks": [
+       "29",
+       "2C",
+       "2D"
+      ],
+      "children": [
+       "item 0F",
+       "item 10"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA104, past 801F923C"
+      }
+     },
+     "STAGE0B": {
+      "handler": "0x801E65D8",
+      "banks": [
+       "29",
+       "2C",
+       "2D"
+      ],
+      "children": [
+       "item 0F",
+       "item 10"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9EE0, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x0F": {
+    "code": [
+     "STAGE03",
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E7110",
+      "banks": [
+       "29"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA4D4, past 801F923C"
+      }
+     },
+     "STAGE0B": {
+      "handler": "0x801E6BA0",
+      "banks": [
+       "29"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA2B0, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x10": {
+    "code": [
+     "STAGE03",
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E7644",
+      "banks": [
+       "29"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9FDC, past 801F923C"
+      }
+     },
+     "STAGE0B": {
+      "handler": "0x801E70D4",
+      "banks": [
+       "29"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9DB8, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x11": {
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E3394",
+      "banks": [
+       "42"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9C7C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x12": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E32E4",
+      "banks": [
+       "40"
+      ],
+      "children": [
+       "effect 1C",
+       "main 4A",
+       "type3 21"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA780, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x13": {
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E7AE4",
+      "banks": [
+       "41"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA06C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x14": {
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E84BC",
+      "banks": [
+       "26"
+      ],
+      "children": [],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9CF4, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x15": {
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E37DC",
+      "banks": [
+       "28"
+      ],
+      "children": [
+       "main 0F"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA0C8, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x16": {
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E8674",
+      "banks": [],
+      "children": [
+       "type3 1C"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9D80, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x17": {
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E3DF4",
+      "banks": [
+       "44"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA080, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x18": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E3BA0",
+      "banks": [
+       "53"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA490, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x19": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E4174",
+      "banks": [
+       "53"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA31C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1A": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E45D4",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA05C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1B": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E4800",
+      "banks": [
+       "53"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FAB94, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1C": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E556C",
+      "banks": [
+       "54"
+      ],
+      "children": [
+       "main ?"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA2E8, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1D": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E5990",
+      "banks": [
+       "53"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA1BC, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1E": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E5C88",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9FA0, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x1F": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E65AC",
+      "banks": [
+       "00",
+       "51",
+       "54"
+      ],
+      "children": [
+       "type3 15",
+       "type3 27"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FB1E8, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x20": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E752C",
+      "banks": [
+       "5B"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA198, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x21": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E7800",
+      "banks": [
+       "00",
+       "5B",
+       "5C"
+      ],
+      "children": [
+       "type3 27"
+      ],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA42C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x22": {
+    "code": "PSX.EXE",
+    "handler": "0x80129240",
+    "move": "works in every stage, nothing to move",
+    "name": "Boss Door"
+   },
+   "0x23": {
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801DF09C",
+      "banks": [
+       "09",
+       "19",
+       "68"
+      ],
+      "children": [
+       "item 23"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA35C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x24": {
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E7AD0",
+      "banks": [
+       "53"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801FA098, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x25": {
+    "code": "PSX.EXE",
+    "handler": "0x80129684",
+    "move": "works in every stage, nothing to move",
+    "name": "Bolt"
+   },
+   "0x26": {
+    "code": "PSX.EXE",
+    "handler": "0x801298E4",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x27": {
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E3790",
+      "banks": [
+       "69",
+       "77"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9E64, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x28": {
+    "code": [
+     "STAGE02",
+     "STAGE0D"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E438C",
+      "banks": [
+       "7B"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9FF4, past 801F923C"
+      }
+     },
+     "STAGE0D": {
+      "handler": "0x801F72D4",
+      "banks": [
+       "7B"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {}
+     }
+    }
+   },
+   "0x29": {
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DE3B8",
+      "banks": [
+       "6A"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F98FC, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2A": {
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E3D54",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9C84, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2B": {
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DE688",
+      "banks": [
+       "6A"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9D0C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2C": {
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E47FC",
+      "banks": [
+       "02"
+      ],
+      "children": [
+       "item 2C"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9F7C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2D": {
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DEC50",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F980C, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2E": {
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E400C",
+      "banks": [],
+      "children": [
+       "type3 34"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE05",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE0D": "target overlay would end at 801F9D14, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x2F": {
+    "code": "PSX.EXE",
+    "handler": "0x80129B7C",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x30": {
+    "code": [
+     "STAGE08"
+    ],
+    "per_stage": {
+     "STAGE08": {
+      "handler": "0x801E08AC",
+      "banks": [
+       "73"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "STAGE02's item table has only 30 entries",
+       "STAGE03": "STAGE03's item table has only 30 entries",
+       "STAGE0D": "target overlay would end at 801F9888, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x31": {
+    "code": [
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE0B": {
+      "handler": "0x801E7574",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "STAGE02's item table has only 30 entries",
+       "STAGE03": "STAGE03's item table has only 30 entries",
+       "STAGE0D": "target overlay would end at 801F9CF4, past 801F923C"
+      }
+     }
+    }
+   },
+   "0x32": {
+    "code": [
+     "STAGE0D"
+    ],
+    "per_stage": {
+     "STAGE0D": {
+      "handler": "0x801F7744",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE05",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B",
+       "STAGE0C"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "STAGE02's item table has only 30 entries",
+       "STAGE03": "STAGE03's item table has only 30 entries"
+      }
+     }
+    }
+   },
+   "0x33": {
+    "code": "PSX.EXE",
+    "handler": "0x80129E04",
+    "move": "works in every stage, nothing to move"
+   }
+  },
+  "type3": {
+   "0x00": {
+    "table_entry": "0x8012A1F0",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x01": {
+    "table_entry": "0x8012A2A8",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x02": {
+    "table_entry": "0x8012A888",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x03": {
+    "table_entry": "0x8012AFCC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x04": {
+    "table_entry": "0x8012B33C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x05": {
+    "table_entry": "0x8012B6E4",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x06": {
+    "table_entry": "0x8012B89C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x07": {
+    "table_entry": "0x8012BA4C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x08": {
+    "table_entry": "0x8012BB74",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x09": {
+    "table_entry": "0x801D8378",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x0A": {
+    "table_entry": "0x8012BE4C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0B": {
+    "table_entry": "0x801348E4",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0C": {
+    "table_entry": "0x8012BF48",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0D": {
+    "table_entry": "0x801DFE58",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801DFE58",
+      "banks": [
+       "0D",
+       "6B",
+       "6C"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 0D must sit at 801DFE58, but its copy would start at 801DFE58, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x0E": {
+    "table_entry": "0x801E0058",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E0058",
+      "banks": [
+       "07",
+       "08"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 0E must sit at 801E0058, but its copy would start at 801E0058, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x0F": {
+    "table_entry": "0x8012C218",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x10": {
+    "table_entry": "0x8012C5C8",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x11": {
+    "table_entry": "0x801E50D0",
+    "code": [
+     "STAGE01",
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E50D0",
+      "banks": [
+       "1B"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "STAGE06 already has the code for type3 11",
+       "STAGE0B": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0D (ends 801F923C)"
+      },
+      "note": "another stage also has a function at this address and neither spawns it in the stage data or code: owner not settled"
+     },
+     "STAGE06": {
+      "handler": "0x801E50D0",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "STAGE01 already has the code for type3 11",
+       "STAGE02": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 11 must sit at 801E50D0, but its copy would start at 801E50D0, inside STAGE0D (ends 801F923C)"
+      },
+      "note": "another stage also has a function at this address and neither spawns it in the stage data or code: owner not settled"
+     }
+    }
+   },
+   "0x12": {
+    "table_entry": "0x8012C998",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x13": {
+    "table_entry": "0x801E4BC8",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E4BC8",
+      "banks": [
+       "2E",
+       "39"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [],
+      "cannot_move_to": {
+       "STAGE00": "reference to 801E5124 is outside the copied code and data",
+       "STAGE01": "reference to 801E5124 is outside the copied code and data",
+       "STAGE03": "reference to 801E5124 is outside the copied code and data",
+       "STAGE04": "reference to 801E5124 is outside the copied code and data",
+       "STAGE05": "reference to 801E5124 is outside the copied code and data",
+       "STAGE06": "reference to 801E5124 is outside the copied code and data",
+       "STAGE07": "reference to 801E5124 is outside the copied code and data",
+       "STAGE08": "reference to 801E5124 is outside the copied code and data",
+       "STAGE09": "reference to 801E5124 is outside the copied code and data",
+       "STAGE0A": "reference to 801E5124 is outside the copied code and data",
+       "STAGE0B": "reference to 801E5124 is outside the copied code and data",
+       "STAGE0C": "reference to 801E5124 is outside the copied code and data",
+       "STAGE0D": "reference to 801E5124 is outside the copied code and data"
+      }
+     }
+    }
+   },
+   "0x14": {
+    "table_entry": "0x801E54AC",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E54AC",
+      "banks": [
+       "36"
+      ],
+      "children": [
+       "main 1D",
+       "type3 06"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE01 (ends 801E711C)",
+       "STAGE03": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 14 must sit at 801E54AC, but its copy would start at 801E54AC, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x15": {
+    "table_entry": "0x801E7DB8",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E7DB8",
+      "banks": [
+       "00",
+       "51",
+       "54"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 15 must sit at 801E7DB8, but its copy would start at 801E7DB8, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 15 must sit at 801E7DB8, but its copy would start at 801E7DB8, inside STAGE03 (ends 801EA130)",
+       "STAGE0B": "type3 15 must sit at 801E7DB8, but its copy would start at 801E7DB8, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 15 must sit at 801E7DB8, but its copy would start at 801E7DB8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 15 must sit at 801E7DB8, but its copy would start at 801E7DB8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x16": {
+    "table_entry": "0x801E63D0",
+    "code": [
+     "STAGE04"
+    ],
+    "per_stage": {
+     "STAGE04": {
+      "handler": "0x801E63D0",
+      "banks": [
+       "38"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 16 must sit at 801E63D0, but its copy would start at 801E63D0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x17": {
+    "table_entry": "0x801E5A24",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E5A24",
+      "banks": [
+       "00"
+      ],
+      "children": [
+       "type3 06",
+       "type3 17"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE01 (ends 801E711C)",
+       "STAGE03": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 17 must sit at 801E5A24, but its copy would start at 801E5A24, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x18": {
+    "table_entry": "0x8012CB0C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x19": {
+    "table_entry": "0x8012CD28",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x1A": {
+    "table_entry": "0x8012CFF4",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x1B": {
+    "table_entry": "0x801E88B8",
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E88B8",
+      "banks": [
+       "48"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 1B must sit at 801E88B8, but its copy would start at 801E88B8, inside STAGE02 (ends 801E8DC8)",
+       "STAGE05": "type3 1B must sit at 801E88B8, but its copy would start at 801E88B8, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "type3 1B must sit at 801E88B8, but its copy would start at 801E88B8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 1B must sit at 801E88B8, but its copy would start at 801E88B8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1C": {
+    "table_entry": "0x801E8B6C",
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E8B6C",
+      "banks": [
+       "45"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 1C must sit at 801E8B6C, but its copy would start at 801E8B6C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE05": "type3 1C must sit at 801E8B6C, but its copy would start at 801E8B6C, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "type3 1C must sit at 801E8B6C, but its copy would start at 801E8B6C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 1C must sit at 801E8B6C, but its copy would start at 801E8B6C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1D": {
+    "table_entry": "0x801E8CD0",
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E8CD0",
+      "banks": [
+       "00",
+       "02",
+       "09",
+       "47"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 1D must sit at 801E8CD0, but its copy would start at 801E8CD0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE05": "type3 1D must sit at 801E8CD0, but its copy would start at 801E8CD0, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "type3 1D must sit at 801E8CD0, but its copy would start at 801E8CD0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 1D must sit at 801E8CD0, but its copy would start at 801E8CD0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1E": {
+    "table_entry": "0x8012D2D8",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x1F": {
+    "table_entry": "0x801E82E4",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E82E4",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 1F must sit at 801E82E4, but its copy would start at 801E82E4, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 1F must sit at 801E82E4, but its copy would start at 801E82E4, inside STAGE03 (ends 801EA130)",
+       "STAGE0B": "type3 1F must sit at 801E82E4, but its copy would start at 801E82E4, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 1F must sit at 801E82E4, but its copy would start at 801E82E4, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 1F must sit at 801E82E4, but its copy would start at 801E82E4, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x20": {
+    "table_entry": "0x8012DAAC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x21": {
+    "table_entry": "0x801E8454",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E8454",
+      "banks": [
+       "40"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 21 must sit at 801E8454, but its copy would start at 801E8454, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 21 must sit at 801E8454, but its copy would start at 801E8454, inside STAGE03 (ends 801EA130)",
+       "STAGE0B": "type3 21 must sit at 801E8454, but its copy would start at 801E8454, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 21 must sit at 801E8454, but its copy would start at 801E8454, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 21 must sit at 801E8454, but its copy would start at 801E8454, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x22": {
+    "table_entry": "0x8012E304",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x23": {
+    "table_entry": "0x8012EBE8",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x24": {
+    "table_entry": "0x801D8FD8",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x25": {
+    "table_entry": "0x801D9350",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x26": {
+    "table_entry": "0x801D9B9C",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x27": {
+    "table_entry": "0x801E8A00",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E8A00",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 27 must sit at 801E8A00, but its copy would start at 801E8A00, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 27 must sit at 801E8A00, but its copy would start at 801E8A00, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "type3 27 must sit at 801E8A00, but its copy would start at 801E8A00, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 27 must sit at 801E8A00, but its copy would start at 801E8A00, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x28": {
+    "table_entry": "0x8012EDF4",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x29": {
+    "table_entry": "0x801DA450",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x2A": {
+    "table_entry": "0x8012F1D4",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x2B": {
+    "table_entry": "0x8012FEC0",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x2C": {
+    "table_entry": "0x801E4354",
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E4354",
+      "banks": [
+       "69"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 2C must sit at 801E4354, but its copy would start at 801E4354, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2D": {
+    "table_entry": "0x801E0188",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E0188",
+      "banks": [
+       "6B",
+       "6C"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 2D must sit at 801E0188, but its copy would start at 801E0188, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2E": {
+    "table_entry": "0x80130184",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x2F": {
+    "table_entry": "0x801E63B8",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E63B8",
+      "banks": [
+       "71"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE01 (ends 801E711C)",
+       "STAGE03": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 2F must sit at 801E63B8, but its copy would start at 801E63B8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x30": {
+    "table_entry": "0x8013028C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x31": {
+    "table_entry": "0x801DED18",
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DED18",
+      "banks": [
+       "57"
+      ],
+      "children": [
+       "item 2B",
+       "type3 31",
+       "type3 33"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE06 (ends 801E5CCC)",
+       "STAGE08": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 31 must sit at 801DED18, but its copy would start at 801DED18, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x32": {
+    "table_entry": "0x8013059C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x33": {
+    "table_entry": "0x801DF078",
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DF078",
+      "banks": [
+       "6E"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE06 (ends 801E5CCC)",
+       "STAGE08": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 33 must sit at 801DF078, but its copy would start at 801DF078, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x34": {
+    "table_entry": "0x801E4734",
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E4734",
+      "banks": [
+       "06"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 34 must sit at 801E4734, but its copy would start at 801E4734, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x35": {
+    "table_entry": "0x80130644",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x36": {
+    "table_entry": "0x801E49B0",
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E49B0",
+      "banks": [],
+      "children": [
+       "type3 36"
+      ],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 36 must sit at 801E49B0, but its copy would start at 801E49B0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x37": {
+    "table_entry": "0x80130D60",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x38": {
+    "table_entry": "0x801DADB0",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x39": {
+    "table_entry": "0x80130F70",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x3A": {
+    "table_entry": "0x801DB2C4",
+    "code": "DEMO.BIN",
+    "move": "attract-mode overlay only, not handled by the injector"
+   },
+   "0x3B": {
+    "table_entry": "0x801E15B8",
+    "code": [
+     "STAGE0A"
+    ],
+    "per_stage": {
+     "STAGE0A": {
+      "handler": "0x801E15B8",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE07",
+       "STAGE08",
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 3B must sit at 801E15B8, but its copy would start at 801E15B8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x3C": {
+    "table_entry": "0x801E9FD4",
+    "code": [
+     "STAGE0C"
+    ],
+    "per_stage": {
+     "STAGE0C": {
+      "handler": "0x801E9FD4",
+      "banks": [],
+      "children": [
+       "type3 3C"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "type3 3C must sit at 801E9FD4, but its copy would start at 801E9FD4, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "type3 3C must sit at 801E9FD4, but its copy would start at 801E9FD4, inside STAGE05 (ends 801EAE10)",
+       "STAGE0D": "type3 3C must sit at 801E9FD4, but its copy would start at 801E9FD4, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x3D": {
+    "table_entry": "0x801316CC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x3E": {
+    "table_entry": "0x801E7950",
+    "code": [
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE0B": {
+      "handler": "0x801E7950",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "type3 3E must sit at 801E7950, but its copy would start at 801E7950, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "type3 3E must sit at 801E7950, but its copy would start at 801E7950, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "type3 3E must sit at 801E7950, but its copy would start at 801E7950, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "type3 3E must sit at 801E7950, but its copy would start at 801E7950, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "type3 3E must sit at 801E7950, but its copy would start at 801E7950, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x3F": {
+    "table_entry": "0x801EA310",
+    "code": [
+     "STAGE0C"
+    ],
+    "per_stage": {
+     "STAGE0C": {
+      "handler": "0x801EA310",
+      "banks": [
+       "00"
+      ],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE03",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE05": "type3 3F must sit at 801EA310, but its copy would start at 801EA310, inside STAGE05 (ends 801EAE10)",
+       "STAGE0D": "type3 3F must sit at 801EA310, but its copy would start at 801EA310, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   }
+  },
+  "effect": {
+   "0x00": {
+    "table_entry": "0x80131B48",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x01": {
+    "table_entry": "0x80131BDC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x02": {
+    "table_entry": "0x80131C70",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x03": {
+    "table_entry": "0x80131D28",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x04": {
+    "table_entry": "0x80131DE0",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move",
+    "name": "Checkpoint"
+   },
+   "0x05": {
+    "table_entry": "0x801E073C",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E073C",
+      "banks": [],
+      "children": [
+       "item 01"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 05 must sit at 801E073C, but its copy would start at 801E073C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x06": {
+    "table_entry": "0x801E09F8",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E09F8",
+      "banks": [],
+      "children": [
+       "main 06"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 06 must sit at 801E09F8, but its copy would start at 801E09F8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x07": {
+    "table_entry": "0x801E0B64",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E0B64",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE07 (ends 801E0CB0)",
+       "STAGE08": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 07 must sit at 801E0B64, but its copy would start at 801E0B64, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x08": {
+    "table_entry": "0x801E64B0",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E64B0",
+      "banks": [],
+      "children": [
+       "item 15"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE01 (ends 801E711C)",
+       "STAGE03": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 08 must sit at 801E64B0, but its copy would start at 801E64B0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x09": {
+    "table_entry": "0x801E5290",
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E5290",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 09 must sit at 801E5290, but its copy would start at 801E5290, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x0A": {
+    "table_entry": "0x80131F1C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0B": {
+    "table_entry": "0x80131FAC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0C": {
+    "table_entry": "0x801E589C",
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E589C",
+      "banks": [],
+      "children": [
+       "main 0B",
+       "main 0E"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 0C must sit at 801E589C, but its copy would start at 801E589C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x0D": {
+    "table_entry": "0x8013203C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x0E": {
+    "table_entry": "0x801E5B3C",
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E5B3C",
+      "banks": [],
+      "children": [
+       "type3 11"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0B": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 0E must sit at 801E5B3C, but its copy would start at 801E5B3C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x0F": {
+    "table_entry": "0x801E5EE4",
+    "code": [
+     "STAGE01"
+    ],
+    "per_stage": {
+     "STAGE01": {
+      "handler": "0x801E5EE4",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 0F must sit at 801E5EE4, but its copy would start at 801E5EE4, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x10": {
+    "table_entry": "0x80132164",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move",
+    "name": "Transition-H"
+   },
+   "0x11": {
+    "table_entry": "0x80132404",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move",
+    "name": "Transition-V"
+   },
+   "0x12": {
+    "table_entry": "0x801E6664",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E6664",
+      "banks": [],
+      "children": [
+       "effect 12",
+       "item 0B",
+       "main 01",
+       "main 21",
+       "type3 13"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE01 (ends 801E711C)",
+       "STAGE03": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 12 must sit at 801E6664, but its copy would start at 801E6664, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x13": {
+    "table_entry": "0x801E91BC",
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E91BC",
+      "banks": [],
+      "children": [
+       "main 13"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE05": "effect 13 must sit at 801E91BC, but its copy would start at 801E91BC, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "effect 13 must sit at 801E91BC, but its copy would start at 801E91BC, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 13 must sit at 801E91BC, but its copy would start at 801E91BC, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x14": {
+    "table_entry": "0x801E7760",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E7760",
+      "banks": [],
+      "children": [
+       "type3 17"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 14 must sit at 801E7760, but its copy would start at 801E7760, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "effect 14 must sit at 801E7760, but its copy would start at 801E7760, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 14 must sit at 801E7760, but its copy would start at 801E7760, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 14 must sit at 801E7760, but its copy would start at 801E7760, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 14 must sit at 801E7760, but its copy would start at 801E7760, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x15": {
+    "table_entry": "0x80132718",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x16": {
+    "table_entry": "0x80132750",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x17": {
+    "table_entry": "0x80132900",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x18": {
+    "table_entry": "0x801E688C",
+    "code": [
+     "STAGE04"
+    ],
+    "per_stage": {
+     "STAGE04": {
+      "handler": "0x801E688C",
+      "banks": [],
+      "children": [
+       "main 24"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 18 must sit at 801E688C, but its copy would start at 801E688C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x19": {
+    "table_entry": "0x80132A2C",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x1A": {
+    "table_entry": "0x801E9470",
+    "code": [
+     "STAGE03"
+    ],
+    "per_stage": {
+     "STAGE03": {
+      "handler": "0x801E9470",
+      "banks": [],
+      "children": [
+       "type3 1B"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE05": "effect 1A must sit at 801E9470, but its copy would start at 801E9470, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "effect 1A must sit at 801E9470, but its copy would start at 801E9470, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 1A must sit at 801E9470, but its copy would start at 801E9470, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1B": {
+    "table_entry": "0x801E8A78",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E8A78",
+      "banks": [],
+      "children": [
+       "effect 26"
+      ],
+      "stage_dependent": [
+       "edits the stage map from a per-stage list (PSX.EXE 0x80102EF4)"
+      ],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 1B must sit at 801E8A78, but its copy would start at 801E8A78, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 1B must sit at 801E8A78, but its copy would start at 801E8A78, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 1B must sit at 801E8A78, but its copy would start at 801E8A78, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 1B must sit at 801E8A78, but its copy would start at 801E8A78, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1C": {
+    "table_entry": "0x801E90B8",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E90B8",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 1C must sit at 801E90B8, but its copy would start at 801E90B8, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 1C must sit at 801E90B8, but its copy would start at 801E90B8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 1C must sit at 801E90B8, but its copy would start at 801E90B8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1D": {
+    "table_entry": "0x80132A58",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x1E": {
+    "table_entry": "0x801E9598",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E9598",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 1E must sit at 801E9598, but its copy would start at 801E9598, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 1E must sit at 801E9598, but its copy would start at 801E9598, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 1E must sit at 801E9598, but its copy would start at 801E9598, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x1F": {
+    "table_entry": "0x801E4D38",
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E4D38",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 1F must sit at 801E4D38, but its copy would start at 801E4D38, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x20": {
+    "table_entry": "0x80132D58",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x21": {
+    "table_entry": "0x80133250",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x22": {
+    "table_entry": "0x801E97AC",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E97AC",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 22 must sit at 801E97AC, but its copy would start at 801E97AC, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 22 must sit at 801E97AC, but its copy would start at 801E97AC, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 22 must sit at 801E97AC, but its copy would start at 801E97AC, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x23": {
+    "table_entry": "0x801E99E0",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E99E0",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 23 must sit at 801E99E0, but its copy would start at 801E99E0, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 23 must sit at 801E99E0, but its copy would start at 801E99E0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 23 must sit at 801E99E0, but its copy would start at 801E99E0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x24": {
+    "table_entry": "0x801E12CC",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E12CC",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE07",
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE06 (ends 801E5CCC)",
+       "STAGE08": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 24 must sit at 801E12CC, but its copy would start at 801E12CC, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x25": {
+    "table_entry": "0x801E0A70",
+    "code": [
+     "STAGE08"
+    ],
+    "per_stage": {
+     "STAGE08": {
+      "handler": "0x801E0A70",
+      "banks": [],
+      "children": [
+       "main 37"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE07 (ends 801E0CB0)",
+       "STAGE0A": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 25 must sit at 801E0A70, but its copy would start at 801E0A70, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x26": {
+    "table_entry": "0x801E9E54",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E9E54",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 26 must sit at 801E9E54, but its copy would start at 801E9E54, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 26 must sit at 801E9E54, but its copy would start at 801E9E54, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 26 must sit at 801E9E54, but its copy would start at 801E9E54, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x27": {
+    "table_entry": "0x801335FC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x28": {
+    "table_entry": "0x801E9ECC",
+    "code": [
+     "STAGE05"
+    ],
+    "per_stage": {
+     "STAGE05": {
+      "handler": "0x801E9ECC",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE02",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A",
+       "STAGE0B"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 28 must sit at 801E9ECC, but its copy would start at 801E9ECC, inside STAGE03 (ends 801EA130)",
+       "STAGE0C": "effect 28 must sit at 801E9ECC, but its copy would start at 801E9ECC, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 28 must sit at 801E9ECC, but its copy would start at 801E9ECC, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x29": {
+    "table_entry": "0x801E17A8",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E17A8",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE07",
+       "STAGE08",
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0A": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 29 must sit at 801E17A8, but its copy would start at 801E17A8, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2A": {
+    "table_entry": "0x801E17B0",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E17B0",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE07",
+       "STAGE08",
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0A": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 2A must sit at 801E17B0, but its copy would start at 801E17B0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2B": {
+    "table_entry": "0x801E4E90",
+    "code": [
+     "STAGE06"
+    ],
+    "per_stage": {
+     "STAGE06": {
+      "handler": "0x801E4E90",
+      "banks": [],
+      "children": [
+       "item 27",
+       "main 3F"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 2B must sit at 801E4E90, but its copy would start at 801E4E90, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2C": {
+    "table_entry": "0x801DF1A4",
+    "code": [
+     "STAGE07"
+    ],
+    "per_stage": {
+     "STAGE07": {
+      "handler": "0x801DF1A4",
+      "banks": [],
+      "children": [
+       "item 2B",
+       "type3 31",
+       "type3 33"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE06 (ends 801E5CCC)",
+       "STAGE08": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE08 (ends 801E1394)",
+       "STAGE0A": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 2C must sit at 801DF1A4, but its copy would start at 801DF1A4, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2D": {
+    "table_entry": "0x801E18A0",
+    "code": [
+     "STAGE00"
+    ],
+    "per_stage": {
+     "STAGE00": {
+      "handler": "0x801E18A0",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE07",
+       "STAGE08",
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE01": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE06 (ends 801E5CCC)",
+       "STAGE0A": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 2D must sit at 801E18A0, but its copy would start at 801E18A0, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2E": {
+    "table_entry": "0x801E7E14",
+    "code": [
+     "STAGE02"
+    ],
+    "per_stage": {
+     "STAGE02": {
+      "handler": "0x801E7E14",
+      "banks": [],
+      "children": [
+       "main 45",
+       "type3 2F"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE03": "effect 2E must sit at 801E7E14, but its copy would start at 801E7E14, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "effect 2E must sit at 801E7E14, but its copy would start at 801E7E14, inside STAGE05 (ends 801EAE10)",
+       "STAGE0B": "effect 2E must sit at 801E7E14, but its copy would start at 801E7E14, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 2E must sit at 801E7E14, but its copy would start at 801E7E14, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 2E must sit at 801E7E14, but its copy would start at 801E7E14, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x2F": {
+    "table_entry": "0x80133708",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x30": {
+    "table_entry": "0x801E0C6C",
+    "code": [
+     "STAGE08"
+    ],
+    "per_stage": {
+     "STAGE08": {
+      "handler": "0x801E0C6C",
+      "banks": [],
+      "children": [],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE09"
+      ],
+      "cannot_move_to": {
+       "STAGE00": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE00 (ends 801E29B0)",
+       "STAGE01": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE01 (ends 801E711C)",
+       "STAGE02": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE03 (ends 801EA130)",
+       "STAGE04": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE04 (ends 801E757C)",
+       "STAGE05": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE05 (ends 801EAE10)",
+       "STAGE06": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE06 (ends 801E5CCC)",
+       "STAGE07": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE07 (ends 801E0CB0)",
+       "STAGE0A": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE0A (ends 801E21D0)",
+       "STAGE0B": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE0B (ends 801E8884)",
+       "STAGE0C": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 30 must sit at 801E0C6C, but its copy would start at 801E0C6C, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x31": {
+    "table_entry": "0x801339DC",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   },
+   "0x32": {
+    "table_entry": "0x801E7B30",
+    "code": [
+     "STAGE0B"
+    ],
+    "per_stage": {
+     "STAGE0B": {
+      "handler": "0x801E7B30",
+      "banks": [],
+      "children": [
+       "main 59"
+      ],
+      "stage_dependent": [],
+      "can_move_to": [
+       "STAGE00",
+       "STAGE01",
+       "STAGE04",
+       "STAGE06",
+       "STAGE07",
+       "STAGE08",
+       "STAGE09",
+       "STAGE0A"
+      ],
+      "cannot_move_to": {
+       "STAGE02": "effect 32 must sit at 801E7B30, but its copy would start at 801E7B30, inside STAGE02 (ends 801E8DC8)",
+       "STAGE03": "effect 32 must sit at 801E7B30, but its copy would start at 801E7B30, inside STAGE03 (ends 801EA130)",
+       "STAGE05": "effect 32 must sit at 801E7B30, but its copy would start at 801E7B30, inside STAGE05 (ends 801EAE10)",
+       "STAGE0C": "effect 32 must sit at 801E7B30, but its copy would start at 801E7B30, inside STAGE0C (ends 801EB0DC)",
+       "STAGE0D": "effect 32 must sit at 801E7B30, but its copy would start at 801E7B30, inside STAGE0D (ends 801F923C)"
+      }
+     }
+    }
+   },
+   "0x33": {
+    "table_entry": "0x80133D98",
+    "code": "PSX.EXE",
+    "move": "works in every stage, nothing to move"
+   }
+  }
+ }
+}

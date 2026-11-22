@@ -354,6 +354,7 @@ void FUN_801dfa90(int param_1)
       *(undefined1 *)(param_1 + 4) = 0;
     }
   }
+                    /* Possible PsyQ macro: setPolyGT4() */
   return;
 }
 
